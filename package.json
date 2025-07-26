@@ -1,0 +1,45 @@
+{
+  "name": "virtual-sky",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host",
+    "build": "vite build",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@heroicons/react": "^2.2.0",
+    "@motionone/utils": "^10.18.0",
+    "@react-three/drei": "^10.0.2",
+    "@react-three/fiber": "^9",
+    "@tailwindcss/vite": "^4.1.11",
+    "@types/three": "^0.173.0",
+    "firebase": "^11.3.1",
+    "flubber": "^0.4.2",
+    "framer-motion": "^12.4.4",
+    "i18next": "^24.2.2",
+    "motion": "^12.4.4",
+    "popmotion": "^11.0.5",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-i18next": "^15.4.1",
+    "react-responsive": "^10.0.0",
+    "react-router-dom": "^7.1.5",
+    "tailwindcss": "^4.1.11",
+    "three": "^0.173.0",
+    "zustand": "^5.0.6"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.30.1",
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
+    "@vitejs/plugin-react": "^4.6.0",
+    "eslint": "^9.30.1",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.20",
+    "globals": "^16.3.0",
+    "vite": "^7.0.4"
+  }
+}
