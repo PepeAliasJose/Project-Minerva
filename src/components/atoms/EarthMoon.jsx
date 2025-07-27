@@ -36,7 +36,7 @@ const EartMoon = memo(({ Earth, Moon }) => {
     setEarthPos([...e])
 
     const { lambda, beta, del } = moonCoordinatesGivenT(JDday)
-    //console.log('MOON: ', lambda, beta, del / SCALE)
+    console.log('MOON: ', lambda, beta, del / SCALE)
     const m = new Vector3().setFromSphericalCoords(
       del / SCALE,
       -Math.PI / 2 + degreesToRadians(beta),

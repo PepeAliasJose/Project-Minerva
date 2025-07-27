@@ -16,7 +16,7 @@ export const useConfig = create(set => ({
   controlsOn: () => set(state => ({ controls: true })),
   controlsOff: () => set(state => ({ controls: false })),
 
-  zoomWhenChange: true,
+  zoomWhenChange: false,
   zoomOn: () => set(state => ({ zoomWhenChange: true })),
   zoomOff: () => set(state => ({ zoomWhenChange: false }))
 }))

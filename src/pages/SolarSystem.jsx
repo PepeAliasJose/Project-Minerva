@@ -3,7 +3,6 @@ import { useState, useLayoutEffect } from 'react'
 
 import { Suspense } from 'react'
 import Scene from '../components/organisms/Scene'
-import { Stats } from '@react-three/drei'
 import IntroTitle from '../components/molecules/IntroTitle'
 import Controls from '../components/organisms/Controls'
 
@@ -24,7 +23,6 @@ function SolarSystem () {
         style={{ width: '100%', height: '100vh' }}
         shadows={true}
       >
-        <Stats />
         <Suspense fallback={null}>
           <Scene
             load={t => {
@@ -33,7 +31,6 @@ function SolarSystem () {
           />
         </Suspense>
       </Canvas>
-
       {!loaded && (
         <div
           className='text-2xl text-white 

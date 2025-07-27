@@ -15,7 +15,7 @@ function SkyTag ({
   return (
     <Html
       position={position}
-      zIndexRange={[100, 10]}
+      zIndexRange={[40, 10]}
       className='-translate-y-1/2 bg-transparent '
     >
       {tags && (

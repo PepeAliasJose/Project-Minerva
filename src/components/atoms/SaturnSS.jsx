@@ -9,7 +9,7 @@ import {
   SATURN_SIZE,
   SCALE
 } from '../../helpers/functions/SolarSystemConstants'
-import { memo, useEffect, useRef, useState } from 'react'
+import { memo, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import SkyTag from './SkyTag'
 
 import * as THREE from 'three'
@@ -55,7 +55,7 @@ const SaturnSS = memo(({ Saturn }) => {
     updateSaturn()
   }, [JDday])
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     //Arreglar las texturas del anillo
     let pos = SaturnRings.current.geometry.attributes.position
     let uvAttribute = SaturnRings.current.geometry.attributes.uv
