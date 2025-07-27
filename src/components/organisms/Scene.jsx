@@ -1,5 +1,5 @@
 import { useThree } from '@react-three/fiber'
-import { useRef, useState, useLayoutEffect, useEffect, memo } from 'react'
+import { useRef, useEffect, memo } from 'react'
 
 import { CameraControls, Line } from '@react-three/drei'
 
@@ -15,8 +15,9 @@ import JupiterSS from '../atoms/JupiterSS'
 import UranusSS from '../atoms/UranusSS'
 import NeptuneSS from '../atoms/NeptuneSS'
 import { useAnimation } from '../../App'
+import SSCamera from '../molecules/SSCamera'
 
-const Scene = memo(({ JDday, planeta, load }) => {
+const Scene = memo(({ load }) => {
   const { camera, gl } = useThree()
   const { intro_animation } = useAnimation()
 
@@ -30,19 +31,23 @@ const Scene = memo(({ JDday, planeta, load }) => {
   const Moon = useRef()
   const Mars = useRef()
   const Saturn = useRef()
-
   const Jupiter = useRef()
   const Uranus = useRef()
-
   const Neptune = useRef()
 
-  useLayoutEffect(() => {
-    console.log('AAAAA')
+  useEffect(() => {
+    console.log('Render scene')
   })
 
-  function moveCamera (st, updateRadius = false) {
+  //TODO: moveCamera(camera?,coords,st,updateRadius){
+  // camera.current.smoothTime = st
+  // camera.current._targetEnd = {...coords}
+  // updateRadius && (camera.current._sphericalEnd.radius = 14)
+  //}
+  function moveCamera (planet, st, updateRadius = false) {
+    //console.log(planet, st, updateRadius)
     Camara.current.smoothTime = st
-    switch (planeta) {
+    switch (planet) {
       case 'sun':
         Camara.current._targetEnd = { ...Sun.current.position }
         updateRadius && (Camara.current._sphericalEnd.radius = 14)
@@ -94,9 +99,9 @@ const Scene = memo(({ JDday, planeta, load }) => {
     }
   }
 
-  function updateCamera (st = 1, updateRadius) {
+  function updateCamera (planet = 'sun', st = 1, updateRadius) {
     try {
-      moveCamera(st, updateRadius)
+      moveCamera(planet, st, updateRadius)
     } catch (error) {
       console.log('ERROR: Error actualizando la camara')
     }
@@ -104,10 +109,10 @@ const Scene = memo(({ JDday, planeta, load }) => {
 
   useEffect(() => {
     //console.log('Cambio planeta')
-    updateCamera(0.3, true)
+    //updateCamera(0.5, zoomWhenChange)
     //console.log('LOAD')
     load(true)
-  }, [planeta])
+  }, [])
 
   useEffect(() => {
     //Inicializar camara
@@ -164,28 +169,24 @@ const Scene = memo(({ JDday, planeta, load }) => {
         decay={0}
         distance={1000}
       />
-      <SunSS Sun={Sun} JDday={JDday} updateCamera={updateCamera} />
+      <SunSS Sun={Sun} />
       {/*MERCURIO*/}
-      <MercurySS Mercury={Mercury} JDday={JDday} updateCamera={updateCamera} />
+      <MercurySS Mercury={Mercury} />
       {/*VENUS*/}
-      <VenusSS Venus={Venus} JDday={JDday} updateCamera={updateCamera} />
+      <VenusSS Venus={Venus} />
       {/*LA TIERRA*/}
-      <EartMoon
-        Earth={Earth}
-        Moon={Moon}
-        JDday={JDday}
-        updateCamera={updateCamera}
-      />
+      <EartMoon Earth={Earth} Moon={Moon} />
       {/*MARTE*/}
-      <MarsSS Mars={Mars} JDday={JDday} updateCamera={updateCamera} />
+      <MarsSS Mars={Mars} />
       {/*SATURNO*/}
-      <SaturnSS Saturn={Saturn} JDday={JDday} updateCamera={updateCamera} />
+      <SaturnSS Saturn={Saturn} />
       {/*JUPITER*/}
-      <JupiterSS Jupiter={Jupiter} JDday={JDday} updateCamera={updateCamera} />
+      <JupiterSS Jupiter={Jupiter} />
       {/*URANO*/}
-      <UranusSS Uranus={Uranus} JDday={JDday} updateCamera={updateCamera} />
+      <UranusSS Uranus={Uranus} />
       {/*NEPTUNO*/}
-      <NeptuneSS Neptune={Neptune} JDday={JDday} updateCamera={updateCamera} />
+      <NeptuneSS Neptune={Neptune} />
+      <SSCamera moveCamera={updateCamera} />
     </>
   )
 })

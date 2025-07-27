@@ -446,3 +446,9 @@ export function calculateMoonOrbit (func, JDay) {
   console.log(points)
   return points
 }
+
+export function changeDateFromInput (value) {
+  let time = Date.parse(value)
+  time = isNaN(time) ? new Date(fechaPredeterminada) : time
+  return time / 86400000 - 60 / 1440 + 2440587.5
+}

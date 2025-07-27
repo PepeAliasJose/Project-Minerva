@@ -1,16 +1,23 @@
-import { memo, useLayoutEffect, useRef, useState } from 'react'
+import { memo, useEffect, useRef, useState } from 'react'
 import { TextureLoader, Vector3 } from 'three'
-import { neptuneCoordinatesGivenDate } from '../../helpers/functions/astronomicalFunctions'
+import {
+  changeDateFromInput,
+  neptuneCoordinatesGivenDate
+} from '../../helpers/functions/astronomicalFunctions'
 import {
   NEPTUNE_SIZE,
   SCALE
 } from '../../helpers/functions/SolarSystemConstants'
 import SkyTag from './SkyTag'
+import { useDate } from '../../App'
 
-const NeptuneSS = memo(({ Neptune, JDday, updateCamera }) => {
+const NeptuneSS = memo(({ Neptune }) => {
   const [neptunePos, setNeptunePos] = useState([0, 0, 0])
   const NeptuneLight = useRef()
   const Neptune_Texture = new TextureLoader().load('textures/neptune.webp')
+
+  const { date } = useDate()
+  const JDday = changeDateFromInput(date)
 
   //Resolucion de las sombras para dispositivos moviles
   const shadowRes =
@@ -32,16 +39,12 @@ const NeptuneSS = memo(({ Neptune, JDday, updateCamera }) => {
     NeptuneLight.current.position.setFromSphericalCoords(10, Math.PI / 2 + B, L)
   }
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     updateNeptune()
     return () => {
       Neptune_Texture.dispose()
     }
   }, [JDday])
-
-  useLayoutEffect(() => {
-    updateCamera(0)
-  }, [neptunePos])
 
   return (
     <mesh ref={Neptune} frustumCulled={false} position={neptunePos}>

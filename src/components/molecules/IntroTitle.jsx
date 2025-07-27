@@ -4,7 +4,7 @@ import { useLayoutEffect, useState } from 'react'
 import { useAnimation, useConfig } from '../../App'
 
 function IntroTitle ({ loaded }) {
-  const { tagsOn } = useConfig()
+  const { tagsOn, controlsOn } = useConfig()
   const { intro_animation } = useAnimation()
 
   const [name, setName] = useState(false)
@@ -21,6 +21,7 @@ function IntroTitle ({ loaded }) {
         setName(false)
         setIntro(false)
         tagsOn()
+        controlsOn()
         document.querySelector('#solarSystem').style.backgroundColor = '#101018'
       }, 14000)
       return () => {

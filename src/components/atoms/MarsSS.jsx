@@ -1,13 +1,20 @@
-import { memo, useLayoutEffect, useState } from 'react'
-import { marsCoordinatesGivenDate } from '../../helpers/functions/astronomicalFunctions'
+import { memo, useEffect, useState } from 'react'
+import {
+  changeDateFromInput,
+  marsCoordinatesGivenDate
+} from '../../helpers/functions/astronomicalFunctions'
 import { MARS_SIZE, SCALE } from '../../helpers/functions/SolarSystemConstants'
 import { TextureLoader, Vector3 } from 'three'
 import SkyTag from './SkyTag'
+import { useDate } from '../../App'
 
-const MarsSS = memo(({ Mars, JDday, updateCamera }) => {
+const MarsSS = memo(({ Mars }) => {
   const Mars_Texture = new TextureLoader().load('textures/mars.webp')
 
   const [marsPos, setMarsPos] = useState([0, 0, 0])
+
+  const { date } = useDate()
+  const JDday = changeDateFromInput(date)
 
   function updateMars () {
     const { L, B, R } = marsCoordinatesGivenDate(JDday)
@@ -20,16 +27,13 @@ const MarsSS = memo(({ Mars, JDday, updateCamera }) => {
     setMarsPos([...m])
   }
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     updateMars()
     return () => {
       Mars_Texture.dispose()
     }
   }, [JDday])
 
-  useLayoutEffect(() => {
-    updateCamera(0)
-  }, [marsPos])
   return (
     <mesh ref={Mars} frustumCulled={false} position={marsPos}>
       <SkyTag name={'Marte'} color='bg-red-400' />

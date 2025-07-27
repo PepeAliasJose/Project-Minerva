@@ -1,6 +1,7 @@
 import { TextureLoader, Vector3 } from 'three'
 
 import {
+  changeDateFromInput,
   earthCoordinatesGivenDate,
   moonCoordinatesGivenT
 } from '../../helpers/functions/astronomicalFunctions'
@@ -11,11 +12,15 @@ import {
 } from '../../helpers/functions/SolarSystemConstants'
 import { degreesToRadians } from 'popmotion'
 import SkyTag from './SkyTag'
-import { memo, useLayoutEffect, useState } from 'react'
+import { memo, useEffect, useState } from 'react'
+import { useDate } from '../../App'
 
-const EartMoon = memo(({ Earth, Moon, JDday, updateCamera }) => {
+const EartMoon = memo(({ Earth, Moon }) => {
   const [earthPos, setEarthPos] = useState([0, 0, 0])
   const [moonPos, setMoonPos] = useState([0, 0, 0])
+
+  const { date } = useDate()
+  const JDday = changeDateFromInput(date)
 
   const Earth_Texture = new TextureLoader().load('textures/earth.webp')
   const Moon_Texture = new TextureLoader().load('textures/moon.webp')
@@ -44,17 +49,13 @@ const EartMoon = memo(({ Earth, Moon, JDday, updateCamera }) => {
     //Actualizar la malla interna de la tierra para compensar el giro
   }
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     updateEarth()
     return () => {
       Earth_Texture.dispose()
       Moon_Texture.dispose()
     }
   }, [JDday])
-
-  useLayoutEffect(() => {
-    updateCamera(0)
-  }, [earthPos, moonPos])
 
   return (
     <mesh ref={Earth} frustumCulled={false} position={earthPos}>

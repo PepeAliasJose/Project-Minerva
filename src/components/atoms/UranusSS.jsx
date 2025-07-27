@@ -1,16 +1,23 @@
-import { memo, useLayoutEffect, useRef, useState } from 'react'
+import { memo, useEffect, useRef, useState } from 'react'
 import { TextureLoader, Vector3 } from 'three'
-import { uranusCoordinatesGivenDate } from '../../helpers/functions/astronomicalFunctions'
+import {
+  changeDateFromInput,
+  uranusCoordinatesGivenDate
+} from '../../helpers/functions/astronomicalFunctions'
 import {
   SCALE,
   URANUS_SIZE
 } from '../../helpers/functions/SolarSystemConstants'
 import SkyTag from './SkyTag'
+import { useDate } from '../../App'
 
-const UranusSS = memo(({ Uranus, JDday, updateCamera }) => {
+const UranusSS = memo(({ Uranus }) => {
   const [uranusPos, setUranusPos] = useState([0, 0, 0])
 
   const UranusLight = useRef()
+
+  const { date } = useDate()
+  const JDday = changeDateFromInput(date)
 
   const shadowRes =
     navigator.userAgent.includes('iPhone') ||
@@ -32,16 +39,13 @@ const UranusSS = memo(({ Uranus, JDday, updateCamera }) => {
     UranusLight.current.position.setFromSphericalCoords(10, Math.PI / 2 + B, L)
   }
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     updateUranus()
     return () => {
       Uranus_Texture.dispose()
     }
   }, [JDday])
 
-  useLayoutEffect(() => {
-    updateCamera(0)
-  }, [uranusPos])
   return (
     <mesh ref={Uranus} frustumCulled={false} position={uranusPos}>
       <SkyTag name={'Urano'} color='bg-cyan-100' />

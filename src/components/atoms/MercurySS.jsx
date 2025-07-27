@@ -5,12 +5,19 @@ import {
 } from '../../helpers/functions/SolarSystemConstants'
 import { TextureLoader, Vector3 } from 'three'
 import SkyTag from './SkyTag'
-import { memo, useLayoutEffect, useState } from 'react'
-import { mercuryCoordinatesGivenDate } from '../../helpers/functions/astronomicalFunctions'
+import { memo, useEffect, useState } from 'react'
+import {
+  changeDateFromInput,
+  mercuryCoordinatesGivenDate
+} from '../../helpers/functions/astronomicalFunctions'
+import { useDate } from '../../App'
 
-const MercurySS = memo(({ Mercury, JDday, updateCamera }) => {
+const MercurySS = memo(({ Mercury }) => {
   const [mercuryPos, setMercuryPos] = useState([0, 0, 0])
   const Mercury_Texture = new TextureLoader().load('textures/mercury.webp')
+
+  const { date } = useDate()
+  const JDday = changeDateFromInput(date)
 
   function updateMercury () {
     const { L, B, R } = mercuryCoordinatesGivenDate(JDday)
@@ -24,16 +31,12 @@ const MercurySS = memo(({ Mercury, JDday, updateCamera }) => {
     setMercuryPos([...m])
   }
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     updateMercury()
     return () => {
       Mercury_Texture.dispose()
     }
   }, [JDday])
-
-  useLayoutEffect(() => {
-    updateCamera(0)
-  }, [mercuryPos])
 
   return (
     <mesh ref={Mercury} frustumCulled={false} position={mercuryPos}>

@@ -1,19 +1,26 @@
 import { TextureLoader } from 'three'
-import { saturnCoordinatesGivenDate } from '../../helpers/functions/astronomicalFunctions'
+import {
+  changeDateFromInput,
+  saturnCoordinatesGivenDate
+} from '../../helpers/functions/astronomicalFunctions'
 import {
   SATURN_INNER_RING_SIZE,
   SATURN_OUTTER_RING_SIZE,
   SATURN_SIZE,
   SCALE
 } from '../../helpers/functions/SolarSystemConstants'
-import { memo, useLayoutEffect, useRef, useState } from 'react'
+import { memo, useEffect, useRef, useState } from 'react'
 import SkyTag from './SkyTag'
 
 import * as THREE from 'three'
+import { useDate } from '../../App'
 
-const SaturnSS = memo(({ Saturn, JDday, updateCamera }) => {
+const SaturnSS = memo(({ Saturn }) => {
   const [saturnPos, setSaturnPos] = useState([0, 0, 0])
   const [saturnRot, setSaturnRot] = useState([0, 0, 0])
+
+  const { date } = useDate()
+  const JDday = changeDateFromInput(date)
 
   const SaturnLight = useRef()
   const SaturnRings = useRef()
@@ -44,11 +51,11 @@ const SaturnSS = memo(({ Saturn, JDday, updateCamera }) => {
     SaturnLight.current.position.setFromSphericalCoords(10, Math.PI / 2 - B, 0)
   }
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     updateSaturn()
   }, [JDday])
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     //Arreglar las texturas del anillo
     let pos = SaturnRings.current.geometry.attributes.position
     let uvAttribute = SaturnRings.current.geometry.attributes.uv
@@ -70,14 +77,6 @@ const SaturnSS = memo(({ Saturn, JDday, updateCamera }) => {
     }
   }, [])
 
-  useLayoutEffect(() => {
-    console.log('SASASA')
-  })
-
-  useLayoutEffect(() => {
-    updateCamera(0)
-  }, [saturnPos])
-
   return (
     <mesh
       ref={Saturn}
@@ -85,7 +84,7 @@ const SaturnSS = memo(({ Saturn, JDday, updateCamera }) => {
       position={saturnPos}
       rotation={saturnRot}
     >
-      <SkyTag name={'Saturn'} color='bg-yellow-200' />
+      <SkyTag name={'Saturno'} color='bg-yellow-200' />
       <pointLight
         ref={SaturnLight}
         intensity={250}
