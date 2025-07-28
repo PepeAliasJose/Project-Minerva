@@ -1,23 +1,16 @@
 import { memo, useEffect, useRef, useState } from 'react'
-import { TextureLoader, Vector3 } from 'three'
-import {
-  changeDateFromInput,
-  neptuneCoordinatesGivenDate
-} from '../../helpers/functions/astronomicalFunctions'
-import {
-  NEPTUNE_SIZE,
-  SCALE
-} from '../../helpers/functions/SolarSystemConstants'
+import { TextureLoader } from 'three'
+import { parseLBRToXYZ } from '../../helpers/functions/astronomicalFunctions'
+import { NEPTUNE_SIZE } from '../../helpers/functions/SolarSystemConstants'
 import SkyTag from './SkyTag'
-import { useDate } from '../../App'
+import { usePlanets } from '../../App'
 
 const NeptuneSS = memo(({ Neptune }) => {
   const [neptunePos, setNeptunePos] = useState([0, 0, 0])
   const NeptuneLight = useRef()
   const Neptune_Texture = new TextureLoader().load('textures/neptune.webp')
 
-  const { date } = useDate()
-  const JDday = changeDateFromInput(date)
+  const { neptune } = usePlanets()
 
   //Resolucion de las sombras para dispositivos moviles
   const shadowRes =
@@ -27,16 +20,12 @@ const NeptuneSS = memo(({ Neptune }) => {
       : 1024
 
   function updateNeptune () {
-    const { L, B, R } = neptuneCoordinatesGivenDate(JDday)
-    //console.log('NEPTUNE: ', L, -Math.PI / 2 + B, (R * 1.5 * 10 ** 8) / SCALE)
-    const n = new Vector3().setFromSphericalCoords(
-      (R * 1.5 * 10 ** 8) / SCALE,
-      -Math.PI / 2 + B,
-      L
+    setNeptunePos(parseLBRToXYZ(neptune))
+    NeptuneLight.current.position.setFromSphericalCoords(
+      10,
+      Math.PI / 2 + neptune.B,
+      neptune.L
     )
-    setNeptunePos([...n])
-
-    NeptuneLight.current.position.setFromSphericalCoords(10, Math.PI / 2 + B, L)
   }
 
   useEffect(() => {
@@ -44,7 +33,7 @@ const NeptuneSS = memo(({ Neptune }) => {
     return () => {
       Neptune_Texture.dispose()
     }
-  }, [JDday])
+  }, [neptune])
 
   return (
     <mesh ref={Neptune} frustumCulled={false} position={neptunePos}>

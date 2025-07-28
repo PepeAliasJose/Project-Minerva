@@ -5,9 +5,10 @@ import { Suspense } from 'react'
 import Scene from '../components/organisms/Scene'
 import IntroTitle from '../components/molecules/IntroTitle'
 import Controls from '../components/organisms/Controls'
+import { Html } from '@react-three/drei'
 
 function SolarSystem () {
-  const [loaded, setLoaded] = useState(false)
+  const [load, setLoad] = useState(false)
 
   useLayoutEffect(() => {
     console.log('Render SolarSystemPage')
@@ -23,25 +24,22 @@ function SolarSystem () {
         style={{ width: '100%', height: '100vh' }}
         shadows={true}
       >
-        <Suspense fallback={null}>
-          <Scene
-            load={t => {
-              setLoaded(t)
-            }}
-          />
+        <Suspense>
+          <Html position={[0, 0, 0]} center></Html>
+          <Scene load={setLoad} />
         </Suspense>
       </Canvas>
-      {!loaded && (
+      {/*ELEMENTOS ANIMACION ENTRADA*/}
+      {!load && (
         <div
           className='text-2xl text-white 
-        fixed top-[50vh] left-[50vw] 
+        fixed top-[50vh] left-[50vw]
         -translate-x-[50%] -translate-y-[50%]'
         >
           Loading...
         </div>
       )}
-      {/*ELEMENTOS ANIMACION ENTRADA*/}
-      <IntroTitle loaded={loaded} />
+      {load && <IntroTitle />}
       {/*FIN ELEMENTOS ANIMACION ENTRADA*/}
       <Controls />
     </div>

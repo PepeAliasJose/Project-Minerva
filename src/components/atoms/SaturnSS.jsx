@@ -1,7 +1,7 @@
 import { TextureLoader } from 'three'
 import {
-  changeDateFromInput,
-  saturnCoordinatesGivenDate
+  parseLBRToXYZ,
+  setSphericalCoordFromCartesian
 } from '../../helpers/functions/astronomicalFunctions'
 import {
   SATURN_INNER_RING_SIZE,
@@ -13,14 +13,13 @@ import { memo, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import SkyTag from './SkyTag'
 
 import * as THREE from 'three'
-import { useDate } from '../../App'
+import { usePlanets } from '../../App'
 
 const SaturnSS = memo(({ Saturn }) => {
   const [saturnPos, setSaturnPos] = useState([0, 0, 0])
   const [saturnRot, setSaturnRot] = useState([0, 0, 0])
 
-  const { date } = useDate()
-  const JDday = changeDateFromInput(date)
+  const { saturn } = usePlanets()
 
   const SaturnLight = useRef()
   const SaturnRings = useRef()
@@ -35,25 +34,15 @@ const SaturnSS = memo(({ Saturn }) => {
     'textures/saturn_ring.webp'
   )
 
-  function updateSaturn () {
-    const { L, B, R } = saturnCoordinatesGivenDate(JDday)
-    //console.log('SATURN: ', L, -Math.PI / 2 + B, (R * 1.5 * 10 ** 8) / SCALE)
-    const s = new THREE.Vector3().setFromSphericalCoords(
-      (R * 1.5 * 10 ** 8) / SCALE,
-      -Math.PI / 2 + B,
-      L
-    )
-    setSaturnPos([...s])
-
-    //Saturn.current.rotation.y = L
-    setSaturnRot([0, L, 0])
-    //   SaturnBody.current.rotation.x =
-    SaturnLight.current.position.setFromSphericalCoords(10, Math.PI / 2 - B, 0)
-  }
-
   useEffect(() => {
-    updateSaturn()
-  }, [JDday])
+    setSaturnPos(parseLBRToXYZ(saturn))
+    setSaturnRot([0, saturn.L, 0])
+    SaturnLight.current.position.setFromSphericalCoords(
+      10,
+      Math.PI / 2 - saturn.B,
+      0
+    )
+  }, [saturn])
 
   useLayoutEffect(() => {
     //Arreglar las texturas del anillo

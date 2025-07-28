@@ -4,6 +4,19 @@ import viteLogo from '/vite.svg'
 import SolarSystem from './pages/SolarSystem'
 
 import { create } from 'zustand'
+import {
+  earthCoordinatesGivenDate,
+  jupiterCoordinatesGivenDate,
+  marsCoordinatesGivenDate,
+  mercuryCoordinatesGivenDate,
+  moonCoordinatesGivenDate,
+  moonParseLBDToXYZ,
+  neptuneCoordinatesGivenDate,
+  parseLBRToXYZ,
+  saturnCoordinatesGivenDate,
+  uranusCoordinatesGivenDate,
+  venusCoordinatesGivenDate
+} from './helpers/functions/astronomicalFunctions'
 
 const i = false
 
@@ -16,16 +29,70 @@ export const useConfig = create(set => ({
   controlsOn: () => set(state => ({ controls: true })),
   controlsOff: () => set(state => ({ controls: false })),
 
-  zoomWhenChange: false,
+  zoomWhenChange: true,
   zoomOn: () => set(state => ({ zoomWhenChange: true })),
   zoomOff: () => set(state => ({ zoomWhenChange: false }))
 }))
 
+export const useCustomCamera = create(set => ({
+  target: [0, 0, 0],
+  theta: -Math.PI / 1.75,
+  phi: Math.PI / 3,
+  radius: 10000,
+  smoothTime: 0,
+  fov: 40,
+  updateTarget: t => set(() => ({ target: t })),
+  updateView: (theta, phi, radius, smoothTime) =>
+    set(() => ({
+      theta: theta,
+      phi: phi,
+      radius: radius,
+      smoothTime: smoothTime
+    })),
+  updateST: smoothTime =>
+    set(() => ({
+      smoothTime: smoothTime
+    })),
+  updateRadius: rad =>
+    set(() => ({
+      radius: rad
+    })),
+  updateFov: fov =>
+    set(() => ({
+      fov: fov
+    }))
+}))
+
+export const usePlanets = create(set => ({
+  mercury: { L: 0, B: 0, R: 0 },
+  venus: { L: 0, B: 0, R: 0 },
+  earth: { L: 0, B: 0, R: 0 },
+  moon: { L: 0, B: 0, R: 0 },
+  mars: { L: 0, B: 0, R: 0 },
+  jupiter: { L: 0, B: 0, R: 0 },
+  saturn: { L: 0, B: 0, R: 0 },
+  uranus: { L: 0, B: 0, R: 0 },
+  neptune: { L: 0, B: 0, R: 0 },
+  updateAllPlanets: JDday =>
+    set(state => ({
+      mercury: mercuryCoordinatesGivenDate(JDday),
+      venus: venusCoordinatesGivenDate(JDday),
+      earth: earthCoordinatesGivenDate(JDday),
+      moon: moonCoordinatesGivenDate(JDday),
+      mars: marsCoordinatesGivenDate(JDday),
+      jupiter: jupiterCoordinatesGivenDate(JDday),
+      saturn: saturnCoordinatesGivenDate(JDday),
+      uranus: uranusCoordinatesGivenDate(JDday),
+      neptune: neptuneCoordinatesGivenDate(JDday)
+    })) //Parser from LBR to xyz
+}))
+
+//Deprecated
 export const usePlanet = create(set => ({
   planet: i ? 'saturn' : 'sun',
   setPlanet: p => set(state => ({ planet: p }))
 }))
-
+//Deprecated
 export const useDate = create(set => ({
   date: '1992-04-12',
   setDate: d => set(state => ({ date: d }))
@@ -52,14 +119,14 @@ export const useCamara = create(set => ({
   changeTarget: (radius = null, coords, st) =>
     set(
       state => (
-        (state.camara.current.smoothTime = st),
-        (state.camara.current._targetEnd = { ...coords }),
-        radius && (state.camara.current._sphericalEnd.radius = radius)
+        (camara.current.smoothTime = st),
+        (camara.current._targetEnd = { ...coords }),
+        radius && (camara.current._sphericalEnd.radius = radius)
       )
     ),
-  setTheta: th => set(state => (state.camara.current._sphericalEnd.theta = th)),
-  setPhi: ph => set(state => (state.camara.current._sphericalEnd.phi = ph)),
+  setTheta: th => set(state => (camara.current._sphericalEnd.theta = th)),
+  setPhi: ph => set(state => (camara.current._sphericalEnd.phi = ph)),
   setRadius: rad =>
-    set(state => (state.camara.current._sphericalEnd.radius = rad))
+    set(state => (camara.current._sphericalEnd.radius = rad))
 }))
 */

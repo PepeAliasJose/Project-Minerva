@@ -1,23 +1,16 @@
 import { memo, useEffect, useRef, useState } from 'react'
-import { TextureLoader, Vector3 } from 'three'
-import {
-  changeDateFromInput,
-  uranusCoordinatesGivenDate
-} from '../../helpers/functions/astronomicalFunctions'
-import {
-  SCALE,
-  URANUS_SIZE
-} from '../../helpers/functions/SolarSystemConstants'
+import { TextureLoader } from 'three'
+import { parseLBRToXYZ } from '../../helpers/functions/astronomicalFunctions'
+import { URANUS_SIZE } from '../../helpers/functions/SolarSystemConstants'
 import SkyTag from './SkyTag'
-import { useDate } from '../../App'
+import { usePlanets } from '../../App'
 
 const UranusSS = memo(({ Uranus }) => {
   const [uranusPos, setUranusPos] = useState([0, 0, 0])
 
   const UranusLight = useRef()
 
-  const { date } = useDate()
-  const JDday = changeDateFromInput(date)
+  const { uranus } = usePlanets()
 
   const shadowRes =
     navigator.userAgent.includes('iPhone') ||
@@ -28,15 +21,12 @@ const UranusSS = memo(({ Uranus }) => {
   const Uranus_Texture = new TextureLoader().load('textures/uranus.webp')
 
   function updateUranus () {
-    const { L, B, R } = uranusCoordinatesGivenDate(JDday)
-    //console.log('URANUS: ', L, -Math.PI / 2 + B, (R * 1.5 * 10 ** 8) / SCALE)
-    const u = new Vector3().setFromSphericalCoords(
-      (R * 1.5 * 10 ** 8) / SCALE,
-      -Math.PI / 2 + B,
-      L
+    setUranusPos(parseLBRToXYZ(uranus))
+    UranusLight.current.position.setFromSphericalCoords(
+      10,
+      Math.PI / 2 + uranus.B,
+      uranus.L
     )
-    setUranusPos([...u])
-    UranusLight.current.position.setFromSphericalCoords(10, Math.PI / 2 + B, L)
   }
 
   useEffect(() => {
@@ -44,7 +34,7 @@ const UranusSS = memo(({ Uranus }) => {
     return () => {
       Uranus_Texture.dispose()
     }
-  }, [JDday])
+  }, [uranus])
 
   return (
     <mesh ref={Uranus} frustumCulled={false} position={uranusPos}>

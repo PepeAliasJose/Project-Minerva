@@ -1,30 +1,19 @@
 import { memo, useEffect, useState } from 'react'
-import {
-  changeDateFromInput,
-  marsCoordinatesGivenDate
-} from '../../helpers/functions/astronomicalFunctions'
-import { MARS_SIZE, SCALE } from '../../helpers/functions/SolarSystemConstants'
-import { TextureLoader, Vector3 } from 'three'
+import { parseLBRToXYZ } from '../../helpers/functions/astronomicalFunctions'
+import { MARS_SIZE } from '../../helpers/functions/SolarSystemConstants'
+import { TextureLoader } from 'three'
 import SkyTag from './SkyTag'
-import { useDate } from '../../App'
+import { usePlanets } from '../../App'
 
 const MarsSS = memo(({ Mars }) => {
   const Mars_Texture = new TextureLoader().load('textures/mars.webp')
 
   const [marsPos, setMarsPos] = useState([0, 0, 0])
 
-  const { date } = useDate()
-  const JDday = changeDateFromInput(date)
+  const { mars } = usePlanets()
 
   function updateMars () {
-    const { L, B, R } = marsCoordinatesGivenDate(JDday)
-    //console.log('MARS: ', L, -Math.PI / 2 + B, (R * 1.5 * 10 ** 8) / SCALE)
-    const m = new Vector3().setFromSphericalCoords(
-      (R * 1.5 * 10 ** 8) / SCALE,
-      -Math.PI / 2 + B,
-      L
-    )
-    setMarsPos([...m])
+    setMarsPos(parseLBRToXYZ(mars))
   }
 
   useEffect(() => {
@@ -32,7 +21,7 @@ const MarsSS = memo(({ Mars }) => {
     return () => {
       Mars_Texture.dispose()
     }
-  }, [JDday])
+  }, [mars])
 
   return (
     <mesh ref={Mars} frustumCulled={false} position={marsPos}>

@@ -3,7 +3,7 @@ import { motion } from 'framer-motion'
 import { useLayoutEffect, useState } from 'react'
 import { useAnimation, useConfig } from '../../App'
 
-function IntroTitle ({ loaded }) {
+function IntroTitle ({}) {
   const { tagsOn, controlsOn } = useConfig()
   const { intro_animation } = useAnimation()
 
@@ -13,7 +13,7 @@ function IntroTitle ({ loaded }) {
   useLayoutEffect(() => {
     //console.log('LOADED: ', loaded)
 
-    if (loaded && intro) {
+    if (intro) {
       const start = setTimeout(() => {
         setName(true)
       }, 10000)
@@ -32,13 +32,13 @@ function IntroTitle ({ loaded }) {
     if (!intro) {
       document.querySelector('#solarSystem').style.backgroundColor = '#101018'
     }
-  }, [loaded])
+  }, [])
 
   return (
     <AnimatePresence>
       <motion.div
         key={'container'}
-        className='absolute z-[51] bottom-15 sm:bottom-0 left-0 
+        className='fixed z-[51] bottom-15 sm:bottom-0 left-0 
           w-screen flex flex-col 
           items-center gap-2 pb-7 text-4xl sm:text-7xl font-black'
       >
@@ -64,7 +64,7 @@ function IntroTitle ({ loaded }) {
               SATURNO
             </motion.div>
           )}
-          {intro && loaded && (
+          {intro && (
             <motion.div
               id='DATE'
               ey={'date'}

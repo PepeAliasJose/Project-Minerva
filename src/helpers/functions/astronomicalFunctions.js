@@ -1,3 +1,9 @@
+/*
+In the lists of Appendix III, the quantities B and C are expressed in radians.
+The coefficients A are in units of 10**-8 radian in the case of the longitude and
+the latitude, in units of 10**-8 astronomical unit for the radius vector.
+*/
+
 import { degreesToRadians } from 'popmotion'
 import {
   moonDistanceArgsTable,
@@ -72,7 +78,7 @@ import { SCALE } from './SolarSystemConstants'
 
 import * as THREE from 'three'
 
-export function moonCoordinatesGivenT (date) {
+export function moonCoordinatesGivenDate (date) {
   const T = TFromJD(date)
 
   //Estos datos hay que convertirlos a grados normales entre 0 360
@@ -158,11 +164,11 @@ export function moonCoordinatesGivenT (date) {
   //console.log('Extra : ', A1, A2, A3)
   //console.log('Sumatorios: ', suml, sumb, sumr)
   //Resultados
-  let lambda = Lp + suml / 1000000
-  let beta = sumb / 1000000
-  let del = 385000.56 + sumr / 1000
-
-  return { lambda, beta, del }
+  let L = Lp + suml / 1000000
+  let B = sumb / 1000000
+  let R = 385000.56 + sumr / 1000
+  //console.log('LUNA: ', L, B, R)
+  return { L, B, R }
 }
 
 function linearCombinationSin (tabla, D, M, Mp, F, E) {
@@ -410,6 +416,7 @@ export function setFromSphericalCoordsCustom (radius, phi, theta, [dx, dy, dz]) 
   return { x, y, z }
 }
 
+//TODO: INVERSE OPERATION
 export function setFromSphericalCoords (radius, phi, theta) {
   const sinPhiRadius = Math.sin(phi) * radius
 
@@ -418,6 +425,14 @@ export function setFromSphericalCoords (radius, phi, theta) {
   let z = sinPhiRadius * Math.cos(theta)
 
   return { x, y, z }
+}
+
+export function setSphericalCoordFromCartesian (x, y, z) {
+  const Rr = Math.sqrt(x ** 2 + y ** 2 + z ** 2)
+  const Ll = Math.atan2(x, z)
+  const Bb = Math.acos(y / Rr)
+
+  return { Ll, Bb, Rr }
 }
 
 export function calculateElementOrbit (func, JDay, limit = 360, precision = 2) {
@@ -451,4 +466,24 @@ export function changeDateFromInput (value) {
   let time = Date.parse(value)
   time = isNaN(time) ? new Date(fechaPredeterminada) : time
   return time / 86400000 - 60 / 1440 + 2440587.5
+}
+
+export function parseLBRToXYZ (pos) {
+  const { L, B, R } = pos
+  const v = new THREE.Vector3().setFromSphericalCoords(
+    (R * 1.5 * 10 ** 8) / SCALE, //Parse from AU to KM
+    -Math.PI / 2 + B,
+    L
+  )
+  return [...v]
+}
+
+export function moonParseLBDToXYZ (pos) {
+  const { L, B, R } = pos
+  const v = new THREE.Vector3().setFromSphericalCoords(
+    R / SCALE,
+    -Math.PI / 2 + degreesToRadians(B),
+    degreesToRadians(L)
+  )
+  return [...v]
 }

@@ -1,7 +1,8 @@
 import { TextureLoader, Vector3 } from 'three'
 import {
   changeDateFromInput,
-  jupiterCoordinatesGivenDate
+  jupiterCoordinatesGivenDate,
+  parseLBRToXYZ
 } from '../../helpers/functions/astronomicalFunctions'
 import SkyTag from './SkyTag'
 import {
@@ -9,13 +10,12 @@ import {
   SCALE
 } from '../../helpers/functions/SolarSystemConstants'
 import { memo, useEffect, useRef, useState } from 'react'
-import { useDate } from '../../App'
+import { usePlanets } from '../../App'
 
 const JupiterSS = memo(({ Jupiter }) => {
   const [jupiterPos, setJupiterPos] = useState([0, 0, 0])
 
-  const { date } = useDate()
-  const JDday = changeDateFromInput(date)
+  const { jupiter } = usePlanets()
 
   const JupiterLight = useRef()
   const Jupiter_Texture = new TextureLoader().load('textures/jupiter.webp')
@@ -28,16 +28,12 @@ const JupiterSS = memo(({ Jupiter }) => {
       : 1024
 
   function updateJupiter () {
-    const { L, B, R } = jupiterCoordinatesGivenDate(JDday)
-    //console.log('JUPITER: ', L, -Math.PI / 2 + B, (R * 1.5 * 10 ** 8) / SCALE)
-    const j = new Vector3().setFromSphericalCoords(
-      (R * 1.5 * 10 ** 8) / SCALE,
-      -Math.PI / 2 + B,
-      L
+    setJupiterPos(parseLBRToXYZ(jupiter))
+    JupiterLight.current.position.setFromSphericalCoords(
+      10,
+      Math.PI / 2 + jupiter.B,
+      jupiter.L
     )
-
-    setJupiterPos([...j])
-    JupiterLight.current.position.setFromSphericalCoords(10, Math.PI / 2 + B, L)
   }
 
   useEffect(() => {
@@ -45,7 +41,7 @@ const JupiterSS = memo(({ Jupiter }) => {
     return () => {
       Jupiter_Texture.dispose()
     }
-  }, [JDday])
+  }, [jupiter])
 
   return (
     <mesh ref={Jupiter} frustumCulled={false} position={jupiterPos}>

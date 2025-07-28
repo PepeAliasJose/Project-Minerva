@@ -1,13 +1,105 @@
 import { AnimatePresence, motion } from 'framer-motion'
-import { useConfig, useDate, usePlanet } from '../../App'
+import { useAnimation, useConfig, useCustomCamera, usePlanets } from '../../App'
 import { useEffect, useState } from 'react'
 import { Cog6ToothIcon } from '@heroicons/react/24/outline'
 import { Stats } from '@react-three/drei'
+import {
+  changeDateFromInput,
+  earthCoordinatesGivenDate,
+  moonParseLBDToXYZ,
+  parseLBRToXYZ
+} from '../../helpers/functions/astronomicalFunctions'
 
 function Controls ({}) {
-  const { controls } = useConfig()
-  const { setPlanet, planet } = usePlanet()
-  const { date, setDate } = useDate()
+  const { controls, zoomWhenChange } = useConfig() //Configuracion
+  const { intro_animation } = useAnimation()
+
+  //Fecha y planeta seleccionado
+  const [date, setDate] = useState('1992-04-12')
+  const [planet, setPlanet] = useState(intro_animation ? 'saturn' : 'sun')
+
+  //Planetas
+  const {
+    mercury,
+    venus,
+    earth,
+    moon,
+    mars,
+    jupiter,
+    saturn,
+    uranus,
+    neptune,
+    updateAllPlanets
+  } = usePlanets()
+
+  //Target de la camara
+  const { updateTarget, updateRadius, updateST } = useCustomCamera()
+
+  useEffect(() => {
+    const JDday = changeDateFromInput(date)
+    updateAllPlanets(JDday)
+  }, [date])
+
+  useEffect(() => {
+    updateST(0.6)
+    updateCameraTarget(planet)
+  }, [planet])
+
+  useEffect(() => {
+    updateST(0)
+    updateCameraTarget(planet)
+  }, [mercury])
+
+  function updateCameraTarget (planet) {
+    switch (planet) {
+      case 'sun':
+        updateTarget([0, 0, 0])
+        zoomWhenChange && updateRadius(14)
+        break
+      case 'mercury':
+        updateTarget(parseLBRToXYZ(mercury))
+        zoomWhenChange && updateRadius(0.7)
+        break
+      case 'venus':
+        updateTarget(parseLBRToXYZ(venus))
+        zoomWhenChange && updateRadius(0.7)
+        break
+      case 'earth':
+        updateTarget(parseLBRToXYZ(earth))
+        zoomWhenChange && updateRadius(0.7)
+        break
+      case 'moon':
+        const e = parseLBRToXYZ(earth)
+        const m = moonParseLBDToXYZ(moon)
+        updateTarget([e[0] + m[0], e[1] + m[1], e[2] + m[2]])
+        zoomWhenChange && updateRadius(0.2)
+        break
+      case 'mars':
+        updateTarget(parseLBRToXYZ(mars))
+        zoomWhenChange && updateRadius(0.7)
+        break
+      case 'saturn':
+        updateTarget(parseLBRToXYZ(saturn))
+        zoomWhenChange && updateRadius(1.3)
+        break
+      case 'jupiter':
+        updateTarget(parseLBRToXYZ(jupiter))
+        zoomWhenChange && updateRadius(1.7)
+        break
+      case 'uranus':
+        updateTarget(parseLBRToXYZ(uranus))
+        zoomWhenChange && updateRadius(1)
+        break
+      case 'neptune':
+        updateTarget(parseLBRToXYZ(neptune))
+        zoomWhenChange && updateRadius(1)
+        break
+      default:
+        updateTarget([0, 0, 0])
+        zoomWhenChange && updateRadius(14)
+        break
+    }
+  }
 
   return (
     <AnimatePresence>
