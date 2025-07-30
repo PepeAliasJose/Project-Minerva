@@ -10,7 +10,7 @@ const UranusSS = memo(({ Uranus }) => {
 
   const UranusLight = useRef()
 
-  const { uranus } = usePlanets()
+  const { planets } = usePlanets()
 
   const shadowRes =
     navigator.userAgent.includes('iPhone') ||
@@ -21,11 +21,11 @@ const UranusSS = memo(({ Uranus }) => {
   const Uranus_Texture = new TextureLoader().load('textures/uranus.webp')
 
   function updateUranus () {
-    setUranusPos(parseLBRToXYZ(uranus))
+    setUranusPos(parseLBRToXYZ(planets.uranus))
     UranusLight.current.position.setFromSphericalCoords(
       10,
-      Math.PI / 2 + uranus.B,
-      uranus.L
+      Math.PI / 2 + planets.uranus.B,
+      planets.uranus.L
     )
   }
 
@@ -34,7 +34,7 @@ const UranusSS = memo(({ Uranus }) => {
     return () => {
       Uranus_Texture.dispose()
     }
-  }, [uranus])
+  }, [planets])
 
   return (
     <mesh ref={Uranus} frustumCulled={false} position={uranusPos}>

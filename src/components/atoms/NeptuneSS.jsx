@@ -10,7 +10,7 @@ const NeptuneSS = memo(({ Neptune }) => {
   const NeptuneLight = useRef()
   const Neptune_Texture = new TextureLoader().load('textures/neptune.webp')
 
-  const { neptune } = usePlanets()
+  const { planets } = usePlanets()
 
   //Resolucion de las sombras para dispositivos moviles
   const shadowRes =
@@ -20,11 +20,11 @@ const NeptuneSS = memo(({ Neptune }) => {
       : 1024
 
   function updateNeptune () {
-    setNeptunePos(parseLBRToXYZ(neptune))
+    setNeptunePos(parseLBRToXYZ(planets.neptune))
     NeptuneLight.current.position.setFromSphericalCoords(
       10,
-      Math.PI / 2 + neptune.B,
-      neptune.L
+      Math.PI / 2 + planets.neptune.B,
+      planets.neptune.L
     )
   }
 
@@ -33,7 +33,7 @@ const NeptuneSS = memo(({ Neptune }) => {
     return () => {
       Neptune_Texture.dispose()
     }
-  }, [neptune])
+  }, [planets])
 
   return (
     <mesh ref={Neptune} frustumCulled={false} position={neptunePos}>

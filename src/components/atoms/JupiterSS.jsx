@@ -15,7 +15,7 @@ import { usePlanets } from '../../App'
 const JupiterSS = memo(({ Jupiter }) => {
   const [jupiterPos, setJupiterPos] = useState([0, 0, 0])
 
-  const { jupiter } = usePlanets()
+  const { planets } = usePlanets()
 
   const JupiterLight = useRef()
   const Jupiter_Texture = new TextureLoader().load('textures/jupiter.webp')
@@ -28,11 +28,11 @@ const JupiterSS = memo(({ Jupiter }) => {
       : 1024
 
   function updateJupiter () {
-    setJupiterPos(parseLBRToXYZ(jupiter))
+    setJupiterPos(parseLBRToXYZ(planets.jupiter))
     JupiterLight.current.position.setFromSphericalCoords(
       10,
-      Math.PI / 2 + jupiter.B,
-      jupiter.L
+      Math.PI / 2 + planets.jupiter.B,
+      planets.jupiter.L
     )
   }
 
@@ -41,7 +41,7 @@ const JupiterSS = memo(({ Jupiter }) => {
     return () => {
       Jupiter_Texture.dispose()
     }
-  }, [jupiter])
+  }, [planets])
 
   return (
     <mesh ref={Jupiter} frustumCulled={false} position={jupiterPos}>

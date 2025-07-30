@@ -14,10 +14,10 @@ const VenusSS = memo(({ Venus }) => {
   const [venusPos, setVenusPos] = useState([0, 0, 0])
   const Venus_Texture = new TextureLoader().load('textures/venus.webp')
 
-  const { venus } = usePlanets()
+  const { planets } = usePlanets()
 
   function updateVenus () {
-    setVenusPos(parseLBRToXYZ(venus))
+    setVenusPos(parseLBRToXYZ(planets.venus))
   }
 
   useEffect(() => {
@@ -25,7 +25,7 @@ const VenusSS = memo(({ Venus }) => {
     return () => {
       Venus_Texture.dispose()
     }
-  }, [venus])
+  }, [planets])
 
   return (
     <mesh ref={Venus} frustumCulled={false} position={venusPos}>

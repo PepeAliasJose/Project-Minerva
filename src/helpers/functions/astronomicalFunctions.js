@@ -31,6 +31,11 @@ import {
   SaturnR5
 } from './SS/saturnTables'
 import {
+  EARTH_VSOP87_B,
+  EARTH_VSOP87_L,
+  EARTH_VSOP87_R
+} from './SS/earthTables_complete'
+import {
   EarthB0,
   EarthB1,
   EarthB2,
@@ -80,7 +85,6 @@ import * as THREE from 'three'
 
 export function moonCoordinatesGivenDate (date) {
   const T = TFromJD(date)
-
   //Estos datos hay que convertirlos a grados normales entre 0 360
   //Mean longitude
   let Lp =
@@ -266,12 +270,12 @@ function angleToPos (angle) {
 }
 
 export function TFromJD (time) {
-  const T = (time - 2451545.0) / 36525
+  const T = (time - 2451545) / 36525
   return T
 }
 
 export function MillenniaTFromJD (time) {
-  const T = (time - 2451545.0) / 365250
+  const T = (time - 2451545) / 365250
   return T
 }
 
@@ -283,6 +287,10 @@ export function saturnCoordinatesGivenDate (date) {
   let L = calculateTerm(tablesL, T) / 10 ** 8
   let B = calculateTerm(tablesB, T) / 10 ** 8
   let R = calculateTerm(tablesR, T) / 10 ** 8
+
+  const Lp = L * 1.397 * (10 * T) - 0.00031 * (10 * T * T)
+  L += -0.09033 + 0.03916 * (Math.cos(Lp) - Math.sin(Lp)) * Math.tan(B)
+  B += 0.03916 * (Math.cos(Lp) - Math.sin(Lp))
 
   return { L, B, R }
 }
@@ -317,6 +325,10 @@ export function jupiterCoordinatesGivenDate (date) {
   let B = calculateTerm(tablesB, T) / 10 ** 8
   let R = calculateTerm(tablesR, T) / 10 ** 8
 
+  const Lp = L * 1.397 * (10 * T) - 0.00031 * (10 * T * T)
+  L += -0.09033 + 0.03916 * (Math.cos(Lp) - Math.sin(Lp)) * Math.tan(B)
+  B += 0.03916 * (Math.cos(Lp) - Math.sin(Lp))
+
   return { L, B, R }
 }
 
@@ -328,6 +340,10 @@ export function earthCoordinatesGivenDate (date) {
   let L = calculateTerm(tablesL, T) / 10 ** 8
   let B = calculateTerm(tablesB, T) / 10 ** 8
   let R = calculateTerm(tablesR, T) / 10 ** 8
+
+  const Lp = L * 1.397 * (10 * T) - 0.00031 * (10 * T * T)
+  L += -0.09033 + 0.03916 * (Math.cos(Lp) - Math.sin(Lp)) * Math.tan(B)
+  B += 0.03916 * (Math.cos(Lp) - Math.sin(Lp))
 
   return { L, B, R }
 }
@@ -341,6 +357,10 @@ export function marsCoordinatesGivenDate (date) {
   let B = calculateTerm(tablesB, T) / 10 ** 8
   let R = calculateTerm(tablesR, T) / 10 ** 8
 
+  const Lp = L * 1.397 * (10 * T) - 0.00031 * (10 * T * T)
+  L += -0.09033 + 0.03916 * (Math.cos(Lp) - Math.sin(Lp)) * Math.tan(B)
+  B += 0.03916 * (Math.cos(Lp) - Math.sin(Lp))
+
   return { L, B, R }
 }
 
@@ -352,6 +372,10 @@ export function venusCoordinatesGivenDate (date) {
   let L = calculateTerm(tablesL, T) / 10 ** 8
   let B = calculateTerm(tablesB, T) / 10 ** 8
   let R = calculateTerm(tablesR, T) / 10 ** 8
+
+  const Lp = L * 1.397 * (10 * T) - 0.00031 * (10 * T * T)
+  L += -0.09033 + 0.03916 * (Math.cos(Lp) - Math.sin(Lp)) * Math.tan(B)
+  B += 0.03916 * (Math.cos(Lp) - Math.sin(Lp))
 
   return { L, B, R }
 }
@@ -365,6 +389,10 @@ export function mercuryCoordinatesGivenDate (date) {
   let B = calculateTerm(tablesB, T) / 10 ** 8
   let R = calculateTerm(tablesR, T) / 10 ** 8
 
+  const Lp = L * 1.397 * (10 * T) - 0.00031 * (10 * T * T)
+  L += -0.09033 + 0.03916 * (Math.cos(Lp) - Math.sin(Lp)) * Math.tan(B)
+  B += 0.03916 * (Math.cos(Lp) - Math.sin(Lp))
+
   return { L, B, R }
 }
 export function uranusCoordinatesGivenDate (date) {
@@ -376,6 +404,10 @@ export function uranusCoordinatesGivenDate (date) {
   let B = calculateTerm(tablesB, T) / 10 ** 8
   let R = calculateTerm(tablesR, T) / 10 ** 8
 
+  const Lp = L * 1.397 * (10 * T) - 0.00031 * (10 * T * T)
+  L += -0.09033 + 0.03916 * (Math.cos(Lp) - Math.sin(Lp)) * Math.tan(B)
+  B += 0.03916 * (Math.cos(Lp) - Math.sin(Lp))
+
   return { L, B, R }
 }
 export function neptuneCoordinatesGivenDate (date) {
@@ -386,6 +418,10 @@ export function neptuneCoordinatesGivenDate (date) {
   let L = calculateTerm(tablesL, T) / 10 ** 8
   let B = calculateTerm(tablesB, T) / 10 ** 8
   let R = calculateTerm(tablesR, T) / 10 ** 8
+
+  const Lp = L * 1.397 * (10 * T) - 0.00031 * (10 * T * T)
+  L += -0.09033 + 0.03916 * (Math.cos(Lp) - Math.sin(Lp)) * Math.tan(B)
+  B += 0.03916 * (Math.cos(Lp) - Math.sin(Lp))
 
   return { L, B, R }
 }
@@ -464,14 +500,19 @@ export function calculateMoonOrbit (func, JDay) {
 
 export function changeDateFromInput (value) {
   let time = Date.parse(value)
-  time = isNaN(time) ? new Date(fechaPredeterminada) : time
-  return time / 86400000 - 60 / 1440 + 2440587.5
+  let gmt = new Date(time).getTimezoneOffset() * 60 * 1000
+
+  time = isNaN(time) ? Date.parse(new Date('1992-04-12')) : time
+  gmt = isNaN(time) ? gmt : 0
+
+  //console.log((time + gmt) / 86400000 + 2440587.5)
+  return (time + gmt) / 86400000 + 2440587.5
 }
 
 export function parseLBRToXYZ (pos) {
   const { L, B, R } = pos
   const v = new THREE.Vector3().setFromSphericalCoords(
-    (R * 1.5 * 10 ** 8) / SCALE, //Parse from AU to KM
+    (R * 149597870.7) / SCALE, //Parse from AU to KM then reduce to scale
     -Math.PI / 2 + B,
     L
   )
@@ -486,4 +527,132 @@ export function moonParseLBDToXYZ (pos) {
     degreesToRadians(L)
   )
   return [...v]
+}
+
+/**
+ *
+ *
+ *
+ */
+export function calculateEarthRotationGivenDate (date) {
+  //const time = (date - 2440587.5) * 86400000
+  //console.log(Math.ceil(time))
+  const T = TFromJD(date)
+  const U = T / 100
+  const e0 =
+    23.43929111111 -
+    1.30025833333 * U -
+    1.55 * U ** 2 +
+    1999.25 * U ** 3 -
+    51.38 * U ** 4 -
+    249.67 * U ** 5 -
+    39.05 * U ** 6 +
+    7.12 * U ** 7 +
+    27.87 * U ** 8 +
+    5.79 * U ** 9 +
+    2.45 * U ** 10
+
+  //console.log(e0)
+  return e0
+}
+
+/*
+
+  const L0 = 280.46646 + 36000.76983 * T + 0.0003032 * T ** 2
+  const M = 357.52911 + 35999.05029 * T - 0.0001537 * T ** 2
+  const C =
+    (1.914602 - 0.004817 * T - 0.000014 * T ** 2) * Math.sin(M) +
+    (0.019993 - 0.000101 * T) * Math.sin(2 * M) +
+    0.000289 * Math.sin(3 * M)
+
+  const U = T / 100
+  const e0 =
+    (82800 +
+      1560 +
+      21.448 -
+      4680.93 * U -
+      1.55 * U ** 2 +
+      1999.25 * U ** 3 -
+      51.38 * U ** 4 -
+      249.67 * U ** 5 -
+      39.05 * U ** 6 +
+      7.12 * U ** 7 +
+      27.87 * U ** 8 +
+      5.79 * U ** 9 +
+      2.45 * U ** 10) /
+    60 /
+    360
+
+  //82800 +1560 +21.448 -
+  //- 46.815 * T - 0.00059 * T ** 2 + 0.001813 * T ** 3
+
+  const omega = 125.04 - 1934.136 * T
+  const lambda = L0 + C - 0.00569 - 0.00478 * Math.sin(omega)
+
+  const r = Math.atan2(
+    Math.cos((e0 + 0.00256 * Math.cos(omega)) * Math.sin(lambda)),
+    Math.cos(lambda)
+  )
+  //Formula 25.6
+  console.log(T, C, angleToPos((L0 + C) % 360))
+  return Math.atan2(
+    Math.cos((e0 + 0.00256 * Math.cos(omega)) * Math.sin(lambda)),
+    Math.cos(lambda)
+  )
+*/
+
+/**
+ *
+ *
+ *
+ */
+export function calculateEarthObliquityOfTheEcliptic (date) {
+  //const time = (date - 2440587.5) * 86400000
+  //console.log(Math.ceil(time))
+  const T = TFromJD(date)
+
+  const U = T / 100
+  const e0 =
+    23.43929111111 -
+    1.30025833333 * U -
+    1.55 * U ** 2 +
+    1999.25 * U ** 3 -
+    51.38 * U ** 4 -
+    249.67 * U ** 5 -
+    39.05 * U ** 6 +
+    7.12 * U ** 7 +
+    27.87 * U ** 8 +
+    5.79 * U ** 9 +
+    2.45 * U ** 10
+
+  //console.log(e0)
+  return e0
+}
+
+/**
+ *
+ *
+ *
+ */
+export function calculateEarthSunLatitude (date) {
+  //const time = (date - 2440587.5) * 86400000
+  //console.log(Math.ceil(time))
+  const T = TFromJD(date)
+
+  const U = T / 100
+  const e0 =
+    23.43929111111 -
+    1.30025833333 * U -
+    1.55 * U ** 2 +
+    1999.25 * U ** 3 -
+    51.38 * U ** 4 -
+    249.67 * U ** 5 -
+    39.05 * U ** 6 +
+    7.12 * U ** 7 +
+    27.87 * U ** 8 +
+    5.79 * U ** 9 +
+    2.45 * U ** 10
+
+  //console.log(e0)
+  return e0
 }

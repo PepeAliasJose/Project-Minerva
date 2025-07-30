@@ -19,7 +19,7 @@ const SaturnSS = memo(({ Saturn }) => {
   const [saturnPos, setSaturnPos] = useState([0, 0, 0])
   const [saturnRot, setSaturnRot] = useState([0, 0, 0])
 
-  const { saturn } = usePlanets()
+  const { planets } = usePlanets()
 
   const SaturnLight = useRef()
   const SaturnRings = useRef()
@@ -35,14 +35,14 @@ const SaturnSS = memo(({ Saturn }) => {
   )
 
   useEffect(() => {
-    setSaturnPos(parseLBRToXYZ(saturn))
-    setSaturnRot([0, saturn.L, 0])
+    setSaturnPos(parseLBRToXYZ(planets.saturn))
+    setSaturnRot([0, planets.saturn.L, 0])
     SaturnLight.current.position.setFromSphericalCoords(
       10,
-      Math.PI / 2 - saturn.B,
+      Math.PI / 2 - planets.saturn.B,
       0
     )
-  }, [saturn])
+  }, [planets])
 
   useLayoutEffect(() => {
     //Arreglar las texturas del anillo

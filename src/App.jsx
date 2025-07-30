@@ -1,18 +1,15 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import SolarSystem from './pages/SolarSystem'
 
 import { create } from 'zustand'
 import {
+  calculateEarthObliquityOfTheEcliptic,
+  calculateEarthRotationGivenDate,
   earthCoordinatesGivenDate,
   jupiterCoordinatesGivenDate,
   marsCoordinatesGivenDate,
   mercuryCoordinatesGivenDate,
   moonCoordinatesGivenDate,
-  moonParseLBDToXYZ,
   neptuneCoordinatesGivenDate,
-  parseLBRToXYZ,
   saturnCoordinatesGivenDate,
   uranusCoordinatesGivenDate,
   venusCoordinatesGivenDate
@@ -31,7 +28,11 @@ export const useConfig = create(set => ({
 
   zoomWhenChange: true,
   zoomOn: () => set(state => ({ zoomWhenChange: true })),
-  zoomOff: () => set(state => ({ zoomWhenChange: false }))
+  zoomOff: () => set(state => ({ zoomWhenChange: false })),
+
+  au: true,
+  auOn: () => set(state => ({ au: true })),
+  auOff: () => set(state => ({ au: false }))
 }))
 
 export const useCustomCamera = create(set => ({
@@ -64,26 +65,34 @@ export const useCustomCamera = create(set => ({
 }))
 
 export const usePlanets = create(set => ({
-  mercury: { L: 0, B: 0, R: 0 },
-  venus: { L: 0, B: 0, R: 0 },
-  earth: { L: 0, B: 0, R: 0 },
-  moon: { L: 0, B: 0, R: 0 },
-  mars: { L: 0, B: 0, R: 0 },
-  jupiter: { L: 0, B: 0, R: 0 },
-  saturn: { L: 0, B: 0, R: 0 },
-  uranus: { L: 0, B: 0, R: 0 },
-  neptune: { L: 0, B: 0, R: 0 },
+  planets: {
+    mercury: { L: 0, B: 0, R: 0 },
+    venus: { L: 0, B: 0, R: 0 },
+    earth: { L: 0, B: 0, R: 0 },
+    moon: { L: 0, B: 0, R: 0 },
+    mars: { L: 0, B: 0, R: 0 },
+    jupiter: { L: 0, B: 0, R: 0 },
+    saturn: { L: 0, B: 0, R: 0 },
+    uranus: { L: 0, B: 0, R: 0 },
+    neptune: { L: 0, B: 0, R: 0 },
+    earthRotation: 0,
+    earthObliquity: 0,
+    earthSunLatitude: 0
+  },
   updateAllPlanets: JDday =>
     set(state => ({
-      mercury: mercuryCoordinatesGivenDate(JDday),
-      venus: venusCoordinatesGivenDate(JDday),
-      earth: earthCoordinatesGivenDate(JDday),
-      moon: moonCoordinatesGivenDate(JDday),
-      mars: marsCoordinatesGivenDate(JDday),
-      jupiter: jupiterCoordinatesGivenDate(JDday),
-      saturn: saturnCoordinatesGivenDate(JDday),
-      uranus: uranusCoordinatesGivenDate(JDday),
-      neptune: neptuneCoordinatesGivenDate(JDday)
+      planets: {
+        mercury: mercuryCoordinatesGivenDate(JDday),
+        venus: venusCoordinatesGivenDate(JDday),
+        earth: earthCoordinatesGivenDate(JDday),
+        moon: moonCoordinatesGivenDate(JDday),
+        mars: marsCoordinatesGivenDate(JDday),
+        jupiter: jupiterCoordinatesGivenDate(JDday),
+        saturn: saturnCoordinatesGivenDate(JDday),
+        uranus: uranusCoordinatesGivenDate(JDday),
+        neptune: neptuneCoordinatesGivenDate(JDday),
+        earthObliquity: calculateEarthObliquityOfTheEcliptic(JDday)
+      }
     })) //Parser from LBR to xyz
 }))
 

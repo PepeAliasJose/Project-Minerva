@@ -16,6 +16,7 @@ import UranusSS from '../atoms/UranusSS'
 import NeptuneSS from '../atoms/NeptuneSS'
 import { useAnimation } from '../../App'
 import SSCamera from '../molecules/SSCamera'
+import Lineas from '../molecules/Lineas'
 
 const Scene = memo(({ load }) => {
   //const desktop = useMediaQuery({ query: '(min-width: 40rem)' })
@@ -67,6 +68,7 @@ const Scene = memo(({ load }) => {
       <UranusSS Uranus={Uranus} />
       {/*NEPTUNO*/}
       <NeptuneSS Neptune={Neptune} />
+      <Lineas />
       <SSCamera />
     </>
   )

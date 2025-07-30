@@ -55,15 +55,61 @@ body {
 .out-rounded {
   border-radius: 25px;
   background: linear-gradient(155deg, var(--light-bg), var(--dark-bg));
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px) brightness(80%);
 }
 
 .in-rounded {
   border-radius: 25px;
   background: linear-gradient(155deg, var(--dark-bg), var(--light-bg));
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px) brightness(80%);
 }
 
 .default {
   background: linear-gradient(135deg, hsl(40, 1%, 53%), hsl(187, 98%, 56%));
+}
+
+input[type='checkbox']:checked {
+  appearance: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 5px;
+  box-shadow: 1px 1px 2px var(--light-border),
+    inset 2px 2px 2px var(--dark-border);
+  background: linear-gradient(155deg, var(--dark-bg), var(--light-bg));
+  backdrop-filter: blur(10px) brightness(80%);
+}
+
+input[type='checkbox']:checked:after {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  content: 'λ';
+  color: #3ff;
+}
+
+input[type='checkbox'] {
+  appearance: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 5px;
+  box-shadow: 3px 3px 4px var(--dark-border),
+    inset 1px 1px 2px var(--light-border);
+  background: linear-gradient(155deg, var(--dark-bg), var(--light-bg));
+  backdrop-filter: blur(10px) brightness(80%);
+}
+
+input[type='checkbox']::after {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  content: 'Θ';
+  color: #f90;
 }

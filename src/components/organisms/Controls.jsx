@@ -5,7 +5,6 @@ import { Cog6ToothIcon } from '@heroicons/react/24/outline'
 import { Stats } from '@react-three/drei'
 import {
   changeDateFromInput,
-  earthCoordinatesGivenDate,
   moonParseLBDToXYZ,
   parseLBRToXYZ
 } from '../../helpers/functions/astronomicalFunctions'
@@ -15,22 +14,12 @@ function Controls ({}) {
   const { intro_animation } = useAnimation()
 
   //Fecha y planeta seleccionado
-  const [date, setDate] = useState('1992-04-12')
+  const [date, setDate] = useState('1992-06-21T00:00:00') //1992-04-12T00:00:00 //2025-07-30T14:00:00
+  const [gmt, setGmt] = useState(2)
   const [planet, setPlanet] = useState(intro_animation ? 'saturn' : 'sun')
 
   //Planetas
-  const {
-    mercury,
-    venus,
-    earth,
-    moon,
-    mars,
-    jupiter,
-    saturn,
-    uranus,
-    neptune,
-    updateAllPlanets
-  } = usePlanets()
+  const { planets, updateAllPlanets } = usePlanets()
 
   //Target de la camara
   const { updateTarget, updateRadius, updateST } = useCustomCamera()
@@ -48,55 +37,24 @@ function Controls ({}) {
   useEffect(() => {
     updateST(0)
     updateCameraTarget(planet)
-  }, [mercury])
+  }, [planets])
 
   function updateCameraTarget (planet) {
+    //console.log(planet, planets[planet])
     switch (planet) {
       case 'sun':
         updateTarget([0, 0, 0])
         zoomWhenChange && updateRadius(14)
         break
-      case 'mercury':
-        updateTarget(parseLBRToXYZ(mercury))
-        zoomWhenChange && updateRadius(0.7)
-        break
-      case 'venus':
-        updateTarget(parseLBRToXYZ(venus))
-        zoomWhenChange && updateRadius(0.7)
-        break
-      case 'earth':
-        updateTarget(parseLBRToXYZ(earth))
-        zoomWhenChange && updateRadius(0.7)
-        break
       case 'moon':
-        const e = parseLBRToXYZ(earth)
-        const m = moonParseLBDToXYZ(moon)
+        const e = parseLBRToXYZ(planets.earth)
+        const m = moonParseLBDToXYZ(planets.moon)
         updateTarget([e[0] + m[0], e[1] + m[1], e[2] + m[2]])
         zoomWhenChange && updateRadius(0.2)
         break
-      case 'mars':
-        updateTarget(parseLBRToXYZ(mars))
-        zoomWhenChange && updateRadius(0.7)
-        break
-      case 'saturn':
-        updateTarget(parseLBRToXYZ(saturn))
-        zoomWhenChange && updateRadius(1.3)
-        break
-      case 'jupiter':
-        updateTarget(parseLBRToXYZ(jupiter))
-        zoomWhenChange && updateRadius(1.7)
-        break
-      case 'uranus':
-        updateTarget(parseLBRToXYZ(uranus))
-        zoomWhenChange && updateRadius(1)
-        break
-      case 'neptune':
-        updateTarget(parseLBRToXYZ(neptune))
-        zoomWhenChange && updateRadius(1)
-        break
       default:
-        updateTarget([0, 0, 0])
-        zoomWhenChange && updateRadius(14)
+        updateTarget(parseLBRToXYZ(planets[planet]))
+        zoomWhenChange && updateRadius(1.4)
         break
     }
   }
@@ -119,11 +77,11 @@ function Controls ({}) {
             transition: { duration: 0.7, ease: 'easeInOut' }
           }}
           className='absolute bottom-5 left-0 w-full justify-center 
-       flex flex-row-reverse gap-10 items-center text-[#B4B5B7]'
+       flex flex-row-reverse gap-10 items-center '
         >
           <input
             className='up out-rounded px-5 py-2.5 z-50'
-            type='date'
+            type='datetime-local'
             value={date}
             onChange={e => {
               //changeDateFromInput(e.target.value)
@@ -178,12 +136,30 @@ function Controls ({}) {
 function SettingsMenu () {
   const [show, setShow] = useState(false)
   const [stats, setStats] = useState(false)
+
+  const {
+    tags,
+    tagsOn,
+    tagsOff,
+    controls,
+    controlsOn,
+    controlsOff,
+    zoomWhenChange,
+    zoomOn,
+    zoomOff,
+    au,
+    auOn,
+    auOff
+  } = useConfig()
+
   return (
     <motion.div
       key={'settings-menu'}
       className={
-        'fixed z-50 transition-all top-5 right-5 overflow-clip up out-rounded p-2 backdrop-blur-md ' +
-        (show ? ' size-80 ' : ' size-12 ')
+        'fixed md: z-50 transition-all flex flex-col top-5 right-5 overflow-clip up out-rounded p-2  ' +
+        (show
+          ? ' w-[calc(100vw-40px)] md:w-80 h-[calc(100svh-40px)]'
+          : ' size-12 ')
       }
     >
       {stats && <Stats />}
@@ -196,9 +172,80 @@ function SettingsMenu () {
           setShow(!show)
         }}
       />
-      <p className='m-4 mt-12'>Etiquetas: </p>
-      <p className='m-4'>Calcular distancia: </p>
-      <p className='m-4 '>Calcular orbita: </p>
+      <div className='m-2 mt-12  font-semibold text-center'>Ajustes</div>
+      <div className='inline-flex gap-2 items-center'>
+        <p className='m-2 '>Etiquetas: </p>
+        <input
+          type='checkbox'
+          checked={tags}
+          onChange={() => {
+            if (tags) {
+              tagsOff()
+            } else {
+              tagsOn()
+            }
+          }}
+        />
+      </div>
+      <div className='inline-flex gap-2 items-center'>
+        <p className='m-2'>Ajustar camara al cambiar: </p>
+        <input
+          type='checkbox'
+          checked={zoomWhenChange}
+          onChange={() => {
+            if (zoomWhenChange) {
+              zoomOff()
+            } else {
+              zoomOn()
+            }
+          }}
+        />
+      </div>
+      <div className='inline-flex gap-2 items-center'>
+        <p className='m-2'>Ver controles: </p>
+        <input
+          type='checkbox'
+          checked={controls}
+          onChange={() => {
+            if (controls) {
+              controlsOff()
+            } else {
+              controlsOn()
+            }
+          }}
+        />
+      </div>
+      <div className='inline-flex gap-2 items-center'>
+        <p className='m-2'>Distancia en {au ? 'AU' : 'KM'}: </p>
+        <input
+          type='checkbox'
+          checked={au}
+          onChange={() => {
+            if (au) {
+              auOff()
+            } else {
+              auOn()
+            }
+          }}
+        />
+      </div>
+      <div className='inline-flex gap-2 items-center'>
+        <p className='m-2'>Animación en siguiente carga: </p>
+      </div>
+      <div className='inline-flex gap-2 items-center'>
+        <p className='m-2'>Estadisticas de rendimiento: </p>
+        <input
+          type='checkbox'
+          checked={stats}
+          onChange={() => {
+            setStats(!stats)
+          }}
+        />
+      </div>
+      <div className='m-2 font-semibold text-center'>Información:</div>
+      <div className='m-2 font-semibold text-center'>Acciones:</div>
+      <p className='m-2'>Calcular distancia: </p>
+      <p className='m-2'>Calcular orbita: </p>
     </motion.div>
   )
 }

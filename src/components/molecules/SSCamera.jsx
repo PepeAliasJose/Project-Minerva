@@ -12,11 +12,13 @@ function SSCamera ({ moveCamera }) {
 
   //Control de camara por zustand
   const { target, theta, phi, radius, smoothTime, fov } = useCustomCamera()
+  const { zoomWhenChange } = useConfig()
 
   const camara = useRef()
 
   //Cambiar target
   useEffect(() => {
+    zoomWhenChange && (camara.current._sphericalEnd.radius = radius)
     camara.current._targetEnd = { x: target[0], y: target[1], z: target[2] }
   }, [target])
 
@@ -26,9 +28,7 @@ function SSCamera ({ moveCamera }) {
     camara.current._sphericalEnd.phi = phi
   }, [theta, phi])
   //cambiar radio
-  useEffect(() => {
-    camara.current._sphericalEnd.radius = radius
-  }, [radius])
+  useEffect(() => {}, [radius])
   //cambiar suavidad
   useEffect(() => {
     camara.current.smoothTime = smoothTime

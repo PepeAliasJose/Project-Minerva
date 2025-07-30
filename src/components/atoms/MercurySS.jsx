@@ -9,10 +9,10 @@ const MercurySS = memo(({ Mercury }) => {
   const [mercuryPos, setMercuryPos] = useState([0, 0, 0])
   const Mercury_Texture = new TextureLoader().load('textures/mercury.webp')
 
-  const { mercury } = usePlanets()
+  const { planets } = usePlanets()
 
   function updateMercury () {
-    setMercuryPos(parseLBRToXYZ(mercury))
+    setMercuryPos(parseLBRToXYZ(planets.mercury))
   }
 
   useEffect(() => {
@@ -20,7 +20,7 @@ const MercurySS = memo(({ Mercury }) => {
     return () => {
       Mercury_Texture.dispose()
     }
-  }, [mercury])
+  }, [planets])
 
   return (
     <mesh ref={Mercury} frustumCulled={false} position={mercuryPos}>

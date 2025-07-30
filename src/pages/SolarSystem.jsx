@@ -17,11 +17,11 @@ function SolarSystem () {
   return (
     <div
       id='solarSystem'
-      className='w-screen h-screen transition-colors duration-1000 '
+      className='w-screen h-[100svh] transition-colors duration-1000 '
     >
       <Canvas
         gl={{ antialias: true, alpha: true }}
-        style={{ width: '100%', height: '100vh' }}
+        style={{ width: 'full', height: '100svh' }}
         shadows={true}
       >
         <Suspense>

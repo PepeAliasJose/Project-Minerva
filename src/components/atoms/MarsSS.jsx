@@ -10,10 +10,10 @@ const MarsSS = memo(({ Mars }) => {
 
   const [marsPos, setMarsPos] = useState([0, 0, 0])
 
-  const { mars } = usePlanets()
+  const { planets } = usePlanets()
 
   function updateMars () {
-    setMarsPos(parseLBRToXYZ(mars))
+    setMarsPos(parseLBRToXYZ(planets.mars))
   }
 
   useEffect(() => {
@@ -21,7 +21,7 @@ const MarsSS = memo(({ Mars }) => {
     return () => {
       Mars_Texture.dispose()
     }
-  }, [mars])
+  }, [planets])
 
   return (
     <mesh ref={Mars} frustumCulled={false} position={marsPos}>
