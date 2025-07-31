@@ -66,7 +66,7 @@ const EartMoon = memo(({ Earth, Moon }) => {
           // + giro por hora
           rotation={[0, 0, degreesToRadians(planets.earthObliquity)]}
         >
-          <mesh rotation={[0, Math.PI / 35, 0]}>
+          <mesh rotation={[0, 0, 0]}>
             <axesHelper />
             <Line
               points={[

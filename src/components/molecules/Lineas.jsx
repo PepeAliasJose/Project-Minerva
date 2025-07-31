@@ -1,7 +1,7 @@
 import { Html, Line } from '@react-three/drei'
 import { MathUtils, Vector3 } from 'three'
 import { SCALE } from '../../helpers/functions/SolarSystemConstants'
-import { useConfig, usePlanets } from '../../App'
+import { useConfig, useLines, usePlanets } from '../../App'
 import {
   moonParseLBDToXYZ,
   parseLBRToXYZ
@@ -9,16 +9,19 @@ import {
 import { TrashIcon } from '@heroicons/react/24/outline'
 
 function Lineas () {
-  return (
-    <>
-      <Linea punto1={'earth'} punto2={'uranus'} />
-    </>
-  )
+  const { lines } = useLines()
+
+  const lineas = lines.map(l => {
+    return <Linea key={l.id} id={l.id} punto1={l.p1} punto2={l.p2} />
+  })
+
+  return <>{lineas}</>
 }
 
-function Linea ({ punto1, punto2 }) {
+function Linea ({ id, punto1, punto2 }) {
   const { planets } = usePlanets()
   const { au } = useConfig()
+  const { removeLine } = useLines()
 
   function getPlanetsCoordinates (planet) {
     //console.log(planet, planets[planet])
@@ -64,7 +67,12 @@ function Linea ({ punto1, punto2 }) {
           <p>{distancia.toFixed(au ? 8 : 7)} </p>
           {au ? 'AU' : 'KM'}
         </div>
-        <div className='up out-rounded p-1.5'>
+        <div
+          className='up out-rounded p-1.5 hover:cursor-pointer'
+          onClick={() => {
+            removeLine(id)
+          }}
+        >
           <TrashIcon className='size-3.5 text-red-400' />
         </div>
       </Html>

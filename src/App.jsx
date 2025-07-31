@@ -96,6 +96,24 @@ export const usePlanets = create(set => ({
     })) //Parser from LBR to xyz
 }))
 
+export const useLines = create(set => ({
+  lines: [],
+  addLine: line =>
+    set(state => ({
+      lines: [...state.lines, line]
+    })),
+
+  removeLine: id =>
+    set(state => ({
+      lines: state.lines.filter(l => {
+        if (l.id != id) {
+          return true
+        }
+        return false
+      })
+    }))
+}))
+
 //Deprecated
 export const usePlanet = create(set => ({
   planet: i ? 'saturn' : 'sun',
