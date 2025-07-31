@@ -1,5 +1,7 @@
 @import 'tailwindcss';
 
+/* Personal custom styles */
+
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -55,28 +57,30 @@ body {
 .out-rounded {
   border-radius: 25px;
   background: linear-gradient(155deg, var(--light-bg), var(--dark-bg));
-  backdrop-filter: blur(10px) brightness(80%);
+  backdrop-filter: blur(25px) brightness(70%);
 }
 
 .in-rounded {
   border-radius: 25px;
   background: linear-gradient(155deg, var(--dark-bg), var(--light-bg));
-  backdrop-filter: blur(10px) brightness(80%);
+  backdrop-filter: blur(25px) brightness(70%);
 }
 
 .default {
   background: linear-gradient(135deg, hsl(40, 1%, 53%), hsl(187, 98%, 56%));
 }
 
+/* Input type checkbox */
+
 input[type='checkbox']:checked {
   appearance: none;
+  position: relative;
   width: 24px;
   height: 24px;
   border-radius: 5px;
   box-shadow: 1px 1px 2px var(--light-border),
     inset 2px 2px 2px var(--dark-border);
   background: linear-gradient(155deg, var(--dark-bg), var(--light-bg));
-  backdrop-filter: blur(10px) brightness(80%);
 }
 
 input[type='checkbox']:checked:after {
@@ -93,13 +97,13 @@ input[type='checkbox']:checked:after {
 
 input[type='checkbox'] {
   appearance: none;
+  position: relative;
   width: 24px;
   height: 24px;
   border-radius: 5px;
   box-shadow: 3px 3px 4px var(--dark-border),
     inset 1px 1px 2px var(--light-border);
   background: linear-gradient(155deg, var(--dark-bg), var(--light-bg));
-  backdrop-filter: blur(10px) brightness(80%);
 }
 
 input[type='checkbox']::after {
@@ -112,4 +116,58 @@ input[type='checkbox']::after {
   transform: translate(-50%, -50%);
   content: 'Θ';
   color: #f90;
+}
+
+/* Input type range */
+
+/***** Chrome, Safari, Opera, and Edge Chromium *****/
+input[type='range']::-webkit-slider-runnable-track {
+  height: 1em;
+  border-radius: 10px;
+  box-shadow: 1px 1px 2px var(--light-border),
+    inset 2px 2px 2px var(--dark-border);
+  background: linear-gradient(155deg, var(--dark-bg), var(--light-bg));
+}
+
+/******** Firefox ********/
+input[type='range']::-moz-range-track {
+  height: 1em;
+  border-radius: 10px;
+  box-shadow: 1px 1px 2px var(--light-border),
+    inset 2px 2px 2px var(--dark-border);
+  background: linear-gradient(155deg, var(--dark-bg), var(--light-bg));
+}
+
+/***** Chrome, Safari, Opera, and Edge Chromium *****/
+input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 1.5em;
+  height: 0.8em;
+  border-radius: 10em;
+  border: none;
+  margin: 0.1em;
+  box-shadow: 3px 3px 4px var(--dark-border),
+    inset 1px 1px 2px var(--light-border);
+  background-color: #f0f0f0;
+}
+
+/******** Firefox ********/
+input[type='range']::-moz-range-thumb {
+  appearance: none;
+  border-radius: 10em;
+  width: 1.5em;
+  height: 0.8em;
+  margin: 0.1em;
+  border: none;
+  box-shadow: 3px 3px 4px var(--dark-border),
+    inset 1px 1px 2px var(--light-border);
+  background-color: #f0f0f0;
+}
+
+input[type='range'] {
+  appearance: none;
+  position: relative;
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
 }

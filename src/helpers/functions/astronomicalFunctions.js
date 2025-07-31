@@ -498,6 +498,9 @@ export function calculateMoonOrbit (func, JDay) {
   return points
 }
 
+/**
+ * Calculates JD from date parsed to the UTC
+ */
 export function changeDateFromInput (value) {
   let time = Date.parse(value)
   let gmt = new Date(time).getTimezoneOffset() * 60 * 1000
@@ -527,6 +530,53 @@ export function moonParseLBDToXYZ (pos) {
     degreesToRadians(L)
   )
   return [...v]
+}
+
+/**
+ *
+ * @param object string to select the desired function
+ * @param period period of time in days
+ * @param quantity quantity of periods
+ * @param precision subdivision of the period
+ * @param startDate date in JD to start counting
+ *
+ *
+ */
+export function calculateObjectOrbit (
+  object,
+  period,
+  quantity,
+  precision,
+  startDate
+) {}
+
+/**
+ *
+ * @param fn function to calculate position
+ * @param period period of time in days
+ * @param quantity quantity of periods
+ * @param precision subdivision of the period
+ * @param startDate date in JD to start counting
+ *
+ *  Calculate all the points of an object between 2 given JD
+ */
+export function calculatePlanetOrbit (
+  fn,
+  period,
+  quantity,
+  precision,
+  startDate
+) {
+  let posiciones = []
+  for (
+    let i = startDate;
+    i < startDate + period * quantity;
+    i += period / precision
+  ) {
+    posiciones = [...posiciones, parseLBRToXYZ(fn(startDate))]
+  }
+
+  return posiciones
 }
 
 /**
@@ -603,7 +653,7 @@ export function calculateEarthRotationGivenDate (date) {
 
 /**
  *
- *
+ * DONE
  *
  */
 export function calculateEarthObliquityOfTheEcliptic (date) {
