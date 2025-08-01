@@ -56,14 +56,12 @@ body {
 
 .out-rounded {
   border-radius: 25px;
-  background: linear-gradient(155deg, var(--light-bg), var(--dark-bg));
-  backdrop-filter: blur(25px) brightness(70%);
+  background: var(--bg);
 }
 
 .in-rounded {
   border-radius: 25px;
-  background: linear-gradient(155deg, var(--dark-bg), var(--light-bg));
-  backdrop-filter: blur(25px) brightness(70%);
+  background: var(--bg);
 }
 
 .default {
@@ -80,7 +78,6 @@ input[type='checkbox']:checked {
   border-radius: 5px;
   box-shadow: 1px 1px 2px var(--light-border),
     inset 2px 2px 2px var(--dark-border);
-  background: linear-gradient(155deg, var(--dark-bg), var(--light-bg));
 }
 
 input[type='checkbox']:checked:after {
@@ -103,7 +100,6 @@ input[type='checkbox'] {
   border-radius: 5px;
   box-shadow: 3px 3px 4px var(--dark-border),
     inset 1px 1px 2px var(--light-border);
-  background: linear-gradient(155deg, var(--dark-bg), var(--light-bg));
 }
 
 input[type='checkbox']::after {
@@ -135,7 +131,6 @@ input[type='range']::-moz-range-track {
   border-radius: 10px;
   box-shadow: 1px 1px 2px var(--light-border),
     inset 2px 2px 2px var(--dark-border);
-  background: linear-gradient(155deg, var(--dark-bg), var(--light-bg));
 }
 
 /***** Chrome, Safari, Opera, and Edge Chromium *****/
@@ -170,4 +165,8 @@ input[type='range'] {
   width: 100%;
   display: inline-flex;
   align-items: center;
+}
+
+strong {
+  color: white;
 }

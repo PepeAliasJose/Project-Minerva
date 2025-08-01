@@ -52,7 +52,7 @@ function Linea ({ id, punto1, punto2 }) {
 
   return (
     <group>
-      <Line points={[p1, p2]} />
+      <Line color={'#606060'} points={[p1, p2]} />
       <Html
         center
         position={mid}

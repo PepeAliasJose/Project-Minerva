@@ -67,7 +67,7 @@ const EartMoon = memo(({ Earth, Moon }) => {
           rotation={[0, 0, degreesToRadians(planets.earthObliquity)]}
         >
           <mesh rotation={[0, 0, 0]}>
-            <axesHelper />
+            <axesHelper args={[0]} />
             <Line
               points={[
                 [0, EARTH_SIZE / 1.6, 0],

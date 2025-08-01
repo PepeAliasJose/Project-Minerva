@@ -532,6 +532,18 @@ export function moonParseLBDToXYZ (pos) {
   return [...v]
 }
 
+export const planetsNoSun = [
+  'mercury',
+  'venus',
+  'earth',
+  'moon',
+  'mars',
+  'jupiter',
+  'saturn',
+  'uranus',
+  'neptune'
+]
+
 /**
  *
  * @param object string to select the desired function
@@ -539,6 +551,7 @@ export function moonParseLBDToXYZ (pos) {
  * @param quantity quantity of periods
  * @param precision subdivision of the period
  * @param startDate date in JD to start counting
+ * @param moveWithPlanet boolean. true: make the orbit of the moon move with the planet. false: the orbit makes a circle around its host
  *
  *
  */
@@ -547,8 +560,62 @@ export function calculateObjectOrbit (
   period,
   quantity,
   precision,
-  startDate
-) {}
+  startDate,
+  moveWithPlanet = true
+) {
+  const func = [
+    mercuryCoordinatesGivenDate,
+    venusCoordinatesGivenDate,
+    earthCoordinatesGivenDate,
+    moonCoordinatesGivenDate,
+    marsCoordinatesGivenDate,
+    jupiterCoordinatesGivenDate,
+    saturnCoordinatesGivenDate,
+    uranusCoordinatesGivenDate,
+    neptuneCoordinatesGivenDate
+  ]
+  const id = planetsNoSun.indexOf(object)
+
+  if (id > -1) {
+    if (object == 'moon') {
+      const moon = calculatePlanetOrbit(
+        func[3],
+        period,
+        quantity,
+        precision,
+        startDate,
+        moonParseLBDToXYZ
+      )
+      if (moveWithPlanet) {
+        //Si se mueve con el planeta
+        const earth = calculatePlanetOrbit(
+          func[2],
+          period,
+          quantity,
+          precision,
+          startDate,
+          parseLBRToXYZ
+        )
+        return earth.map((p, i) => {
+          return [p[0] + moon[i][0], p[1] + moon[i][1], p[2] + moon[i][2]]
+        })
+      }
+
+      return moon
+    }
+
+    return calculatePlanetOrbit(
+      func[id],
+      period,
+      quantity,
+      precision,
+      startDate,
+      parseLBRToXYZ
+    )
+  }
+
+  return [0, 0, 0]
+}
 
 /**
  *
@@ -557,6 +624,7 @@ export function calculateObjectOrbit (
  * @param quantity quantity of periods
  * @param precision subdivision of the period
  * @param startDate date in JD to start counting
+ * @param parseFunc
  *
  *  Calculate all the points of an object between 2 given JD
  */
@@ -565,15 +633,17 @@ export function calculatePlanetOrbit (
   period,
   quantity,
   precision,
-  startDate
+  startDate,
+  parseFunc
 ) {
   let posiciones = []
+  const endDate = startDate + period * quantity
   for (
-    let i = startDate;
-    i < startDate + period * quantity;
-    i += period / precision
+    let i = Math.min(startDate, endDate);
+    i <= Math.max(startDate, endDate);
+    i += Math.abs(period / precision)
   ) {
-    posiciones = [...posiciones, parseLBRToXYZ(fn(startDate))]
+    posiciones = [...posiciones, parseFunc(fn(i))]
   }
 
   return posiciones

@@ -114,6 +114,24 @@ export const useLines = create(set => ({
     }))
 }))
 
+export const useOrbits = create(set => ({
+  orbits: [],
+  addOrbit: orbit =>
+    set(state => ({
+      orbits: [...state.orbits, orbit]
+    })),
+
+  removeOrbit: id =>
+    set(state => ({
+      orbits: state.orbits.filter(l => {
+        if (l.id != id) {
+          return true
+        }
+        return false
+      })
+    }))
+}))
+
 //Deprecated
 export const usePlanet = create(set => ({
   planet: i ? 'saturn' : 'sun',
