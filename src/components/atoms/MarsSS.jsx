@@ -24,7 +24,11 @@ const MarsSS = memo(({ Mars }) => {
   }, [planets])
 
   return (
-    <mesh ref={Mars} frustumCulled={false} position={marsPos}>
+    <mesh
+      ref={Mars}
+      //frustumCulled={false}
+      position={marsPos}
+    >
       <SkyTag name={'Marte'} color='bg-red-400' />
       <icosahedronGeometry args={[MARS_SIZE / 2, 15]} />
       <meshStandardMaterial map={Mars_Texture} />

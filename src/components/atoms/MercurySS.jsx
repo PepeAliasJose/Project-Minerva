@@ -23,7 +23,11 @@ const MercurySS = memo(({ Mercury }) => {
   }, [planets])
 
   return (
-    <mesh ref={Mercury} frustumCulled={false} position={mercuryPos}>
+    <mesh
+      ref={Mercury}
+      //frustumCulled={false}
+      position={mercuryPos}
+    >
       <SkyTag name={'Mercurio'} />
       <icosahedronGeometry args={[MERCURY_SIZE / 2, 10]} />
       <meshStandardMaterial map={Mercury_Texture} />

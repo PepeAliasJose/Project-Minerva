@@ -4,16 +4,18 @@ import { create } from 'zustand'
 import {
   calculateEarthObliquityOfTheEcliptic,
   calculateEarthRotationGivenDate,
+  moonCoordinatesGivenDate
+} from './helpers/functions/astronomicalFunctions'
+import {
   earthCoordinatesGivenDate,
   jupiterCoordinatesGivenDate,
   marsCoordinatesGivenDate,
   mercuryCoordinatesGivenDate,
-  moonCoordinatesGivenDate,
   neptuneCoordinatesGivenDate,
   saturnCoordinatesGivenDate,
   uranusCoordinatesGivenDate,
   venusCoordinatesGivenDate
-} from './helpers/functions/astronomicalFunctions'
+} from './helpers/functions/VSOP87D'
 
 const i = false
 

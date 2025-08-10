@@ -37,7 +37,7 @@ const UranusSS = memo(({ Uranus }) => {
   }, [planets])
 
   return (
-    <mesh ref={Uranus} frustumCulled={false} position={uranusPos}>
+    <mesh ref={Uranus} frustumCulled={true} position={uranusPos}>
       <SkyTag name={'Urano'} color='bg-cyan-100' />
       <pointLight
         ref={UranusLight}

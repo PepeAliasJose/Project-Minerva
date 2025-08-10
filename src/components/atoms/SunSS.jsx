@@ -14,7 +14,7 @@ function SunSS ({ Sun }) {
   }, [])
 
   return (
-    <mesh ref={Sun} frustumCulled={false}>
+    <mesh ref={Sun} frustumCulled={true}>
       <SkyTag name={'Sol'} color={'bg-yellow-800'} top big />
       <icosahedronGeometry args={[SUN_SIZE / 2, 20]} />
       <meshPhysicalMaterial

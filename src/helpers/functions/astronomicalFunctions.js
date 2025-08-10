@@ -10,78 +10,20 @@ import {
   moonLatitudeArgsTable,
   moonLongitudeArgsTable
 } from './SS/moonTables'
-import {
-  SaturnB0,
-  SaturnB1,
-  SaturnB2,
-  SaturnB3,
-  SaturnB4,
-  SaturnB5,
-  SaturnL0,
-  SaturnL1,
-  SaturnL2,
-  SaturnL3,
-  SaturnL4,
-  SaturnL5,
-  SaturnR0,
-  SaturnR1,
-  SaturnR2,
-  SaturnR3,
-  SaturnR4,
-  SaturnR5
-} from './SS/saturnTables'
-import {
-  EARTH_VSOP87_B,
-  EARTH_VSOP87_L,
-  EARTH_VSOP87_R
-} from './SS/earthTables_complete'
-import {
-  EarthB0,
-  EarthB1,
-  EarthB2,
-  EarthB3,
-  EarthB4,
-  EarthL0,
-  EarthL1,
-  EarthL2,
-  EarthL3,
-  EarthL4,
-  EarthL5,
-  EarthR0,
-  EarthR1,
-  EarthR2,
-  EarthR3,
-  EarthR4,
-  EarthR5
-} from './SS/earthTables'
-import {
-  JupiterB0,
-  JupiterB1,
-  JupiterB2,
-  JupiterB3,
-  JupiterB4,
-  JupiterB5,
-  JupiterL0,
-  JupiterL1,
-  JupiterL2,
-  JupiterL3,
-  JupiterL4,
-  JupiterL5,
-  JupiterR0,
-  JupiterR1,
-  JupiterR2,
-  JupiterR3,
-  JupiterR4,
-  JupiterR5
-} from './SS/jupiterTables'
-import { Mars_B, Mars_L, Mars_R } from './SS/marsTables'
-import { Venus_B, Venus_L, Venus_R } from './SS/venusTables'
-import { Mercury_B, Mercury_L, Mercury_R } from './SS/mercuryTables'
-import { Uranus_B, Uranus_L, Uranus_R } from './SS/uranusTables'
-import { Neptune_B, Neptune_L, Neptune_R } from './SS/neptuneTables'
+
 import { SCALE } from './SolarSystemConstants'
 
 import * as THREE from 'three'
+import {
+  earthCoordinatesGivenDate,
+  jupiterCoordinatesGivenDate,
+  marsCoordinatesGivenDate,
+  mercuryCoordinatesGivenDate,
+  neptuneCoordinatesGivenDate,
+  saturnCoordinatesGivenDate,
+  uranusCoordinatesGivenDate,
+  venusCoordinatesGivenDate
+} from './VSOP87D'
 
 export function moonCoordinatesGivenDate (date) {
   const T = TFromJD(date)
@@ -279,153 +221,6 @@ export function MillenniaTFromJD (time) {
   return T
 }
 
-export function saturnCoordinatesGivenDate (date) {
-  const T = MillenniaTFromJD(date)
-  let tablesL = [SaturnL0, SaturnL1, SaturnL2, SaturnL3, SaturnL4, SaturnL5]
-  let tablesB = [SaturnB0, SaturnB1, SaturnB2, SaturnB3, SaturnB4, SaturnB5]
-  let tablesR = [SaturnR0, SaturnR1, SaturnR2, SaturnR3, SaturnR4, SaturnR5]
-  let L = calculateTerm(tablesL, T) / 10 ** 8
-  let B = calculateTerm(tablesB, T) / 10 ** 8
-  let R = calculateTerm(tablesR, T) / 10 ** 8
-
-  const Lp = L * 1.397 * (10 * T) - 0.00031 * (10 * T * T)
-  L += -0.09033 + 0.03916 * (Math.cos(Lp) - Math.sin(Lp)) * Math.tan(B)
-  B += 0.03916 * (Math.cos(Lp) - Math.sin(Lp))
-
-  return { L, B, R }
-}
-
-export function jupiterCoordinatesGivenDate (date) {
-  const T = MillenniaTFromJD(date)
-  let tablesL = [
-    JupiterL0,
-    JupiterL1,
-    JupiterL2,
-    JupiterL3,
-    JupiterL4,
-    JupiterL5
-  ]
-  let tablesB = [
-    JupiterB0,
-    JupiterB1,
-    JupiterB2,
-    JupiterB3,
-    JupiterB4,
-    JupiterB5
-  ]
-  let tablesR = [
-    JupiterR0,
-    JupiterR1,
-    JupiterR2,
-    JupiterR3,
-    JupiterR4,
-    JupiterR5
-  ]
-  let L = calculateTerm(tablesL, T) / 10 ** 8
-  let B = calculateTerm(tablesB, T) / 10 ** 8
-  let R = calculateTerm(tablesR, T) / 10 ** 8
-
-  const Lp = L * 1.397 * (10 * T) - 0.00031 * (10 * T * T)
-  L += -0.09033 + 0.03916 * (Math.cos(Lp) - Math.sin(Lp)) * Math.tan(B)
-  B += 0.03916 * (Math.cos(Lp) - Math.sin(Lp))
-
-  return { L, B, R }
-}
-
-export function earthCoordinatesGivenDate (date) {
-  const T = MillenniaTFromJD(date)
-  let tablesL = [EarthL0, EarthL1, EarthL2, EarthL3, EarthL4, EarthL5]
-  let tablesB = [EarthB0, EarthB1, EarthB2, EarthB3, EarthB4]
-  let tablesR = [EarthR0, EarthR1, EarthR2, EarthR3, EarthR4, EarthR5]
-  let L = calculateTerm(tablesL, T) / 10 ** 8
-  let B = calculateTerm(tablesB, T) / 10 ** 8
-  let R = calculateTerm(tablesR, T) / 10 ** 8
-
-  const Lp = L * 1.397 * (10 * T) - 0.00031 * (10 * T * T)
-  L += -0.09033 + 0.03916 * (Math.cos(Lp) - Math.sin(Lp)) * Math.tan(B)
-  B += 0.03916 * (Math.cos(Lp) - Math.sin(Lp))
-
-  return { L, B, R }
-}
-
-export function marsCoordinatesGivenDate (date) {
-  const T = MillenniaTFromJD(date)
-  let tablesL = Mars_L
-  let tablesB = Mars_B
-  let tablesR = Mars_R
-  let L = calculateTerm(tablesL, T) / 10 ** 8
-  let B = calculateTerm(tablesB, T) / 10 ** 8
-  let R = calculateTerm(tablesR, T) / 10 ** 8
-
-  const Lp = L * 1.397 * (10 * T) - 0.00031 * (10 * T * T)
-  L += -0.09033 + 0.03916 * (Math.cos(Lp) - Math.sin(Lp)) * Math.tan(B)
-  B += 0.03916 * (Math.cos(Lp) - Math.sin(Lp))
-
-  return { L, B, R }
-}
-
-export function venusCoordinatesGivenDate (date) {
-  const T = MillenniaTFromJD(date)
-  let tablesL = Venus_L
-  let tablesB = Venus_B
-  let tablesR = Venus_R
-  let L = calculateTerm(tablesL, T) / 10 ** 8
-  let B = calculateTerm(tablesB, T) / 10 ** 8
-  let R = calculateTerm(tablesR, T) / 10 ** 8
-
-  const Lp = L * 1.397 * (10 * T) - 0.00031 * (10 * T * T)
-  L += -0.09033 + 0.03916 * (Math.cos(Lp) - Math.sin(Lp)) * Math.tan(B)
-  B += 0.03916 * (Math.cos(Lp) - Math.sin(Lp))
-
-  return { L, B, R }
-}
-
-export function mercuryCoordinatesGivenDate (date) {
-  const T = MillenniaTFromJD(date)
-  let tablesL = Mercury_L
-  let tablesB = Mercury_B
-  let tablesR = Mercury_R
-  let L = calculateTerm(tablesL, T) / 10 ** 8
-  let B = calculateTerm(tablesB, T) / 10 ** 8
-  let R = calculateTerm(tablesR, T) / 10 ** 8
-
-  const Lp = L * 1.397 * (10 * T) - 0.00031 * (10 * T * T)
-  L += -0.09033 + 0.03916 * (Math.cos(Lp) - Math.sin(Lp)) * Math.tan(B)
-  B += 0.03916 * (Math.cos(Lp) - Math.sin(Lp))
-
-  return { L, B, R }
-}
-export function uranusCoordinatesGivenDate (date) {
-  const T = MillenniaTFromJD(date)
-  let tablesL = Uranus_L
-  let tablesB = Uranus_B
-  let tablesR = Uranus_R
-  let L = calculateTerm(tablesL, T) / 10 ** 8
-  let B = calculateTerm(tablesB, T) / 10 ** 8
-  let R = calculateTerm(tablesR, T) / 10 ** 8
-
-  const Lp = L * 1.397 * (10 * T) - 0.00031 * (10 * T * T)
-  L += -0.09033 + 0.03916 * (Math.cos(Lp) - Math.sin(Lp)) * Math.tan(B)
-  B += 0.03916 * (Math.cos(Lp) - Math.sin(Lp))
-
-  return { L, B, R }
-}
-export function neptuneCoordinatesGivenDate (date) {
-  const T = MillenniaTFromJD(date)
-  let tablesL = Neptune_L
-  let tablesB = Neptune_B
-  let tablesR = Neptune_R
-  let L = calculateTerm(tablesL, T) / 10 ** 8
-  let B = calculateTerm(tablesB, T) / 10 ** 8
-  let R = calculateTerm(tablesR, T) / 10 ** 8
-
-  const Lp = L * 1.397 * (10 * T) - 0.00031 * (10 * T * T)
-  L += -0.09033 + 0.03916 * (Math.cos(Lp) - Math.sin(Lp)) * Math.tan(B)
-  B += 0.03916 * (Math.cos(Lp) - Math.sin(Lp))
-
-  return { L, B, R }
-}
-
 export function calculateTerm (tables, T) {
   let X = 0
   for (let x = 0; x < tables.length; x++) {
@@ -544,6 +339,78 @@ export const planetsNoSun = [
   'neptune'
 ]
 
+import Core from '../../core/main.js'
+
+//Acceder a los modulos de WASM
+function mercuryCoordinatesGivenWasm (instance, date) {
+  const T = MillenniaTFromJD(date)
+  return {
+    L: instance._mercuryCoordinatesGivenDateL(T),
+    B: instance._mercuryCoordinatesGivenDateB(T),
+    R: instance._mercuryCoordinatesGivenDateR(T)
+  }
+}
+function venusCoordinatesGivenWasm (instance, date) {
+  const T = MillenniaTFromJD(date)
+  return {
+    L: instance._venusCoordinatesGivenDateL(T),
+    B: instance._venusCoordinatesGivenDateB(T),
+    R: instance._venusCoordinatesGivenDateR(T)
+  }
+}
+function earthCoordinatesGivenWasm (instance, date) {
+  const T = MillenniaTFromJD(date)
+  return {
+    L: instance._earthCoordinatesGivenDateL(T),
+    B: instance._earthCoordinatesGivenDateB(T),
+    R: instance._earthCoordinatesGivenDateR(T)
+  }
+}
+
+function marsCoordinatesGivenWasm (instance, date) {
+  const T = MillenniaTFromJD(date)
+  return {
+    L: instance._marsCoordinatesGivenDateL(T),
+    B: instance._marsCoordinatesGivenDateB(T),
+    R: instance._marsCoordinatesGivenDateR(T)
+  }
+}
+function jupiterCoordinatesGivenWasm (instance, date) {
+  const T = MillenniaTFromJD(date)
+
+  return {
+    L: instance._jupiterCoordinatesGivenDateL(T),
+    B: instance._jupiterCoordinatesGivenDateB(T),
+    R: instance._jupiterCoordinatesGivenDateR(T)
+  }
+}
+function saturnCoordinatesGivenWasm (instance, date) {
+  const T = MillenniaTFromJD(date)
+
+  return {
+    L: instance._saturnCoordinatesGivenDateL(T),
+    B: instance._saturnCoordinatesGivenDateB(T),
+    R: instance._saturnCoordinatesGivenDateR(T)
+  }
+}
+function uranusCoordinatesGivenWasm (instance, date) {
+  const T = MillenniaTFromJD(date)
+
+  return {
+    L: instance._uranusCoordinatesGivenDateL(T),
+    B: instance._uranusCoordinatesGivenDateB(T),
+    R: instance._uranusCoordinatesGivenDateR(T)
+  }
+}
+function neptuneCoordinatesGivenWasm (instance, date) {
+  const T = MillenniaTFromJD(date)
+  return {
+    L: instance._neptuneCoordinatesGivenDateL(T),
+    B: instance._neptuneCoordinatesGivenDateB(T),
+    R: instance._neptuneCoordinatesGivenDateR(T)
+  }
+}
+
 /**
  *
  * @param object string to select the desired function
@@ -555,7 +422,7 @@ export const planetsNoSun = [
  *
  *
  */
-export function calculateObjectOrbit (
+export async function calculateObjectOrbit (
   object,
   period,
   quantity,
@@ -564,57 +431,68 @@ export function calculateObjectOrbit (
   moveWithPlanet = true
 ) {
   const func = [
-    mercuryCoordinatesGivenDate,
-    venusCoordinatesGivenDate,
-    earthCoordinatesGivenDate,
+    mercuryCoordinatesGivenWasm,
+    venusCoordinatesGivenWasm,
+    earthCoordinatesGivenWasm,
     moonCoordinatesGivenDate,
-    marsCoordinatesGivenDate,
-    jupiterCoordinatesGivenDate,
-    saturnCoordinatesGivenDate,
-    uranusCoordinatesGivenDate,
-    neptuneCoordinatesGivenDate
+    marsCoordinatesGivenWasm,
+    jupiterCoordinatesGivenWasm,
+    saturnCoordinatesGivenWasm,
+    uranusCoordinatesGivenWasm,
+    neptuneCoordinatesGivenWasm
   ]
   const id = planetsNoSun.indexOf(object)
+  const start = Date.now()
 
   if (id > -1) {
     if (object == 'moon') {
-      const moon = calculatePlanetOrbit(
+      return calculatePlanetOrbit(
         func[3],
         period,
         quantity,
         precision,
         startDate,
-        moonParseLBDToXYZ
-      )
-      if (moveWithPlanet) {
-        //Si se mueve con el planeta
-        const earth = calculatePlanetOrbit(
-          func[2],
-          period,
-          quantity,
-          precision,
-          startDate,
-          parseLBRToXYZ
-        )
-        return earth.map((p, i) => {
-          return [p[0] + moon[i][0], p[1] + moon[i][1], p[2] + moon[i][2]]
-        })
-      }
+        moonParseLBDToXYZ,
+        false
+      ).then(moon => {
+        if (moveWithPlanet) {
+          //Si se mueve con el planeta
+          return calculatePlanetOrbit(
+            func[2],
+            period,
+            quantity,
+            precision,
+            startDate,
+            parseLBRToXYZ
+          ).then(earth => {
+            const end = Date.now()
+            console.log('MOON TIME: ', end - start, start)
 
-      return moon
+            return earth.map((p, i) => {
+              return [p[0] + moon[i][0], p[1] + moon[i][1], p[2] + moon[i][2]]
+            })
+          })
+        } else {
+          return moon
+        }
+      })
+    } else {
+      return calculatePlanetOrbit(
+        func[id],
+        period,
+        quantity,
+        precision,
+        startDate,
+        parseLBRToXYZ
+      ).then(res => {
+        const end = Date.now()
+        console.log('PLANET TIME: ', end - start)
+        return res
+      })
     }
-
-    return calculatePlanetOrbit(
-      func[id],
-      period,
-      quantity,
-      precision,
-      startDate,
-      parseLBRToXYZ
-    )
+  } else {
+    return [0, 0, 0]
   }
-
-  return [0, 0, 0]
 }
 
 /**
@@ -624,29 +502,44 @@ export function calculateObjectOrbit (
  * @param quantity quantity of periods
  * @param precision subdivision of the period
  * @param startDate date in JD to start counting
- * @param parseFunc
+ * @param parseFunc function to convert LBR to XYZ coords
  *
- *  Calculate all the points of an object between 2 given JD
+ *  Calculate an amount of points of an object between 2 given JD
  */
-export function calculatePlanetOrbit (
+export async function calculatePlanetOrbit (
   fn,
   period,
   quantity,
   precision,
   startDate,
-  parseFunc
+  parseFunc,
+  asy = true
 ) {
   let posiciones = []
   const endDate = startDate + period * quantity
-  for (
-    let i = Math.min(startDate, endDate);
-    i <= Math.max(startDate, endDate);
-    i += Math.abs(period / precision)
-  ) {
-    posiciones = [...posiciones, parseFunc(fn(i))]
-  }
+  const max = Math.max(startDate, endDate)
+  const min = Math.min(startDate, endDate)
+  const inverse = startDate == max
 
-  return posiciones
+  //console.log(min, max)
+
+  if (asy) {
+    return Core().then(core => {
+      for (let i = min; i <= max; i += Math.abs(period / precision)) {
+        !inverse && (posiciones = [...posiciones, parseFunc(fn(core, i))])
+        inverse && (posiciones = [parseFunc(fn(core, i)), ...posiciones])
+      }
+
+      return posiciones
+    })
+  } else {
+    for (let i = min; i <= max; i += Math.abs(period / precision)) {
+      !inverse && (posiciones = [...posiciones, parseFunc(fn(i))])
+      inverse && (posiciones = [parseFunc(fn(i)), ...posiciones])
+    }
+
+    return posiciones
+  }
 }
 
 /**
@@ -675,51 +568,6 @@ export function calculateEarthRotationGivenDate (date) {
   //console.log(e0)
   return e0
 }
-
-/*
-
-  const L0 = 280.46646 + 36000.76983 * T + 0.0003032 * T ** 2
-  const M = 357.52911 + 35999.05029 * T - 0.0001537 * T ** 2
-  const C =
-    (1.914602 - 0.004817 * T - 0.000014 * T ** 2) * Math.sin(M) +
-    (0.019993 - 0.000101 * T) * Math.sin(2 * M) +
-    0.000289 * Math.sin(3 * M)
-
-  const U = T / 100
-  const e0 =
-    (82800 +
-      1560 +
-      21.448 -
-      4680.93 * U -
-      1.55 * U ** 2 +
-      1999.25 * U ** 3 -
-      51.38 * U ** 4 -
-      249.67 * U ** 5 -
-      39.05 * U ** 6 +
-      7.12 * U ** 7 +
-      27.87 * U ** 8 +
-      5.79 * U ** 9 +
-      2.45 * U ** 10) /
-    60 /
-    360
-
-  //82800 +1560 +21.448 -
-  //- 46.815 * T - 0.00059 * T ** 2 + 0.001813 * T ** 3
-
-  const omega = 125.04 - 1934.136 * T
-  const lambda = L0 + C - 0.00569 - 0.00478 * Math.sin(omega)
-
-  const r = Math.atan2(
-    Math.cos((e0 + 0.00256 * Math.cos(omega)) * Math.sin(lambda)),
-    Math.cos(lambda)
-  )
-  //Formula 25.6
-  console.log(T, C, angleToPos((L0 + C) % 360))
-  return Math.atan2(
-    Math.cos((e0 + 0.00256 * Math.cos(omega)) * Math.sin(lambda)),
-    Math.cos(lambda)
-  )
-*/
 
 /**
  *

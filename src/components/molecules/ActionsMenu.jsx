@@ -6,7 +6,7 @@ import {
   calculateObjectOrbit,
   planetsNoSun
 } from '../../helpers/functions/astronomicalFunctions'
-import PlanetSelector from '../atoms/PlaneSelector'
+import PlanetSelector from '../atoms/PlanetSelector'
 
 function ActionsMenu ({ date }) {
   const [show, setShow] = useState(false)
@@ -88,6 +88,7 @@ function CreateOrbit ({ date }) {
   const [fecha, setFecha] = useState(1)
   const [duracion, setDuracion] = useState(1)
   const [precision, setPrecision] = useState(1)
+  const [color, setColor] = useState(1)
 
   const colors = [
     '#F0F0F0',
@@ -113,13 +114,17 @@ function CreateOrbit ({ date }) {
 
       if (!repetido) {
         console.log('Agregar orbita')
-        addOrbit({
-          id: p1 + ':' + fecha,
-          points: calculateObjectOrbit(p1, fecha, duracion, precision, date),
-          color: colors[planetsNoSun.indexOf(p1)],
-          start: date,
-          end: date + fecha * duracion
-        })
+        calculateObjectOrbit(p1, fecha, duracion, precision, date).then(
+          points => {
+            addOrbit({
+              id: p1 + ':' + fecha,
+              points: points,
+              color: colors[planetsNoSun.indexOf(p1)],
+              start: date,
+              end: date + fecha * duracion
+            })
+          }
+        )
       }
     }
   }

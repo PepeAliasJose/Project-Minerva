@@ -1,12 +1,8 @@
 import { memo, useEffect, useState } from 'react'
-import {
-  changeDateFromInput,
-  parseLBRToXYZ,
-  venusCoordinatesGivenDate
-} from '../../helpers/functions/astronomicalFunctions'
-import { TextureLoader, Vector3 } from 'three'
+import { parseLBRToXYZ } from '../../helpers/functions/astronomicalFunctions'
+import { TextureLoader } from 'three'
 
-import { SCALE, VENUS_SIZE } from '../../helpers/functions/SolarSystemConstants'
+import { VENUS_SIZE } from '../../helpers/functions/SolarSystemConstants'
 import SkyTag from './SkyTag'
 import { usePlanets } from '../../App'
 
@@ -28,7 +24,7 @@ const VenusSS = memo(({ Venus }) => {
   }, [planets])
 
   return (
-    <mesh ref={Venus} frustumCulled={false} position={venusPos}>
+    <mesh ref={Venus} frustumCulled={true} position={venusPos}>
       <SkyTag name={'Venus'} color='bg-orange-400' />
       <icosahedronGeometry args={[VENUS_SIZE / 2, 10]} />
       <meshStandardMaterial map={Venus_Texture} />

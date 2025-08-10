@@ -1,12 +1,4 @@
 import { Html, Line } from '@react-three/drei'
-import {
-  calculatePlanetOrbit,
-  earthCoordinatesGivenDate,
-  moonCoordinatesGivenDate,
-  moonParseLBDToXYZ,
-  parseLBRToXYZ,
-  saturnCoordinatesGivenDate
-} from '../../helpers/functions/astronomicalFunctions'
 import { useConfig, useOrbits, usePlanets } from '../../App'
 import { EyeIcon, EyeSlashIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { useState } from 'react'
@@ -116,15 +108,6 @@ function Orbit ({ id, points, color }) {
         className='mt-2 -translate-x-1/2 bg-transparent
          inline-flex items-start gap-2 '
       >
-        <div
-          className='up out-rounded p-1.5 hover:cursor-pointer'
-          onClick={() => {
-            setShow(!show)
-          }}
-        >
-          {show && <EyeSlashIcon className='size-3.5 text-red-400' />}
-          {!show && <EyeIcon className='size-3.5 ' />}
-        </div>
         {show && (
           <>
             <div
@@ -174,16 +157,29 @@ function Orbit ({ id, points, color }) {
                 </div>
               </div>
             </div>
-            <div
+          </>
+        )}
+        <div className='flex flex-col gap-2'>
+          {show && (
+            <button
               className='up out-rounded p-1.5 hover:cursor-pointer'
               onClick={() => {
                 removeOrbit(id)
               }}
             >
               <TrashIcon className='size-3.5 text-red-400' />
-            </div>
-          </>
-        )}
+            </button>
+          )}
+          <button
+            className='up out-rounded p-1.5 hover:cursor-pointer'
+            onClick={() => {
+              setShow(!show)
+            }}
+          >
+            {show && <EyeSlashIcon className='size-3.5 text-red-400' />}
+            {!show && <EyeIcon className='size-3.5 ' />}
+          </button>
+        </div>
       </Html>
     </>
   )

@@ -69,7 +69,7 @@ const SaturnSS = memo(({ Saturn }) => {
   return (
     <mesh
       ref={Saturn}
-      frustumCulled={false}
+      //frustumCulled={false}
       position={saturnPos}
       rotation={saturnRot}
     >
@@ -82,7 +82,7 @@ const SaturnSS = memo(({ Saturn }) => {
         shadow-mapSize-height={shadowRes}
       />
 
-      <mesh frustumCulled={false} rotation={[Math.PI / 12, 0, 0]}>
+      <mesh frustumCulled={true} rotation={[Math.PI / 12, 0, 0]}>
         <mesh rotation={[-Math.PI / 2, 0, 0]} ref={SaturnRings} receiveShadow>
           <ringGeometry
             args={[
@@ -97,7 +97,7 @@ const SaturnSS = memo(({ Saturn }) => {
             transparent={true}
           />
         </mesh>
-        <mesh castShadow receiveShadow frustumCulled={false}>
+        <mesh castShadow receiveShadow frustumCulled={true}>
           <icosahedronGeometry args={[SATURN_SIZE / 2, 20]} />
           <meshStandardMaterial map={Saturn_Texture} transparent={false} />
         </mesh>

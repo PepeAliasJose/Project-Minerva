@@ -7,7 +7,7 @@ import {
   moonParseLBDToXYZ,
   parseLBRToXYZ
 } from '../../helpers/functions/astronomicalFunctions'
-import PlanetSelector from '../atoms/PlaneSelector'
+import PlanetSelector from '../atoms/PlanetSelector'
 import ActionsMenu from '../molecules/ActionsMenu'
 import SettingsMenu from '../molecules/SettingsMenu'
 
@@ -78,7 +78,7 @@ function Controls ({}) {
             transition: { duration: 0.7, ease: 'easeInOut' }
           }}
           className='absolute bottom-5 left-0 w-full justify-center 
-       flex flex-row-reverse gap-10 items-center '
+       flex flex-row-reverse gap-10 items-center z-50'
         >
           <div className='up out-rounded'>
             <input

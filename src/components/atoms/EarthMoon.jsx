@@ -37,6 +37,7 @@ const EartMoon = memo(({ Earth, Moon }) => {
   useEffect(() => {
     updateMoonRotation(planets.moon.L)
     setEarthPos(parseLBRToXYZ(planets.earth))
+    //console.log('EARTH XYZ: ', parseLBRToXYZ(planets.earth))
     setMoonPos(moonParseLBDToXYZ(planets.moon))
     return () => {
       Earth_Texture.dispose()
@@ -53,7 +54,7 @@ const EartMoon = memo(({ Earth, Moon }) => {
         position={moonPos}
         castShadow
         receiveShadow
-        frustumCulled={false}
+        //frustumCulled={false}
       >
         <SkyTag name={'Luna'} top />
         <icosahedronGeometry attach={'geometry'} args={[MOON_SIZE / 2, 12]} />
@@ -61,7 +62,7 @@ const EartMoon = memo(({ Earth, Moon }) => {
       </mesh>
       <group rotation={[0, -Math.PI / 35, 0]}>
         <mesh
-          frustumCulled={false}
+          //frustumCulled={false}
           //correccion de posicion a las 00:00 GMT
           // + giro por hora
           rotation={[0, 0, degreesToRadians(planets.earthObliquity)]}

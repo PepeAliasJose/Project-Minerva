@@ -1,14 +1,7 @@
-import { TextureLoader, Vector3 } from 'three'
-import {
-  changeDateFromInput,
-  jupiterCoordinatesGivenDate,
-  parseLBRToXYZ
-} from '../../helpers/functions/astronomicalFunctions'
+import { TextureLoader } from 'three'
+import { parseLBRToXYZ } from '../../helpers/functions/astronomicalFunctions'
 import SkyTag from './SkyTag'
-import {
-  JUPITER_SIZE,
-  SCALE
-} from '../../helpers/functions/SolarSystemConstants'
+import { JUPITER_SIZE } from '../../helpers/functions/SolarSystemConstants'
 import { memo, useEffect, useRef, useState } from 'react'
 import { usePlanets } from '../../App'
 
@@ -44,7 +37,11 @@ const JupiterSS = memo(({ Jupiter }) => {
   }, [planets])
 
   return (
-    <mesh ref={Jupiter} frustumCulled={false} position={jupiterPos}>
+    <mesh
+      ref={Jupiter}
+      //frustumCulled={false}
+      position={jupiterPos}
+    >
       <SkyTag name={'Jupiter'} color='bg-orange-400' />
       <pointLight
         ref={JupiterLight}

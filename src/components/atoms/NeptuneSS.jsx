@@ -36,7 +36,11 @@ const NeptuneSS = memo(({ Neptune }) => {
   }, [planets])
 
   return (
-    <mesh ref={Neptune} frustumCulled={false} position={neptunePos}>
+    <mesh
+      ref={Neptune}
+      //frustumCulled={false}
+      position={neptunePos}
+    >
       <SkyTag name={'Neptuno'} color='bg-blue-500' />
       <pointLight
         ref={NeptuneLight}
@@ -45,7 +49,11 @@ const NeptuneSS = memo(({ Neptune }) => {
         shadow-mapSize-width={shadowRes}
         shadow-mapSize-height={shadowRes}
       />
-      <mesh castShadow receiveShadow frustumCulled={false}>
+      <mesh
+        castShadow
+        receiveShadow
+        //frustumCulled={false}
+      >
         <icosahedronGeometry args={[NEPTUNE_SIZE / 2, 20]} />
         <meshStandardMaterial map={Neptune_Texture} />
       </mesh>
