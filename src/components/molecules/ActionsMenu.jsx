@@ -114,17 +114,13 @@ function CreateOrbit ({ date }) {
 
       if (!repetido) {
         console.log('Agregar orbita')
-        calculateObjectOrbit(p1, fecha, duracion, precision, date).then(
-          points => {
-            addOrbit({
-              id: p1 + ':' + fecha,
-              points: points,
-              color: colors[planetsNoSun.indexOf(p1)],
-              start: date,
-              end: date + fecha * duracion
-            })
-          }
-        )
+        addOrbit({
+          id: p1 + ':' + fecha,
+          points: calculateObjectOrbit(p1, fecha, duracion, precision, date),
+          color: colors[planetsNoSun.indexOf(p1)],
+          start: date,
+          end: date + fecha * duracion
+        })
       }
     }
   }

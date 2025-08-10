@@ -339,78 +339,6 @@ export const planetsNoSun = [
   'neptune'
 ]
 
-import Core from '../../core/main.js'
-
-//Acceder a los modulos de WASM
-function mercuryCoordinatesGivenWasm (instance, date) {
-  const T = MillenniaTFromJD(date)
-  return {
-    L: instance._mercuryCoordinatesGivenDateL(T),
-    B: instance._mercuryCoordinatesGivenDateB(T),
-    R: instance._mercuryCoordinatesGivenDateR(T)
-  }
-}
-function venusCoordinatesGivenWasm (instance, date) {
-  const T = MillenniaTFromJD(date)
-  return {
-    L: instance._venusCoordinatesGivenDateL(T),
-    B: instance._venusCoordinatesGivenDateB(T),
-    R: instance._venusCoordinatesGivenDateR(T)
-  }
-}
-function earthCoordinatesGivenWasm (instance, date) {
-  const T = MillenniaTFromJD(date)
-  return {
-    L: instance._earthCoordinatesGivenDateL(T),
-    B: instance._earthCoordinatesGivenDateB(T),
-    R: instance._earthCoordinatesGivenDateR(T)
-  }
-}
-
-function marsCoordinatesGivenWasm (instance, date) {
-  const T = MillenniaTFromJD(date)
-  return {
-    L: instance._marsCoordinatesGivenDateL(T),
-    B: instance._marsCoordinatesGivenDateB(T),
-    R: instance._marsCoordinatesGivenDateR(T)
-  }
-}
-function jupiterCoordinatesGivenWasm (instance, date) {
-  const T = MillenniaTFromJD(date)
-
-  return {
-    L: instance._jupiterCoordinatesGivenDateL(T),
-    B: instance._jupiterCoordinatesGivenDateB(T),
-    R: instance._jupiterCoordinatesGivenDateR(T)
-  }
-}
-function saturnCoordinatesGivenWasm (instance, date) {
-  const T = MillenniaTFromJD(date)
-
-  return {
-    L: instance._saturnCoordinatesGivenDateL(T),
-    B: instance._saturnCoordinatesGivenDateB(T),
-    R: instance._saturnCoordinatesGivenDateR(T)
-  }
-}
-function uranusCoordinatesGivenWasm (instance, date) {
-  const T = MillenniaTFromJD(date)
-
-  return {
-    L: instance._uranusCoordinatesGivenDateL(T),
-    B: instance._uranusCoordinatesGivenDateB(T),
-    R: instance._uranusCoordinatesGivenDateR(T)
-  }
-}
-function neptuneCoordinatesGivenWasm (instance, date) {
-  const T = MillenniaTFromJD(date)
-  return {
-    L: instance._neptuneCoordinatesGivenDateL(T),
-    B: instance._neptuneCoordinatesGivenDateB(T),
-    R: instance._neptuneCoordinatesGivenDateR(T)
-  }
-}
-
 /**
  *
  * @param object string to select the desired function
@@ -422,7 +350,7 @@ function neptuneCoordinatesGivenWasm (instance, date) {
  *
  *
  */
-export async function calculateObjectOrbit (
+export function calculateObjectOrbit (
   object,
   period,
   quantity,
@@ -431,68 +359,68 @@ export async function calculateObjectOrbit (
   moveWithPlanet = true
 ) {
   const func = [
-    mercuryCoordinatesGivenWasm,
-    venusCoordinatesGivenWasm,
-    earthCoordinatesGivenWasm,
+    mercuryCoordinatesGivenDate,
+    venusCoordinatesGivenDate,
+    earthCoordinatesGivenDate,
     moonCoordinatesGivenDate,
-    marsCoordinatesGivenWasm,
-    jupiterCoordinatesGivenWasm,
-    saturnCoordinatesGivenWasm,
-    uranusCoordinatesGivenWasm,
-    neptuneCoordinatesGivenWasm
+    marsCoordinatesGivenDate,
+    jupiterCoordinatesGivenDate,
+    saturnCoordinatesGivenDate,
+    uranusCoordinatesGivenDate,
+    neptuneCoordinatesGivenDate
   ]
+
   const id = planetsNoSun.indexOf(object)
   const start = Date.now()
 
   if (id > -1) {
     if (object == 'moon') {
-      return calculatePlanetOrbit(
+      const moon = calculatePlanetOrbit(
         func[3],
         period,
         quantity,
         precision,
         startDate,
-        moonParseLBDToXYZ,
-        false
-      ).then(moon => {
-        if (moveWithPlanet) {
-          //Si se mueve con el planeta
-          return calculatePlanetOrbit(
-            func[2],
-            period,
-            quantity,
-            precision,
-            startDate,
-            parseLBRToXYZ
-          ).then(earth => {
-            const end = Date.now()
-            console.log('MOON TIME: ', end - start, start)
+        moonParseLBDToXYZ
+      )
 
-            return earth.map((p, i) => {
-              return [p[0] + moon[i][0], p[1] + moon[i][1], p[2] + moon[i][2]]
-            })
-          })
-        } else {
-          return moon
-        }
-      })
-    } else {
-      return calculatePlanetOrbit(
-        func[id],
-        period,
-        quantity,
-        precision,
-        startDate,
-        parseLBRToXYZ
-      ).then(res => {
+      if (moveWithPlanet) {
+        //Si se mueve con el planeta
+
+        const earth = calculatePlanetOrbit(
+          func[2],
+          period,
+          quantity,
+          precision,
+          startDate,
+          parseLBRToXYZ
+        )
         const end = Date.now()
-        console.log('PLANET TIME: ', end - start)
-        return res
-      })
+        console.log('MOON TIME: ', end - start, start)
+        return earth.map((p, i) => {
+          return [p[0] + moon[i][0], p[1] + moon[i][1], p[2] + moon[i][2]]
+        })
+      }
+      const end = Date.now()
+      console.log('MOON TIME: ', end - start, start)
+      return moon
     }
-  } else {
-    return [0, 0, 0]
+
+    const r = calculatePlanetOrbit(
+      func[id],
+      period,
+      quantity,
+      precision,
+      startDate,
+      parseLBRToXYZ
+    )
+
+    const end = Date.now()
+    console.log('MOON TIME: ', end - start, start)
+    return r
   }
+
+  return [0, 0, 0]
 }
 
 /**
@@ -506,7 +434,7 @@ export async function calculateObjectOrbit (
  *
  *  Calculate an amount of points of an object between 2 given JD
  */
-export async function calculatePlanetOrbit (
+export function calculatePlanetOrbit (
   fn,
   period,
   quantity,
@@ -523,23 +451,12 @@ export async function calculatePlanetOrbit (
 
   //console.log(min, max)
 
-  if (asy) {
-    return Core().then(core => {
-      for (let i = min; i <= max; i += Math.abs(period / precision)) {
-        !inverse && (posiciones = [...posiciones, parseFunc(fn(core, i))])
-        inverse && (posiciones = [parseFunc(fn(core, i)), ...posiciones])
-      }
-
-      return posiciones
-    })
-  } else {
-    for (let i = min; i <= max; i += Math.abs(period / precision)) {
-      !inverse && (posiciones = [...posiciones, parseFunc(fn(i))])
-      inverse && (posiciones = [parseFunc(fn(i)), ...posiciones])
-    }
-
-    return posiciones
+  for (let i = min; i <= max; i += Math.abs(period / precision)) {
+    !inverse && (posiciones = [...posiciones, parseFunc(fn(i))])
+    inverse && (posiciones = [parseFunc(fn(i)), ...posiciones])
   }
+
+  return posiciones
 }
 
 /**
