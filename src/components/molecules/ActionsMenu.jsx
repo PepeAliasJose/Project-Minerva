@@ -2,15 +2,14 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { useLines, useOrbits } from '../../App'
 import { useState } from 'react'
 import {
+  ExclamationCircleIcon,
   ExclamationTriangleIcon,
   PlusIcon,
   WrenchScrewdriverIcon
 } from '@heroicons/react/24/outline'
-import {
-  calculateObjectOrbit,
-  planetsNoSun
-} from '../../helpers/functions/astronomicalFunctions'
+
 import PlanetSelector from '../atoms/PlanetSelector'
+import { planetsNoSun } from '../../helpers/functions/orbitCalculator'
 
 function ActionsMenu ({ date }) {
   const [show, setShow] = useState(false)
@@ -92,7 +91,8 @@ function CreateOrbit ({ date }) {
   const [fecha, setFecha] = useState(1)
   const [duracion, setDuracion] = useState(1)
   const [precision, setPrecision] = useState(1)
-  const [color, setColor] = useState(1)
+  const [calculando, setCalculando] = useState(false)
+  const [color, setColor] = useState('#60a5fa')
 
   const colors = [
     '#F0F0F0',
@@ -106,7 +106,7 @@ function CreateOrbit ({ date }) {
     '#3b82f6'
   ]
 
-  function agregarLinea () {
+  async function agregarLinea () {
     if (p1 != 'sun') {
       let repetido = false
       orbits.map(o => {
@@ -118,22 +118,45 @@ function CreateOrbit ({ date }) {
 
       if (!repetido) {
         console.log('Agregar orbita')
-        addOrbit({
-          id: p1 + ':' + fecha,
-          points: calculateObjectOrbit(p1, fecha, duracion, precision, date),
-          color: colors[planetsNoSun.indexOf(p1)],
-          start: date,
-          end: date + fecha * duracion
-        })
+
+        const calculateOrbit = new Worker('orbitWorker.js')
+        const agregar = event => {
+          addOrbit({
+            id: p1 + ':' + fecha,
+            points: event.data,
+            color: color,
+            start: date,
+            end: date + fecha * duracion
+          })
+          setCalculando(false)
+        }
+
+        calculateOrbit.addEventListener('message', agregar)
+        calculateOrbit.postMessage([p1, fecha, duracion, precision, date])
+        setCalculando(true)
       }
     }
   }
 
   return (
     <div className='flex flex-col gap-2'>
+      {calculando && (
+        <div className='fixed top-5 left-5 inline-flex gap-2 items-center'>
+          <ExclamationCircleIcon className='size-5 text-red-500' />
+          calculando ...
+        </div>
+      )}
       <div className='flex flex-col gap-2 mx-2'>
         <div className='inline-flex items-center justify-between gap-2 '>
-          <PlanetSelector flat planet={p1} setPlanet={setP1} sun={false} />
+          <PlanetSelector
+            flat
+            planet={p1}
+            setPlanet={p => {
+              setP1(p)
+              setColor(colors[planetsNoSun.indexOf(p)])
+            }}
+            sun={false}
+          />
           <DistanciaOrbita orbita={fecha} setOrbita={setFecha} />
           <button
             aria-label='Agregar orbita'
@@ -156,7 +179,7 @@ function CreateOrbit ({ date }) {
             max={365}
             aria-label='Duración'
             className={
-              'down p-1 px-3 border-2 ' +
+              'down p-1 px-3 border-2 text-lg ' +
               (chechNumber(duracion)
                 ? ' border-red-400 '
                 : ' border-transparent')
@@ -164,7 +187,7 @@ function CreateOrbit ({ date }) {
           />
         </label>
         <label className='flex flex-col gap-1 text-sm text-[var(--soft-text)]'>
-          División:
+          División: (día/24, año/360...)
           <input
             type='text'
             value={precision}
@@ -175,22 +198,36 @@ function CreateOrbit ({ date }) {
             max={100}
             aria-label='Precisión'
             className={
-              'down p-1 px-3 border-2 ' +
+              'down p-1 px-3 border-2 text-lg ' +
               (chechNumber(precision)
                 ? ' border-red-400 '
                 : ' border-transparent')
             }
           />
         </label>
+        <label className='flex flex-row gap-2 text-sm text-[var(--soft-text)] items-center'>
+          Color
+          <input
+            type='color'
+            value={color}
+            onChange={e => {
+              setColor(e.target.value)
+            }}
+            min={1}
+            max={100}
+            aria-label='Color'
+            className='rounded-xl'
+          />
+        </label>
       </div>
       <div className='flex flex-col gap-2'></div>
-      {duracion * precision > 1000 && (
+      {duracion * precision >= 1000 && (
         <p className='text-sm text-yellow-300 mx-2 inline-flex gap-2 items-center'>
           <ExclamationTriangleIcon className='size-4 mt-0.5' />
           Los calculos pueden tardar un poco
         </p>
       )}
-      {duracion * precision > 10000 && (
+      {duracion * precision >= 10000 && (
         <p className='text-sm text-red-400 mx-2 inline-flex gap-2 items-center'>
           <ExclamationTriangleIcon className='size-4 mt-0.5' />
           Requiere mucha potencia
@@ -198,7 +235,8 @@ function CreateOrbit ({ date }) {
       )}
       <p className='text-sm text-[var(--soft-text)] mx-2'>
         Calcula la trayectoria durante el intervalo seleccionado, desde la fecha
-        establecida
+        establecida. La división es el numero de calculos intermedios entre
+        unidad de tiempo
       </p>
     </div>
   )

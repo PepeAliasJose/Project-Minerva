@@ -36,7 +36,7 @@ function SolarSystem () {
         fixed top-[50vh] left-[50vw]
         -translate-x-[50%] -translate-y-[50%]'
         >
-          Loading...
+          Cargando ...
         </div>
       )}
       {load && <IntroTitle />}
