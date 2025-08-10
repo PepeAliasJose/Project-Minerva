@@ -68,6 +68,11 @@ body {
   background: linear-gradient(135deg, hsl(40, 1%, 53%), hsl(187, 98%, 56%));
 }
 
+input:focus {
+  appearance: none;
+  outline: none;
+}
+
 /* Input type checkbox */
 
 input[type='checkbox']:checked {

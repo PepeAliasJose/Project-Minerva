@@ -1,7 +1,11 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { useLines, useOrbits } from '../../App'
 import { useState } from 'react'
-import { PlusIcon, WrenchScrewdriverIcon } from '@heroicons/react/24/outline'
+import {
+  ExclamationTriangleIcon,
+  PlusIcon,
+  WrenchScrewdriverIcon
+} from '@heroicons/react/24/outline'
 import {
   calculateObjectOrbit,
   planetsNoSun
@@ -29,13 +33,13 @@ function ActionsMenu ({ date }) {
             exit={{ translateX: '120%' }}
             transition={{ duration: 0.5, ease: 'easeInOut' }}
             className='flex flex-col w-[calc(100vw-40px)]
-       md:w-80 h-[calc(100svh-40px)] overflow-y-scroll 
+       md:w-80 h-[calc(100svh-40px)] overflow-y-scroll overflow-x-clip 
        hide-scroll up out-rounded p-2 pb-4'
           >
-            <div className='m-2 font-semibold text-center'>Acciones:</div>
+            <div className='m-2 font-semibold text-center'>Acciones</div>
             <p className='m-2'>Calcular distancia: </p>
             <CreateDistanceLine />
-            <p className='m-2 mt-4'>Calcular trayectoria: </p>
+            <p className='m-2 mt-5'>Calcular trayectoria: </p>
             <CreateOrbit date={date} />
           </motion.div>
         )}
@@ -139,10 +143,11 @@ function CreateOrbit ({ date }) {
             <PlusIcon className='size-6' />
           </button>
         </div>
-        <label className='flex flex-col gap-1'>
-          Duración: {duracion} (día, año, ...)
+
+        <label className='flex flex-col gap-1 text-sm text-[var(--soft-text)]'>
+          Duración: (día, año...)
           <input
-            type='range'
+            type='text'
             value={duracion}
             onChange={e => {
               setDuracion(e.target.value)
@@ -150,12 +155,18 @@ function CreateOrbit ({ date }) {
             min={1}
             max={365}
             aria-label='Duración'
+            className={
+              'down p-1 px-3 border-2 ' +
+              (chechNumber(duracion)
+                ? ' border-red-400 '
+                : ' border-transparent')
+            }
           />
         </label>
-        <label className='flex flex-col gap-1'>
-          Subdivisión: {precision} %
+        <label className='flex flex-col gap-1 text-sm text-[var(--soft-text)]'>
+          División:
           <input
-            type='range'
+            type='text'
             value={precision}
             onChange={e => {
               setPrecision(e.target.value)
@@ -163,20 +174,38 @@ function CreateOrbit ({ date }) {
             min={1}
             max={100}
             aria-label='Precisión'
+            className={
+              'down p-1 px-3 border-2 ' +
+              (chechNumber(precision)
+                ? ' border-red-400 '
+                : ' border-transparent')
+            }
           />
         </label>
       </div>
       <div className='flex flex-col gap-2'></div>
+      {duracion * precision > 1000 && (
+        <p className='text-sm text-yellow-300 mx-2 inline-flex gap-2 items-center'>
+          <ExclamationTriangleIcon className='size-4 mt-0.5' />
+          Los calculos pueden tardar un poco
+        </p>
+      )}
+      {duracion * precision > 10000 && (
+        <p className='text-sm text-red-400 mx-2 inline-flex gap-2 items-center'>
+          <ExclamationTriangleIcon className='size-4 mt-0.5' />
+          Requiere mucha potencia
+        </p>
+      )}
       <p className='text-sm text-[var(--soft-text)] mx-2'>
-        Al establecer mas duración y subdivisiones, puede tardar mas en calcular
-        y aparecer la órbita. Una subdivisón al 1% será un calculo entre unidad
-        de tiempo establecida (1 cada día, 1 cada año), y una establecida al
-        100% calculará 100 fracciones entre unidad de tiempo (100 calculos entre
-        dia, ...) con lo que la curva sera mas suave y precisa.
-        <br /> El maximo de puntos por trayetoria es de 36500
+        Calcula la trayectoria durante el intervalo seleccionado, desde la fecha
+        establecida
       </p>
     </div>
   )
+}
+
+function chechNumber (number) {
+  return isNaN(number) || number.length < 1
 }
 
 function DistanciaOrbita ({ orbita, setOrbita }) {

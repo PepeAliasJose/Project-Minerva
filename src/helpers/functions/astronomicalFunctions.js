@@ -450,10 +450,20 @@ export function calculatePlanetOrbit (
   const inverse = startDate == max
 
   //console.log(min, max)
+  let lastVal = min
 
-  for (let i = min; i <= max; i += Math.abs(period / precision)) {
-    !inverse && (posiciones = [...posiciones, parseFunc(fn(i))])
-    inverse && (posiciones = [parseFunc(fn(i)), ...posiciones])
+  while (lastVal <= max) {
+    !inverse && (posiciones = [...posiciones, parseFunc(fn(lastVal))])
+    inverse && (posiciones = [parseFunc(fn(lastVal)), ...posiciones])
+
+    lastVal += Math.abs(period / precision)
+  }
+
+  if (lastVal != max) {
+    //Si no ha coincidido la subdivision con el punto final de la trayectoria
+    //Lo agregamos, casos como agregar decimales
+    !inverse && (posiciones = [...posiciones, parseFunc(fn(max))])
+    inverse && (posiciones = [parseFunc(fn(max)), ...posiciones])
   }
 
   return posiciones
