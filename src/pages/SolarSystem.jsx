@@ -1,11 +1,13 @@
 import { Canvas } from '@react-three/fiber'
-import { useState, useLayoutEffect } from 'react'
+import { useState, useLayoutEffect, useEffect } from 'react'
 
 import { Suspense } from 'react'
 import Scene from '../components/organisms/Scene'
 import IntroTitle from '../components/molecules/IntroTitle'
 import Controls from '../components/organisms/Controls'
-import { Html } from '@react-three/drei'
+import { Fisheye, Html } from '@react-three/drei'
+
+//TODO: Sombra de eclipse, rotacion de la tierra, posicionamiento en superficie, ajustes
 
 function SolarSystem () {
   const [load, setLoad] = useState(false)
@@ -13,6 +15,17 @@ function SolarSystem () {
   useLayoutEffect(() => {
     console.log('Render SolarSystemPage')
   })
+  const none = e => {
+    e.preventDefault()
+  }
+  useEffect(() => {
+    window.addEventListener('contextmenu', event => {
+      event.preventDefault()
+    })
+    return () => {
+      window.removeEventListener('contextmenu', none)
+    }
+  }, [])
 
   return (
     <div

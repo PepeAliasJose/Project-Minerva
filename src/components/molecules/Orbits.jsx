@@ -1,6 +1,12 @@
 import { Html, Line } from '@react-three/drei'
-import { useConfig, useOrbits, usePlanets } from '../../App'
-import { EyeIcon, EyeSlashIcon, TrashIcon } from '@heroicons/react/24/outline'
+import { useConfig, useCustomCamera, useOrbits, usePlanets } from '../../App'
+import {
+  ArrowDownIcon,
+  ArrowUpIcon,
+  EyeIcon,
+  EyeSlashIcon,
+  TrashIcon
+} from '@heroicons/react/24/outline'
 import { useState } from 'react'
 import { SCALE } from '../../helpers/functions/SolarSystemConstants'
 import { Vector3 } from 'three'
@@ -17,6 +23,7 @@ function Orbits () {
         color={o.color}
         start={o.start}
         end={o.end}
+        host={o.referencePoint}
       />
     )
   })
@@ -24,11 +31,15 @@ function Orbits () {
   return <>{o}</>
 }
 
-function Orbit ({ id, points, color }) {
+function Orbit ({ id, points, color, start, end, host }) {
   const { removeOrbit } = useOrbits()
   const { au } = useConfig()
 
   const [show, setShow] = useState(true)
+
+  const endPoints = points.map(p => {
+    return [p[0] + host[0], p[1] + host[1], p[2] + host[2]]
+  })
 
   function calculaDesplazamiento () {
     const p1 = new Vector3(...points[0])
@@ -44,8 +55,8 @@ function Orbit ({ id, points, color }) {
   }
 
   function calculaDisSol () {
-    const p1 = new Vector3(0, 0, 0)
-    const p2 = new Vector3(...points[points.length - 1])
+    const p1 = new Vector3(...host)
+    const p2 = new Vector3(...endPoints[endPoints.length - 1])
 
     let distancia = p1.distanceTo(p2) * SCALE
 
@@ -95,15 +106,14 @@ function Orbit ({ id, points, color }) {
 
   return (
     <>
-      <Line color={color} points={[...points]} />
       <Line
         dashed
         dashSize={5}
         color={'#505050'}
-        points={[[0, 0, 0], points[points.length - 1], points[0], [0, 0, 0]]}
+        points={[host, endPoints[endPoints.length - 1], endPoints[0], host]}
       />
       <Html
-        position={points[points.length - 1]}
+        position={endPoints[endPoints.length - 1]}
         zIndexRange={[40, 10]}
         className='mt-2 -translate-x-1/2 bg-transparent
          inline-flex items-start gap-2 '
@@ -115,6 +125,7 @@ function Orbit ({ id, points, color }) {
         text-xs inline-flex flex-nowrap  gap-1 bg-transparent w-56 '
             >
               <div className='flex flex-col gap-2'>
+                <p className='text-center text-white'>{id.split(':')[0]}</p>
                 <div className='flex flex-col gap-1'>
                   <p>
                     Distancia recorrida total:{'  '}
@@ -133,7 +144,7 @@ function Orbit ({ id, points, color }) {
                 </div>
                 <div className='flex flex-col gap-1'>
                   <p>
-                    Distancia al sol final:{'  '}
+                    Distancia al cuerpo primario final:{'  '}
                     <strong className='font-semibold'>
                       {calculaDisSol().toFixed(8)} {au ? 'AU' : 'KM'}
                     </strong>
@@ -180,6 +191,77 @@ function Orbit ({ id, points, color }) {
             {!show && <EyeIcon className='size-3.5 ' />}
           </button>
         </div>
+      </Html>
+      <MiLinea points={endPoints} color={color} />
+    </>
+  )
+}
+
+function MiLinea ({ points, color }) {
+  const { updateTarget } = useCustomCamera()
+  const [point, setPoint] = useState({ point: [0, 0, 0], show: false })
+  const [top, setTop] = useState(false)
+
+  return (
+    <>
+      <Line
+        color={color}
+        points={points}
+        lineWidth={3}
+        onClick={e => {
+          updateTarget([...e.pointOnLine])
+          setPoint({ point: [...e.pointOnLine], show: true })
+        }}
+        onPointerEnter={e => {
+          document.body.style.cursor = 'pointer'
+        }}
+        onPointerLeave={e => {
+          document.body.style.cursor = 'initial'
+        }}
+      />
+      <Html
+        position={point.point}
+        zIndexRange={[40, 10]}
+        className={
+          ' -translate-x-1/2 bg-transparent inline-flex items-start gap-2 ' +
+          (top ? ' mb-2 -translate-y-full ' : ' mt-2 ')
+        }
+      >
+        {point.show && (
+          <>
+            <div
+              className='text-[var(--soft-text)] up out-rounded px-5 py-2.5 
+        text-xs flex flex-col gap-2 bg-transparent w-56 '
+            >
+              <p className='text-white text-center'>Punto seleccionado</p>
+              <div className=' flex flex-col gap-1'>
+                <p>Coord. rectangular</p>
+                <p>X: {point.point[0] * SCALE}</p>
+                <p>Y: {point.point[1] * SCALE}</p>
+                <p>Z: {point.point[2] * SCALE}</p>
+              </div>
+            </div>
+            <div className='flex flex-col gap-2'>
+              <button
+                className='up out-rounded p-1.5 hover:cursor-pointer'
+                onClick={() => {
+                  setPoint({ ...point, show: false })
+                }}
+              >
+                <TrashIcon className='size-3.5 text-red-400' />
+              </button>
+              <button
+                className='up out-rounded p-1.5 hover:cursor-pointer'
+                onClick={() => {
+                  setTop(!top)
+                }}
+              >
+                {!top && <ArrowUpIcon className='size-3.5 ' />}
+                {top && <ArrowDownIcon className='size-3.5 ' />}
+              </button>
+            </div>
+          </>
+        )}
       </Html>
     </>
   )

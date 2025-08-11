@@ -6,6 +6,7 @@ import { useMediaQuery } from 'react-responsive'
 
 function SSCamera ({ moveCamera }) {
   const { camera, gl } = useThree()
+
   const desktop = useMediaQuery({ query: '(min-width: 40rem)' })
 
   const { intro_animation } = useAnimation()
@@ -19,7 +20,9 @@ function SSCamera ({ moveCamera }) {
   //Cambiar target
   useEffect(() => {
     zoomWhenChange && (camara.current._sphericalEnd.radius = radius)
+    //console.log('Cambio target: ', target)
     camara.current._targetEnd = { x: target[0], y: target[1], z: target[2] }
+    camara.current.mouseButtons.right = CameraControls.NONE
   }, [target])
 
   //Cambiar angulo de la camara
@@ -80,6 +83,7 @@ function SSCamera ({ moveCamera }) {
       ref={camara}
       minZoom={0.1}
       maxZoom={5}
+      makeDefault={true}
       maxDistance={30000}
     />
   )

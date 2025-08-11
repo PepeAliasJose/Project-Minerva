@@ -43,7 +43,7 @@ export const useCustomCamera = create(set => ({
   phi: Math.PI / 3,
   radius: 10000,
   smoothTime: 0,
-  fov: 40,
+  fov: 60,
   updateTarget: t => set(() => ({ target: t })),
   updateView: (theta, phi, radius, smoothTime) =>
     set(() => ({

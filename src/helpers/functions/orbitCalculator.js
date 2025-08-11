@@ -71,10 +71,9 @@ export default function calculateObjectOrbit (
         moonParseLBDToXYZ
       )
 
+      //Helicentric orbit
       if (moveWithPlanet) {
-        //Si se mueve con el planeta
-
-        const earth = calculatePlanetOrbit(
+        const host = calculatePlanetOrbit(
           func[2],
           period,
           quantity,
@@ -84,13 +83,27 @@ export default function calculateObjectOrbit (
         )
         //const end = Date.now()
         //console.log('MOON TIME: ', end - start, start)
-        return earth.map((p, i) => {
+        const r = host.map((p, i) => {
           return [p[0] + moon[i][0], p[1] + moon[i][1], p[2] + moon[i][2]]
         })
+
+        return { orbit: r, host: [0, 0, 0] }
       }
+      //Geocentric orbit
+      //Calcular posicion actual del host
+      const host = calculatePlanetOrbit(
+        func[2],
+        1,
+        0,
+        0,
+        startDate,
+        parseLBRToXYZ
+      )
+
       //const end = Date.now()
       //console.log('MOON TIME: ', end - start, start)
-      return moon
+
+      return { orbit: moon, host: [host[0][0], host[0][1], host[0][2]] }
     }
 
     const r = calculatePlanetOrbit(
@@ -104,7 +117,7 @@ export default function calculateObjectOrbit (
 
     //const end = Date.now()
     //console.log('PLANET TIME: ', end - start, start)
-    return r
+    return { orbit: r, host: [0, 0, 0] }
   }
 
   return [0, 0, 0]

@@ -10,6 +10,7 @@ import {
 
 import PlanetSelector from '../atoms/PlanetSelector'
 import { planetsNoSun } from '../../helpers/functions/orbitCalculator'
+import Checker from '../atoms/Checker'
 
 function ActionsMenu ({ date }) {
   const [show, setShow] = useState(false)
@@ -18,7 +19,7 @@ function ActionsMenu ({ date }) {
       <WrenchScrewdriverIcon
         className={
           'size-6 transition-all duration-500 z-[51] ease-in-out fixed top-8 right-16 ' +
-          (show && ' size-7 ')
+          (show ? ' -rotate-90 text-white ' : ' text-gray-400 ')
         }
         onClick={() => {
           setShow(!show)
@@ -91,6 +92,7 @@ function CreateOrbit ({ date }) {
   const [fecha, setFecha] = useState(1)
   const [duracion, setDuracion] = useState(1)
   const [precision, setPrecision] = useState(1)
+  const [geocentrica, setGeo] = useState(false)
   const [calculando, setCalculando] = useState(false)
   const [color, setColor] = useState('#60a5fa')
 
@@ -123,16 +125,24 @@ function CreateOrbit ({ date }) {
         const agregar = event => {
           addOrbit({
             id: p1 + ':' + fecha,
-            points: event.data,
+            points: event.data.orbit,
             color: color,
             start: date,
-            end: date + fecha * duracion
+            end: date + fecha * duracion,
+            referencePoint: event.data.host
           })
           setCalculando(false)
         }
 
         calculateOrbit.addEventListener('message', agregar)
-        calculateOrbit.postMessage([p1, fecha, duracion, precision, date])
+        calculateOrbit.postMessage([
+          p1,
+          fecha,
+          duracion,
+          precision,
+          date,
+          !geocentrica
+        ])
         setCalculando(true)
       }
     }
@@ -205,20 +215,29 @@ function CreateOrbit ({ date }) {
             }
           />
         </label>
-        <label className='flex flex-row gap-2 text-sm text-[var(--soft-text)] items-center'>
-          Color
-          <input
-            type='color'
-            value={color}
-            onChange={e => {
-              setColor(e.target.value)
+        <div className='inline-flex gap-2 w-full'>
+          <label className='flex flex-row gap-2 text-sm text-[var(--soft-text)] items-center'>
+            Color
+            <input
+              type='color'
+              value={color}
+              onChange={e => {
+                setColor(e.target.value)
+              }}
+              min={1}
+              max={100}
+              aria-label='Color'
+              className='rounded-xl'
+            />
+          </label>
+          <Checker
+            tag={'Geocentrica: '}
+            value={geocentrica}
+            setValue={() => {
+              setGeo(!geocentrica)
             }}
-            min={1}
-            max={100}
-            aria-label='Color'
-            className='rounded-xl'
           />
-        </label>
+        </div>
       </div>
       <div className='flex flex-col gap-2'></div>
       {duracion * precision >= 1000 && (
@@ -234,9 +253,10 @@ function CreateOrbit ({ date }) {
         </p>
       )}
       <p className='text-sm text-[var(--soft-text)] mx-2'>
-        Calcula la trayectoria durante el intervalo seleccionado, desde la fecha
-        establecida. La división es el numero de calculos intermedios entre
-        unidad de tiempo
+        En lunas, marcar geocentrica genera la orbita alrededor de su planeta en
+        la posición actual. <br /> Calcula la trayectoria durante el intervalo
+        seleccionado, desde la fecha establecida. La división es el numero de
+        calculos intermedios entre unidad de tiempo
       </p>
     </div>
   )

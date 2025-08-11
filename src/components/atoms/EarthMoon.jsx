@@ -49,6 +49,10 @@ const EartMoon = memo(({ Earth, Moon }) => {
   // para cuadrar el angulo de inclinacion del eje
   return (
     <mesh ref={Earth} frustumCulled={false} position={earthPos}>
+      <mesh>
+        <sphereGeometry wireframe args={[0.01, 24, 9]} />
+        <meshBasicMaterial color={'white'} wireframe />
+      </mesh>
       <mesh
         ref={Moon}
         position={moonPos}

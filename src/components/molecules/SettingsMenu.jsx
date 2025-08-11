@@ -1,8 +1,9 @@
 import { AnimatePresence, motion } from 'framer-motion'
-import { useConfig } from '../../App'
+import { useConfig, useCustomCamera } from '../../App'
 import { useState } from 'react'
 import { Cog6ToothIcon } from '@heroicons/react/24/outline'
 import { Stats } from '@react-three/drei'
+import Checker from '../atoms/Checker'
 
 function SettingsMenu () {
   const [show, setShow] = useState(false)
@@ -23,13 +24,15 @@ function SettingsMenu () {
     auOff
   } = useConfig()
 
+  const { fov, updateFov } = useCustomCamera()
+
   return (
     <div className='fixed z-[51] top-0 right-0 p-5 overflow-clip  '>
       {stats && <Stats />}
       <Cog6ToothIcon
         className={
           'size-6 transition-all duration-500 z-[51] ease-in-out fixed top-8 right-8 ' +
-          (show && ' -rotate-180 ')
+          (show ? ' -rotate-180 text-white ' : ' text-gray-400 ')
         }
         onClick={() => {
           setShow(!show)
@@ -48,12 +51,10 @@ function SettingsMenu () {
           >
             <div className='m-2 font-semibold text-center'>Ajustes</div>
             <div className='inline-flex gap-2 items-center'>
-              <p className='m-2 '>Etiquetas: </p>
-              <input
-                aria-label='Ver etiquetas'
-                type='checkbox'
-                checked={tags}
-                onChange={() => {
+              <Checker
+                tag={'Etiquetas: '}
+                value={tags}
+                setValue={() => {
                   if (tags) {
                     tagsOff()
                   } else {
@@ -63,12 +64,10 @@ function SettingsMenu () {
               />
             </div>
             <div className='inline-flex gap-2 items-center '>
-              <p className='m-2'>Ajustar camara al cambiar: </p>
-              <input
-                aria-label='Ajustar la camara al cambiar '
-                type='checkbox'
-                checked={zoomWhenChange}
-                onChange={() => {
+              <Checker
+                tag={'Ajustar camara al cambiar: '}
+                value={zoomWhenChange}
+                setValue={() => {
                   if (zoomWhenChange) {
                     zoomOff()
                   } else {
@@ -78,12 +77,10 @@ function SettingsMenu () {
               />
             </div>
             <div className='inline-flex gap-2 items-center'>
-              <p className='m-2'>Ver controles: </p>
-              <input
-                aria-label='Ver controles'
-                type='checkbox'
-                checked={controls}
-                onChange={() => {
+              <Checker
+                tag={'Ver controles: '}
+                value={controls}
+                setValue={() => {
                   if (controls) {
                     controlsOff()
                   } else {
@@ -93,12 +90,10 @@ function SettingsMenu () {
               />
             </div>
             <div className='inline-flex gap-2 items-center'>
-              <p className='m-2'>Distancia en {au ? 'AU' : 'KM'}: </p>
-              <input
-                aria-label='Cambiar unidad de distancia'
-                type='checkbox'
-                checked={au}
-                onChange={() => {
+              <Checker
+                tag={'Distancia en ' + (au ? 'AU' : 'KM') + ':'}
+                value={au}
+                setValue={() => {
                   if (au) {
                     auOff()
                   } else {
@@ -111,14 +106,26 @@ function SettingsMenu () {
               <p className='m-2'>Animación en siguiente carga: </p>
             </div>
             <div className='inline-flex gap-2 items-center'>
-              <p className='m-2'>Estadisticas de rendimiento: </p>
-              <input
-                aria-label='Estadisticas de rendimiento'
-                type='checkbox'
-                checked={stats}
-                onChange={() => {
+              <Checker
+                tag={'Ver FPS: '}
+                value={stats}
+                setValue={() => {
                   setStats(!stats)
                 }}
+              />
+            </div>
+            <div className='inline-flex gap-2 items-center'>
+              <p className='m-2'>FOV:</p>
+              <input
+                type='text'
+                defaultValue={fov}
+                onChange={e => {
+                  const fov = e.target.value
+                  if (fov < 180 && fov > 0) {
+                    updateFov(fov)
+                  }
+                }}
+                className='down p-1 px-3 w-14 text-center'
               />
             </div>
           </motion.div>
