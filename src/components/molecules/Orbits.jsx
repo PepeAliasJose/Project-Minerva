@@ -3,13 +3,15 @@ import { useConfig, useCustomCamera, useOrbits, usePlanets } from '../../App'
 import {
   ArrowDownIcon,
   ArrowUpIcon,
+  CubeIcon,
+  CubeTransparentIcon,
   EyeIcon,
   EyeSlashIcon,
   TrashIcon
 } from '@heroicons/react/24/outline'
 import { useState } from 'react'
 import { SCALE } from '../../helpers/functions/SolarSystemConstants'
-import { Vector3 } from 'three'
+import { Spherical, Vector3 } from 'three'
 
 function Orbits () {
   const { orbits } = useOrbits()
@@ -201,6 +203,7 @@ function MiLinea ({ points, color }) {
   const { updateTarget } = useCustomCamera()
   const [point, setPoint] = useState({ point: [0, 0, 0], show: false })
   const [top, setTop] = useState(false)
+  const [cube, setCube] = useState(false)
 
   return (
     <>
@@ -235,10 +238,8 @@ function MiLinea ({ points, color }) {
             >
               <p className='text-white text-center'>Punto seleccionado</p>
               <div className=' flex flex-col gap-1'>
-                <p>Coord. rectangular</p>
-                <p>X: {point.point[0] * SCALE}</p>
-                <p>Y: {point.point[1] * SCALE}</p>
-                <p>Z: {point.point[2] * SCALE}</p>
+                {cube && <RectangularInfo point={point.point} />}
+                {!cube && <SphericalInfo point={point.point} />}
               </div>
             </div>
             <div className='flex flex-col gap-2'>
@@ -259,10 +260,79 @@ function MiLinea ({ points, color }) {
                 {!top && <ArrowUpIcon className='size-3.5 ' />}
                 {top && <ArrowDownIcon className='size-3.5 ' />}
               </button>
+              <button
+                className='up out-rounded p-1.5 hover:cursor-pointer'
+                onClick={() => {
+                  setCube(!cube)
+                }}
+              >
+                {!cube && <CubeIcon className='size-3.5 ' />}
+                {cube && (
+                  <CubeTransparentIcon className='size-3.5 rotate-180' />
+                )}
+              </button>
             </div>
           </>
         )}
       </Html>
+    </>
+  )
+}
+
+/**
+ * Rectangular point in scene -> Rectangular point in SCALE
+ */
+export function RectangularInfo ({ point }) {
+  const { au } = useConfig()
+  let x = point[0] * SCALE
+  let y = point[1] * SCALE
+  let z = point[2] * SCALE
+
+  if (au) {
+    x /= 149597870.7
+    y /= 149597870.7
+    z /= 149597870.7
+  }
+
+  return (
+    <>
+      <p>Coord. rectangular</p>
+      <p>
+        X: {x} {au ? 'AU' : 'KM'}
+      </p>
+      <p>
+        Y: {y} {au ? 'AU' : 'KM'}
+      </p>
+      <p>
+        Z: {z} {au ? 'AU' : 'KM'}
+      </p>
+    </>
+  )
+}
+
+/**
+ * Rectangular point in scene -> Spherical point in SCALE
+ */
+export function SphericalInfo ({ point }) {
+  const { au } = useConfig()
+  const spherical = new Spherical().setFromCartesianCoords(...point)
+
+  let radius = spherical.radius * SCALE
+  let phi = spherical.phi - Math.PI / 2
+  let theta = spherical.theta
+
+  if (au) {
+    radius /= 149597870.7
+  }
+
+  return (
+    <>
+      <p className='mt-1'>Coord. esferica</p>
+      <p>L: {theta} rad</p>
+      <p>B: {phi} rad</p>
+      <p>
+        R: {radius} {au ? 'AU' : 'KM'}
+      </p>
     </>
   )
 }

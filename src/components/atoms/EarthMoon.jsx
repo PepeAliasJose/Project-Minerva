@@ -8,8 +8,6 @@ import SkyTag from './SkyTag'
 import { memo, useEffect, useState } from 'react'
 import { usePlanets } from '../../App'
 
-import * as THREE from 'three'
-
 import {
   moonParseLBDToXYZ,
   parseLBRToXYZ
@@ -24,9 +22,6 @@ const EartMoon = memo(({ Earth, Moon }) => {
   const { planets } = usePlanets()
 
   const Earth_Texture = new TextureLoader().load('textures/earth.webp')
-  const Earth_Night_Texture = new TextureLoader().load(
-    'textures/earth_night.webp'
-  )
   const Moon_Texture = new TextureLoader().load('textures/moon.webp')
 
   function updateMoonRotation (lambda) {
@@ -44,6 +39,8 @@ const EartMoon = memo(({ Earth, Moon }) => {
       Moon_Texture.dispose()
     }
   }, [planets])
+
+  console.log(degreesToRadians(planets.earthRotation % 360))
 
   // Rotation: 1 correccion de giro respecto al sol
   // para cuadrar el angulo de inclinacion del eje
@@ -71,7 +68,14 @@ const EartMoon = memo(({ Earth, Moon }) => {
           // + giro por hora
           rotation={[0, 0, degreesToRadians(planets.earthObliquity)]}
         >
-          <mesh rotation={[0, 0, 0]}>
+          <mesh
+            rotation={[
+              0,
+
+              -Math.PI / 2.25 + degreesToRadians(planets.earthRotation),
+              0
+            ]}
+          >
             <axesHelper args={[0]} />
             <Line
               points={[
@@ -90,18 +94,3 @@ const EartMoon = memo(({ Earth, Moon }) => {
 })
 
 export default EartMoon
-
-/*
-<mesh
-  frustumCulled={false}
-  receiveShadow
-  rotation={[0, planets.earth.L, 0]}
->
-  <SkyTag name={'Tierra'} color='bg-blue-400' />
-  <icosahedronGeometry args={[EARTH_SIZE / 2, 15]} />
-  <meshStandardMaterial
-    map={Earth_Texture}
-    blending={THREE.AdditiveBlending}
-  />
-</mesh>
-*/

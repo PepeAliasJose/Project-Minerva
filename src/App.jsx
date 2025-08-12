@@ -4,7 +4,8 @@ import { create } from 'zustand'
 import {
   calculateEarthObliquityOfTheEcliptic,
   calculateEarthRotationGivenDate,
-  moonCoordinatesGivenDate
+  moonCoordinatesGivenDate,
+  sideralTimeAtGreenwich
 } from './helpers/functions/astronomicalFunctions'
 import {
   earthCoordinatesGivenDate,
@@ -78,8 +79,7 @@ export const usePlanets = create(set => ({
     uranus: { L: 0, B: 0, R: 0 },
     neptune: { L: 0, B: 0, R: 0 },
     earthRotation: 0,
-    earthObliquity: 0,
-    earthSunLatitude: 0
+    earthObliquity: 0
   },
   updateAllPlanets: JDday =>
     set(state => ({
@@ -93,7 +93,8 @@ export const usePlanets = create(set => ({
         saturn: saturnCoordinatesGivenDate(JDday),
         uranus: uranusCoordinatesGivenDate(JDday),
         neptune: neptuneCoordinatesGivenDate(JDday),
-        earthObliquity: calculateEarthObliquityOfTheEcliptic(JDday)
+        earthObliquity: calculateEarthObliquityOfTheEcliptic(JDday),
+        earthRotation: sideralTimeAtGreenwich(JDday)
       }
     })) //Parser from LBR to xyz
 }))

@@ -256,6 +256,9 @@ export function setSphericalCoordFromCartesian (x, y, z) {
   return { Ll, Bb, Rr }
 }
 
+/**
+ * @deprecated
+ */
 export function calculateElementOrbit (func, JDay, limit = 360, precision = 2) {
   let points = []
   for (let d = JDay; d < JDay + limit; d += precision) {
@@ -272,6 +275,9 @@ export function calculateElementOrbit (func, JDay, limit = 360, precision = 2) {
   return points
 }
 
+/**
+ * @deprecated
+ */
 export function calculateMoonOrbit (func, JDay) {
   let points = []
   for (let d = JDay; d < JDay + 360; d += 2) {
@@ -375,27 +381,13 @@ export function calculateEarthObliquityOfTheEcliptic (date) {
 /**
  *
  *
- *
  */
-export function calculateEarthSunLatitude (date) {
-  //const time = (date - 2440587.5) * 86400000
-  //console.log(Math.ceil(time))
+export function sideralTimeAtGreenwich (date) {
   const T = TFromJD(date)
-
-  const U = T / 100
-  const e0 =
-    23.43929111111 -
-    1.30025833333 * U -
-    1.55 * U ** 2 +
-    1999.25 * U ** 3 -
-    51.38 * U ** 4 -
-    249.67 * U ** 5 -
-    39.05 * U ** 6 +
-    7.12 * U ** 7 +
-    27.87 * U ** 8 +
-    5.79 * U ** 9 +
-    2.45 * U ** 10
-
-  //console.log(e0)
-  return e0
+  const o0 =
+    280.46061837 +
+    360.98564736629 * (date - 2451545) +
+    0.000387933 * T ** 2 -
+    T ** 3 / 38710000
+  return o0
 }
