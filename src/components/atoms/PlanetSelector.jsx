@@ -29,7 +29,7 @@ function PlanetSelector ({ planet, setPlanet, sun = true }) {
         Marte
       </option>
       <option className='text-white bg-[var(--bg)]' value={'jupiter'}>
-        Jupiter
+        Júpiter
       </option>
       <option className='text-white bg-[var(--bg)]' value={'saturn'}>
         Saturno

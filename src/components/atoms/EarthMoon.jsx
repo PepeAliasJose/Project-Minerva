@@ -40,16 +40,10 @@ const EartMoon = memo(({ Earth, Moon }) => {
     }
   }, [planets])
 
-  console.log(degreesToRadians(planets.earthRotation % 360))
-
   // Rotation: 1 correccion de giro respecto al sol
   // para cuadrar el angulo de inclinacion del eje
   return (
     <mesh ref={Earth} frustumCulled={false} position={earthPos}>
-      <mesh>
-        <sphereGeometry wireframe args={[0.01, 24, 9]} />
-        <meshBasicMaterial color={'white'} wireframe />
-      </mesh>
       <mesh
         ref={Moon}
         position={moonPos}
@@ -77,12 +71,6 @@ const EartMoon = memo(({ Earth, Moon }) => {
             ]}
           >
             <axesHelper args={[0]} />
-            <Line
-              points={[
-                [0, EARTH_SIZE / 1.6, 0],
-                [0, -EARTH_SIZE / 1.6, 0]
-              ]}
-            />
             <SkyTag name={'Tierra'} color='bg-blue-400' />
             <icosahedronGeometry args={[EARTH_SIZE / 2, 15]} />
             <meshStandardMaterial map={Earth_Texture} />

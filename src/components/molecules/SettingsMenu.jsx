@@ -8,6 +8,7 @@ import Checker from '../atoms/Checker'
 function SettingsMenu () {
   const [show, setShow] = useState(false)
   const [stats, setStats] = useState(false)
+  const [anim, setAnim] = useState(false)
 
   const {
     tags,
@@ -65,7 +66,7 @@ function SettingsMenu () {
             </div>
             <div className='inline-flex gap-2 items-center '>
               <Checker
-                tag={'Ajustar camara al cambiar: '}
+                tag={'Ajustar cámara al cambiar: '}
                 value={zoomWhenChange}
                 setValue={() => {
                   if (zoomWhenChange) {
@@ -103,7 +104,18 @@ function SettingsMenu () {
               />
             </div>
             <div className='inline-flex gap-2 items-center'>
-              <p className='m-2'>Animación en siguiente carga: </p>
+              <Checker
+                tag={'Repetir animación inicial: '}
+                value={anim}
+                setValue={() => {
+                  setAnim(!anim)
+
+                  localStorage.setItem(
+                    'firstEnter',
+                    new Boolean(!anim).toString()
+                  )
+                }}
+              />
             </div>
             <div className='inline-flex gap-2 items-center'>
               <Checker

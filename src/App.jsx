@@ -17,8 +17,9 @@ import {
   uranusCoordinatesGivenDate,
   venusCoordinatesGivenDate
 } from './helpers/functions/VSOP87D'
+import { useEffect } from 'react'
 
-const i = false
+const i = localStorage.getItem('firstEnter') != 'false'
 
 export const useConfig = create(set => ({
   tags: !i,
@@ -44,7 +45,7 @@ export const useCustomCamera = create(set => ({
   phi: Math.PI / 3,
   radius: 10000,
   smoothTime: 0,
-  fov: 60,
+  fov: 40,
   updateTarget: t => set(() => ({ target: t })),
   updateView: (theta, phi, radius, smoothTime) =>
     set(() => ({
@@ -151,6 +152,10 @@ export const useAnimation = create(set => ({
 }))
 
 function App () {
+  useEffect(() => {
+    localStorage.setItem('firstEnter', 'false')
+  }, [])
+
   return (
     <>
       <SolarSystem />

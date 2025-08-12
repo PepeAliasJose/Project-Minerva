@@ -42,7 +42,7 @@ const JupiterSS = memo(({ Jupiter }) => {
       //frustumCulled={false}
       position={jupiterPos}
     >
-      <SkyTag name={'Jupiter'} color='bg-orange-400' />
+      <SkyTag name={'Júpiter'} color='bg-orange-400' />
       <pointLight
         ref={JupiterLight}
         intensity={300}

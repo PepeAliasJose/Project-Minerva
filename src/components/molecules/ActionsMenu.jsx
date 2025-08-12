@@ -231,7 +231,7 @@ function CreateOrbit ({ date }) {
             />
           </label>
           <Checker
-            tag={'Geocentrica: '}
+            tag={'Geocéntrica: '}
             value={geocentrica}
             setValue={() => {
               setGeo(!geocentrica)
@@ -243,7 +243,7 @@ function CreateOrbit ({ date }) {
       {duracion * precision >= 1000 && (
         <p className='text-sm text-yellow-300 mx-2 inline-flex gap-2 items-center'>
           <ExclamationTriangleIcon className='size-4 mt-0.5' />
-          Los calculos pueden tardar un poco
+          Los cálculos pueden tardar un poco
         </p>
       )}
       {duracion * precision >= 10000 && (
@@ -253,10 +253,11 @@ function CreateOrbit ({ date }) {
         </p>
       )}
       <p className='text-sm text-[var(--soft-text)] mx-2'>
-        En lunas, marcar geocentrica genera la orbita alrededor de su planeta en
-        la posición actual. <br /> Calcula la trayectoria durante el intervalo
-        seleccionado, desde la fecha establecida. La división es el numero de
-        calculos intermedios entre unidad de tiempo
+        En lunas, marcar geocéntrica genera la órbita alrededor de su planeta en
+        la posición actual. <br />
+        Calcula la trayectoria durante el intervalo seleccionado, desde la fecha
+        establecida. La división es el número de cálculos intermedios entre
+        unidades de tiempo.
       </p>
     </div>
   )
