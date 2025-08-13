@@ -21,7 +21,6 @@
     "framer-motion": "^12.4.4",
     "i18next": "^24.2.2",
     "motion": "^12.4.4",
-    "popmotion": "^11.0.5",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-i18next": "^15.4.1",

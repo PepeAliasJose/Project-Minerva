@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from 'framer-motion'
-import { useLines, useOrbits } from '../../App'
+import { useEclipse, useLines, useOrbits } from '../../App'
 import { useState } from 'react'
 import {
   ExclamationCircleIcon,
@@ -37,6 +37,7 @@ function ActionsMenu ({ date }) {
        hide-scroll up out-rounded p-2 pb-4'
           >
             <div className='m-2 font-semibold text-center'>Acciones</div>
+            <ActivateEclipse />
             <p className='m-2'>Calcular distancia: </p>
             <CreateDistanceLine />
             <p className='m-2 mt-5'>Calcular trayectoria: </p>
@@ -82,6 +83,25 @@ function CreateDistanceLine () {
       >
         <PlusIcon className='size-6' />
       </button>
+    </div>
+  )
+}
+
+function ActivateEclipse () {
+  const { eclip, eclipOn, eclipOff } = useEclipse()
+  return (
+    <div className='flex flex-col gap-2'>
+      <Checker
+        tag={'Mostrar proyección de eclipse: '}
+        value={eclip}
+        setValue={() => {
+          if (eclip) {
+            eclipOff()
+          } else {
+            eclipOn()
+          }
+        }}
+      />
     </div>
   )
 }
@@ -150,12 +170,6 @@ function CreateOrbit ({ date }) {
 
   return (
     <div className='flex flex-col gap-2'>
-      {calculando && (
-        <div className='fixed top-5 left-5 inline-flex gap-2 items-center'>
-          <ExclamationCircleIcon className='size-5 text-red-500' />
-          calculando ...
-        </div>
-      )}
       <div className='flex flex-col gap-2 mx-2'>
         <div className='inline-flex items-center justify-between gap-2 '>
           <PlanetSelector
@@ -251,6 +265,12 @@ function CreateOrbit ({ date }) {
           <ExclamationTriangleIcon className='size-4 mt-0.5' />
           Requiere mucha potencia
         </p>
+      )}
+      {calculando && (
+        <div className='inline-flex gap-2 items-center'>
+          <ExclamationCircleIcon className='size-5 text-red-500' />
+          calculando ...
+        </div>
       )}
       <p className='text-sm text-[var(--soft-text)] mx-2'>
         En lunas, marcar geocéntrica genera la órbita alrededor de su planeta en

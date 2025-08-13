@@ -1,9 +1,4 @@
-import { useThree } from '@react-three/fiber'
 import { useRef, useEffect, memo } from 'react'
-
-import { CameraControls, Line } from '@react-three/drei'
-
-import { useMediaQuery } from 'react-responsive'
 
 import SunSS from '../atoms/SunSS'
 import MercurySS from '../atoms/MercurySS'
@@ -14,15 +9,14 @@ import SaturnSS from '../atoms/SaturnSS'
 import JupiterSS from '../atoms/JupiterSS'
 import UranusSS from '../atoms/UranusSS'
 import NeptuneSS from '../atoms/NeptuneSS'
-import { useAnimation } from '../../App'
+
 import SSCamera from '../molecules/SSCamera'
 import Lineas from '../molecules/Lineas'
 import Orbits from '../molecules/Orbits'
 
-const Scene = memo(({ load }) => {
-  //const desktop = useMediaQuery({ query: '(min-width: 40rem)' })
+import EclipseSim from '../atoms/EclipseSim'
 
-  const Camara = useRef()
+const Scene = memo(({ load }) => {
   const Sun = useRef()
   const Mercury = useRef()
   const Venus = useRef()
@@ -51,7 +45,9 @@ const Scene = memo(({ load }) => {
         intensity={5}
         decay={0}
         distance={1000}
+        castShadow
       />
+      <EclipseSim />
       <SunSS Sun={Sun} />
       {/*MERCURIO*/}
       <MercurySS Mercury={Mercury} />

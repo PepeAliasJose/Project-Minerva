@@ -1,10 +1,10 @@
-import { useEffect, useLayoutEffect, useRef } from 'react'
-import { useAnimation, useConfig, useCustomCamera, usePlanets } from '../../App'
+import { useEffect, useRef } from 'react'
+import { useAnimation, useConfig, useCustomCamera } from '../../App'
 import { useThree } from '@react-three/fiber'
 import { CameraControls } from '@react-three/drei'
 import { useMediaQuery } from 'react-responsive'
 
-function SSCamera ({ moveCamera }) {
+function SSCamera () {
   const { camera, gl } = useThree()
 
   const desktop = useMediaQuery({ query: '(min-width: 40rem)' })
@@ -81,9 +81,9 @@ function SSCamera ({ moveCamera }) {
   return (
     <CameraControls
       ref={camara}
+      camera={camera}
       minZoom={0.1}
       maxZoom={5}
-      makeDefault={true}
       maxDistance={30000}
     />
   )

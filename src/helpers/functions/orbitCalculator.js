@@ -1,13 +1,10 @@
-import {
-  moonCoordinatesGivenDate,
-  moonParseLBDToXYZ,
-  parseLBRToXYZ
-} from './astronomicalFunctions'
+import { moonParseLBDToXYZ, parseLBRToXYZ } from './astronomicalFunctions'
 import {
   earthCoordinatesGivenDate,
   jupiterCoordinatesGivenDate,
   marsCoordinatesGivenDate,
   mercuryCoordinatesGivenDate,
+  moonCoordinatesGivenDate,
   neptuneCoordinatesGivenDate,
   saturnCoordinatesGivenDate,
   uranusCoordinatesGivenDate,

@@ -16,7 +16,7 @@ function Controls ({}) {
   const { intro_animation } = useAnimation()
 
   //Fecha y planeta seleccionado
-  const [date, setDate] = useState('1992-04-12T14:00:00') //1992-04-12T00:00:00 //2025-07-30T14:00:00
+  const [date, setDate] = useState('2026-08-12T18:00:00') //1992-04-12T00:00:00 //2025-07-30T14:00:00
   const [planet, setPlanet] = useState(intro_animation ? 'saturn' : 'sun')
 
   //Planetas

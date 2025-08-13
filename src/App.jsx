@@ -1,19 +1,19 @@
 import SolarSystem from './pages/SolarSystem'
 
 import { create } from 'zustand'
+
 import {
   calculateEarthObliquityOfTheEcliptic,
-  calculateEarthRotationGivenDate,
-  moonCoordinatesGivenDate,
-  sideralTimeAtGreenwich
-} from './helpers/functions/astronomicalFunctions'
-import {
   earthCoordinatesGivenDate,
+  earthNutationInLongitude,
+  earthNutationInObliquity,
   jupiterCoordinatesGivenDate,
   marsCoordinatesGivenDate,
   mercuryCoordinatesGivenDate,
+  moonCoordinatesGivenDate,
   neptuneCoordinatesGivenDate,
   saturnCoordinatesGivenDate,
+  sideralTimeAtGreenwich,
   uranusCoordinatesGivenDate,
   venusCoordinatesGivenDate
 } from './helpers/functions/VSOP87D'
@@ -21,6 +21,7 @@ import { useEffect } from 'react'
 
 const i = localStorage.getItem('firstEnter') != 'false'
 
+//State for config
 export const useConfig = create(set => ({
   tags: !i,
   tagsOn: () => set(state => ({ tags: true })),
@@ -30,7 +31,7 @@ export const useConfig = create(set => ({
   controlsOn: () => set(state => ({ controls: true })),
   controlsOff: () => set(state => ({ controls: false })),
 
-  zoomWhenChange: true,
+  zoomWhenChange: false,
   zoomOn: () => set(state => ({ zoomWhenChange: true })),
   zoomOff: () => set(state => ({ zoomWhenChange: false })),
 
@@ -39,6 +40,14 @@ export const useConfig = create(set => ({
   auOff: () => set(state => ({ au: false }))
 }))
 
+//State for eclipse simulation
+export const useEclipse = create(set => ({
+  eclip: false,
+  eclipOn: () => set(state => ({ eclip: true })),
+  eclipOff: () => set(state => ({ eclip: false }))
+}))
+
+//State for camera
 export const useCustomCamera = create(set => ({
   target: [0, 0, 0],
   theta: -Math.PI / 1.75,
@@ -68,6 +77,7 @@ export const useCustomCamera = create(set => ({
     }))
 }))
 
+//State for planet coords
 export const usePlanets = create(set => ({
   planets: {
     mercury: { L: 0, B: 0, R: 0 },
@@ -80,7 +90,8 @@ export const usePlanets = create(set => ({
     uranus: { L: 0, B: 0, R: 0 },
     neptune: { L: 0, B: 0, R: 0 },
     earthRotation: 0,
-    earthObliquity: 0
+    earthObliquity: 0,
+    earthRotationCompensation: 0
   },
   updateAllPlanets: JDday =>
     set(state => ({
@@ -95,11 +106,13 @@ export const usePlanets = create(set => ({
         uranus: uranusCoordinatesGivenDate(JDday),
         neptune: neptuneCoordinatesGivenDate(JDday),
         earthObliquity: calculateEarthObliquityOfTheEcliptic(JDday),
-        earthRotation: sideralTimeAtGreenwich(JDday)
+        earthRotation: sideralTimeAtGreenwich(JDday),
+        earthRotationCompensation: Math.cos(earthNutationInObliquity(JDday))
       }
     })) //Parser from LBR to xyz
 }))
 
+//State for line management
 export const useLines = create(set => ({
   lines: [],
   addLine: line =>
@@ -118,6 +131,7 @@ export const useLines = create(set => ({
     }))
 }))
 
+//State for orbit management
 export const useOrbits = create(set => ({
   orbits: [],
   addOrbit: orbit =>
@@ -134,17 +148,6 @@ export const useOrbits = create(set => ({
         return false
       })
     }))
-}))
-
-//Deprecated
-export const usePlanet = create(set => ({
-  planet: i ? 'saturn' : 'sun',
-  setPlanet: p => set(state => ({ planet: p }))
-}))
-//Deprecated
-export const useDate = create(set => ({
-  date: '1992-04-12',
-  setDate: d => set(state => ({ date: d }))
 }))
 
 export const useAnimation = create(set => ({
@@ -164,22 +167,3 @@ function App () {
 }
 
 export default App
-
-/*
-export const useCamara = create(set => ({
-  camara: undefined,
-  setCamara: camara => set(state => ({ camara: camara })),
-  changeTarget: (radius = null, coords, st) =>
-    set(
-      state => (
-        (camara.current.smoothTime = st),
-        (camara.current._targetEnd = { ...coords }),
-        radius && (camara.current._sphericalEnd.radius = radius)
-      )
-    ),
-  setTheta: th => set(state => (camara.current._sphericalEnd.theta = th)),
-  setPhi: ph => set(state => (camara.current._sphericalEnd.phi = ph)),
-  setRadius: rad =>
-    set(state => (camara.current._sphericalEnd.radius = rad))
-}))
-*/
