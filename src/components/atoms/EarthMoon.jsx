@@ -12,7 +12,6 @@ import {
   moonParseLBDToXYZ,
   parseLBRToXYZ
 } from '../../helpers/functions/astronomicalFunctions'
-import EclipseSim from './EclipseSim'
 
 const EartMoon = memo(({ Earth, Moon }) => {
   const [earthPos, setEarthPos] = useState([0, 0, 0])
@@ -61,13 +60,6 @@ const EartMoon = memo(({ Earth, Moon }) => {
       </mesh>
 
       <group rotation={[0, 0, 0]} receiveShadow>
-        <axesHelper
-          destino={moonParseLBDToXYZ({
-            L: planets.moon.L,
-            B: planets.moon.B,
-            R: planets.moon.R + 1
-          })}
-        />
         <mesh
           //frustumCulled={false}
           //correccion de posicion a las 00:00 GMT

@@ -37,7 +37,10 @@ export const useConfig = create(set => ({
 
   au: true,
   auOn: () => set(state => ({ au: true })),
-  auOff: () => set(state => ({ au: false }))
+  auOff: () => set(state => ({ au: false })),
+
+  localTime: false,
+  setLocalTime: t => set(state => ({ localTime: t }))
 }))
 
 //State for eclipse simulation

@@ -22,7 +22,9 @@ function SettingsMenu () {
     zoomOff,
     au,
     auOn,
-    auOff
+    auOff,
+    localTime,
+    setLocalTime
   } = useConfig()
 
   const { fov, updateFov } = useCustomCamera()
@@ -51,6 +53,15 @@ function SettingsMenu () {
        hide-scroll up out-rounded p-2 pb-4'
           >
             <div className='m-2 font-semibold text-center'>Ajustes</div>
+            <div className='inline-flex gap-2 items-center'>
+              <Checker
+                tag={'Usar hora local: '}
+                value={localTime}
+                setValue={() => {
+                  setLocalTime(!localTime)
+                }}
+              />
+            </div>
             <div className='inline-flex gap-2 items-center'>
               <Checker
                 tag={'Etiquetas: '}

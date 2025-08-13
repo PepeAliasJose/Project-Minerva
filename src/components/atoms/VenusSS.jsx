@@ -1,6 +1,6 @@
 import { memo, useEffect, useState } from 'react'
 import { parseLBRToXYZ } from '../../helpers/functions/astronomicalFunctions'
-import { TextureLoader } from 'three'
+import { Texture, TextureLoader } from 'three'
 
 import { VENUS_SIZE } from '../../helpers/functions/SolarSystemConstants'
 import SkyTag from './SkyTag'
@@ -8,7 +8,7 @@ import { usePlanets } from '../../App'
 
 const VenusSS = memo(({ Venus }) => {
   const [venusPos, setVenusPos] = useState([0, 0, 0])
-  const Venus_Texture = new TextureLoader().load('textures/venus.webp')
+  const [Venus_Texture, setTexture] = useState(new Texture())
 
   const { planets } = usePlanets()
 
@@ -17,10 +17,14 @@ const VenusSS = memo(({ Venus }) => {
   }
 
   useEffect(() => {
-    updateVenus()
+    setTexture(new TextureLoader().load('textures/venus.webp'))
     return () => {
       Venus_Texture.dispose()
     }
+  }, [])
+
+  useEffect(() => {
+    updateVenus()
   }, [planets])
 
   return (

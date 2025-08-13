@@ -29,10 +29,8 @@ const SaturnSS = memo(({ Saturn }) => {
     navigator.userAgent.includes('Android')
       ? 128
       : 1024
-  const Saturn_Texture = new TextureLoader().load('textures/saturn.webp')
-  const Saturn_Ring_Texture = new TextureLoader().load(
-    'textures/saturn_ring.webp'
-  )
+  const [Saturn_Texture, setST] = useState(new THREE.Texture())
+  const [Saturn_Ring_Texture, setSRT] = useState(new THREE.Texture())
 
   useEffect(() => {
     setSaturnPos(parseLBRToXYZ(planets.saturn))
@@ -60,6 +58,8 @@ const SaturnSS = memo(({ Saturn }) => {
         1
       )
     }
+    setST(new TextureLoader().load('textures/saturn.webp'))
+    setSRT(new TextureLoader().load('textures/saturn_ring.webp'))
     return () => {
       Saturn_Texture.dispose()
       Saturn_Ring_Texture.dispose()

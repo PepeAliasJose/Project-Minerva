@@ -1,4 +1,4 @@
-import { TextureLoader } from 'three'
+import { Texture, TextureLoader } from 'three'
 import { parseLBRToXYZ } from '../../helpers/functions/astronomicalFunctions'
 import SkyTag from './SkyTag'
 import { JUPITER_SIZE } from '../../helpers/functions/SolarSystemConstants'
@@ -11,7 +11,7 @@ const JupiterSS = memo(({ Jupiter }) => {
   const { planets } = usePlanets()
 
   const JupiterLight = useRef()
-  const Jupiter_Texture = new TextureLoader().load('textures/jupiter.webp')
+  const [Jupiter_Texture, setTexture] = useState(new Texture())
 
   //Resolucion de las sombras para dispositivos moviles
   const shadowRes =
@@ -30,10 +30,14 @@ const JupiterSS = memo(({ Jupiter }) => {
   }
 
   useEffect(() => {
-    updateJupiter()
+    setTexture(new TextureLoader().load('textures/jupiter.webp'))
     return () => {
       Jupiter_Texture.dispose()
     }
+  }, [])
+
+  useEffect(() => {
+    updateJupiter()
   }, [planets])
 
   return (

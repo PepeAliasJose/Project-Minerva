@@ -1,5 +1,5 @@
 import { memo, useEffect, useRef, useState } from 'react'
-import { TextureLoader } from 'three'
+import { Texture, TextureLoader } from 'three'
 import { parseLBRToXYZ } from '../../helpers/functions/astronomicalFunctions'
 import { NEPTUNE_SIZE } from '../../helpers/functions/SolarSystemConstants'
 import SkyTag from './SkyTag'
@@ -8,7 +8,7 @@ import { usePlanets } from '../../App'
 const NeptuneSS = memo(({ Neptune }) => {
   const [neptunePos, setNeptunePos] = useState([0, 0, 0])
   const NeptuneLight = useRef()
-  const Neptune_Texture = new TextureLoader().load('textures/neptune.webp')
+  const [Neptune_Texture, setTexture] = useState(new Texture())
 
   const { planets } = usePlanets()
 
@@ -29,10 +29,14 @@ const NeptuneSS = memo(({ Neptune }) => {
   }
 
   useEffect(() => {
-    updateNeptune()
+    setTexture(new TextureLoader().load('textures/neptune.webp'))
     return () => {
       Neptune_Texture.dispose()
     }
+  }, [])
+
+  useEffect(() => {
+    updateNeptune()
   }, [planets])
 
   return (

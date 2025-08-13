@@ -12,7 +12,7 @@ import ActionsMenu from '../molecules/ActionsMenu'
 import SettingsMenu from '../molecules/SettingsMenu'
 
 function Controls ({}) {
-  const { controls, zoomWhenChange } = useConfig() //Configuracion
+  const { controls, zoomWhenChange, localTime } = useConfig() //Configuracion
   const { intro_animation } = useAnimation()
 
   //Fecha y planeta seleccionado
@@ -26,9 +26,9 @@ function Controls ({}) {
   const { updateTarget, updateRadius, updateST } = useCustomCamera()
 
   useEffect(() => {
-    const JDday = changeDateFromInput(date)
+    const JDday = changeDateFromInput(date, localTime)
     updateAllPlanets(JDday)
-  }, [date])
+  }, [date, localTime])
 
   useEffect(() => {
     updateST(0.5)
@@ -80,6 +80,11 @@ function Controls ({}) {
           className='absolute bottom-5 left-0 w-full justify-center 
        flex flex-row-reverse gap-10 items-center z-50'
         >
+          <div className='up out-rounded -ml-8'>
+            <p className='px-5 h-11 text-center content-center'>
+              {localTime ? ' Local ' : ' UT '}
+            </p>
+          </div>
           <div className='up out-rounded'>
             <input
               aria-label='Fecha para calcular'
@@ -99,7 +104,10 @@ function Controls ({}) {
         </motion.div>
       )}
       <SettingsMenu key={'SetingsMenu'} />
-      <ActionsMenu key={'ActionMenu'} date={changeDateFromInput(date)} />
+      <ActionsMenu
+        key={'ActionMenu'}
+        date={changeDateFromInput(date, localTime)}
+      />
     </AnimatePresence>
   )
 }

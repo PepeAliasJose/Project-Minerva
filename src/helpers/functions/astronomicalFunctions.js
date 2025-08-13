@@ -211,7 +211,7 @@ export function changeDateFromInput (value, isLocal = false) {
   let time = Date.parse(value) + 120000
   let gmt = new Date(time).getTimezoneOffset() * 60 * 1000
 
-  const l = isLocal ? time : time - gmt
+  const l = !isLocal ? time - gmt : time
 
   if (isNaN(l)) {
     return Date.parse(new Date('1992-04-12T00:00:00'))

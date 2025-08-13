@@ -398,36 +398,3 @@ function convertToFK5 () {
   //B += 0.03916 * (Math.cos(Lp) - Math.sin(Lp))
   return 0
 }
-
-/*
-
-export function sideralTimeAtGreenwich (date) {
-  const T = TFromJD(date)
-  const o0 =
-    280.46061837 +
-    360.98564736629 * (date - 2451545) +
-    0.000387933 * T ** 2 -
-    T ** 3 / 38710000
-
-  //Corrections
-  const e = calculateEarthObliquityOfTheEcliptic(date)
-  const n = earthNutationInLongitude(date)
-
-  return angleToPos(o0 % 360)
-}
-  
-const GMST =
-    6.697375 +
-    0.065709824279 * (date - 2451545) +
-    1.0027379 * decimalHour(date) +
-    0.0000258 * T ** 2
-
-  //Corrections
-  const e = calculateEarthObliquityOfTheEcliptic(date)
-  const n = earthNutationInLongitude(date)
-
-  const eqeq = n * Math.cos(e)
-  console.log(angleToPos(GMST % 360) + eqeq / 15)
-
-  return angleToPos(GMST % 360) + eqeq / 15
-*/

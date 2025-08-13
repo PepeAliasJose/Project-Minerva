@@ -1,5 +1,5 @@
 import { MERCURY_SIZE } from '../../helpers/functions/SolarSystemConstants'
-import { TextureLoader } from 'three'
+import { Texture, TextureLoader } from 'three'
 import SkyTag from './SkyTag'
 import { memo, useEffect, useState } from 'react'
 import { parseLBRToXYZ } from '../../helpers/functions/astronomicalFunctions'
@@ -7,7 +7,7 @@ import { usePlanets } from '../../App'
 
 const MercurySS = memo(({ Mercury }) => {
   const [mercuryPos, setMercuryPos] = useState([0, 0, 0])
-  const Mercury_Texture = new TextureLoader().load('textures/mercury.webp')
+  const [Mercury_Texture, setTexture] = useState(new Texture())
 
   const { planets } = usePlanets()
 
@@ -16,10 +16,14 @@ const MercurySS = memo(({ Mercury }) => {
   }
 
   useEffect(() => {
-    updateMercury()
+    setTexture(new TextureLoader().load('textures/mercury.webp'))
     return () => {
       Mercury_Texture.dispose()
     }
+  }, [])
+
+  useEffect(() => {
+    updateMercury()
   }, [planets])
 
   return (

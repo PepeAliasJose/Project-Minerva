@@ -1,5 +1,5 @@
 import { memo, useEffect, useRef, useState } from 'react'
-import { TextureLoader } from 'three'
+import { Texture, TextureLoader } from 'three'
 import { parseLBRToXYZ } from '../../helpers/functions/astronomicalFunctions'
 import { URANUS_SIZE } from '../../helpers/functions/SolarSystemConstants'
 import SkyTag from './SkyTag'
@@ -18,7 +18,7 @@ const UranusSS = memo(({ Uranus }) => {
       ? 128
       : 1024
 
-  const Uranus_Texture = new TextureLoader().load('textures/uranus.webp')
+  const [Uranus_Texture, setTexture] = useState(new Texture())
 
   function updateUranus () {
     setUranusPos(parseLBRToXYZ(planets.uranus))
@@ -28,12 +28,15 @@ const UranusSS = memo(({ Uranus }) => {
       planets.uranus.L
     )
   }
-
   useEffect(() => {
-    updateUranus()
+    setTexture(new TextureLoader().load('textures/uranus.webp'))
     return () => {
       Uranus_Texture.dispose()
     }
+  }, [])
+
+  useEffect(() => {
+    updateUranus()
   }, [planets])
 
   return (

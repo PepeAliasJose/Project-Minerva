@@ -1,12 +1,12 @@
 import { memo, useEffect, useState } from 'react'
 import { parseLBRToXYZ } from '../../helpers/functions/astronomicalFunctions'
 import { MARS_SIZE } from '../../helpers/functions/SolarSystemConstants'
-import { TextureLoader } from 'three'
+import { Texture, TextureLoader } from 'three'
 import SkyTag from './SkyTag'
 import { usePlanets } from '../../App'
 
 const MarsSS = memo(({ Mars }) => {
-  const Mars_Texture = new TextureLoader().load('textures/mars.webp')
+  const [Mars_Texture, setTexture] = useState(new Texture())
 
   const [marsPos, setMarsPos] = useState([0, 0, 0])
 
@@ -17,10 +17,14 @@ const MarsSS = memo(({ Mars }) => {
   }
 
   useEffect(() => {
-    updateMars()
+    setTexture(new TextureLoader().load('textures/mars.webp'))
     return () => {
       Mars_Texture.dispose()
     }
+  }, [])
+
+  useEffect(() => {
+    updateMars()
   }, [planets])
 
   return (
