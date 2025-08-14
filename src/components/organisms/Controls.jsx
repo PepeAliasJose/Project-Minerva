@@ -77,7 +77,7 @@ function Controls ({}) {
             opacity: 0,
             transition: { duration: 0.7, ease: 'easeInOut' }
           }}
-          className='absolute bottom-5 left-0 w-full justify-center 
+          className='absolute bottom-10 left-0 w-full justify-center 
        flex flex-row-reverse gap-10 items-center z-50'
         >
           <div className='up out-rounded -ml-8'>

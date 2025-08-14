@@ -9,7 +9,7 @@ import {
   saturnCoordinatesGivenDate,
   uranusCoordinatesGivenDate,
   venusCoordinatesGivenDate
-} from './VSOP87D'
+} from '../../core/VSOP87D'
 
 export const planetsNoSun = [
   'mercury',
@@ -34,7 +34,7 @@ export const planetsNoSun = [
  *
  *
  */
-export default function calculateObjectOrbit (
+export function calculateObjectOrbit (
   object,
   period,
   quantity,

@@ -16,7 +16,7 @@ import {
   sideralTimeAtGreenwich,
   uranusCoordinatesGivenDate,
   venusCoordinatesGivenDate
-} from './helpers/functions/VSOP87D'
+} from './core/VSOP87D'
 import { useEffect } from 'react'
 
 const i = localStorage.getItem('firstEnter') != 'false'
@@ -165,6 +165,19 @@ function App () {
   return (
     <>
       <SolarSystem />
+      <div
+        className='fixed z-[60] bottom-2.5 w-screen
+       text-center text-[0.81em] font-semibold underline'
+      >
+        <a
+          className='text-[var(--soft-text)]'
+          href='https://pepercfoundry.web.app/'
+          target='_blank'
+          rel='noopener noreferrer'
+        >
+          Pepe RC Foundry - 2025
+        </a>
+      </div>
     </>
   )
 }

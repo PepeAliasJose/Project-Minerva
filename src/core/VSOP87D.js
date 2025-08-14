@@ -4,7 +4,7 @@ import {
   linearCombinationSin,
   MillenniaTFromJD,
   TFromJD
-} from './astronomicalFunctions'
+} from '../helpers/functions/astronomicalFunctions'
 
 import { VSOP_EARTH } from './VSOP87D/vsop_ear'
 import { VSOP_VENUS } from './VSOP87D/vsop_ven'

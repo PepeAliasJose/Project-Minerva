@@ -11,6 +11,7 @@ import {
 import PlanetSelector from '../atoms/PlanetSelector'
 import { planetsNoSun } from '../../helpers/functions/orbitCalculator'
 import Checker from '../atoms/Checker'
+import Worker from '../../helpers/workers/orbitWorker?worker'
 
 function ActionsMenu ({ date }) {
   const [show, setShow] = useState(false)
@@ -141,7 +142,8 @@ function CreateOrbit ({ date }) {
       if (!repetido) {
         console.log('Agregar orbita')
 
-        const calculateOrbit = new Worker('orbitWorker.js')
+        const calculateOrbit = new Worker()
+
         const agregar = event => {
           addOrbit({
             id: p1 + ':' + fecha,
@@ -300,7 +302,7 @@ function DistanciaOrbita ({ orbita, setOrbita }) {
         + siglo
       </option>
       <option className='text-white bg-[var(--bg)]' value={3650}>
-        + decada
+        + década
       </option>
       <option className='text-white bg-[var(--bg)]' value={365}>
         + año
@@ -315,7 +317,7 @@ function DistanciaOrbita ({ orbita, setOrbita }) {
         - año
       </option>
       <option className='text-white bg-[var(--bg)]' value={-3650}>
-        - decada
+        - década
       </option>
       <option className='text-white bg-[var(--bg)]' value={-36500}>
         - siglo
