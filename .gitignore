@@ -25,7 +25,7 @@ coverage
 *.lcov
 .firebaserc
 firebase.json
-
+.firebase
 # nyc test coverage
 .nyc_output
 
