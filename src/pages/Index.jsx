@@ -37,9 +37,9 @@ function Index () {
                 se ponga automatico en km
               </li>
               <li>
-                TODO: Mejorar la proyeccion de eclipses lanzando 4 lineas desde
-                el sol a los polos de la luna por cada dimension, asi puedes ver
-                la umbra y penumbra de verdad segun la distancia
+                Mejorar la proyeccion de eclipses lanzando 4 lineas desde el sol
+                a los polos de la luna por cada dimension, asi puedes ver la
+                umbra y penumbra de verdad segun la distancia
               </li>
             </ul>
           </article>

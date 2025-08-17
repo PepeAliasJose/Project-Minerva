@@ -89,21 +89,28 @@ function CreateDistanceLine () {
 }
 
 function ActivateEclipse () {
-  const { eclip, eclipOn, eclipOff } = useEclipse()
+  const { eclip, setEclip, penum, setPenum } = useEclipse()
   return (
-    <div className='flex flex-col gap-2'>
-      <Checker
-        tag={'Mostrar proyección de eclipse: '}
-        value={eclip}
-        setValue={() => {
-          if (eclip) {
-            eclipOff()
-          } else {
-            eclipOn()
-          }
-        }}
-      />
-    </div>
+    <>
+      <div className='flex flex-col gap-2'>
+        <Checker
+          tag={'Proyectar umbra lunar: '}
+          value={eclip}
+          setValue={() => {
+            setEclip(!eclip)
+          }}
+        />
+      </div>
+      <div className='flex flex-col gap-2'>
+        <Checker
+          tag={'Proyectar penumbra lunar: '}
+          value={penum}
+          setValue={() => {
+            setPenum(!penum)
+          }}
+        />
+      </div>
+    </>
   )
 }
 

@@ -48,8 +48,9 @@ export const useConfig = create(set => ({
 //State for eclipse simulation
 export const useEclipse = create(set => ({
   eclip: false,
-  eclipOn: () => set(state => ({ eclip: true })),
-  eclipOff: () => set(state => ({ eclip: false }))
+  setEclip: t => set(state => ({ eclip: t })),
+  penum: false,
+  setPenum: t => set(state => ({ penum: t }))
 }))
 
 //State for camera

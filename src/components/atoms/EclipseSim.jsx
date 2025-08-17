@@ -15,9 +15,11 @@ import {
   SUN_SIZE
 } from '../../helpers/functions/SolarSystemConstants'
 
+const fragmentos = Math.PI / 8
+
 function EclipseSim () {
-  const { eclip } = useEclipse()
-  return <>{eclip && <Eclipse />}</>
+  const { eclip, penum } = useEclipse()
+  return <>{(eclip || penum) && <Eclipse umbra={eclip} penumbra={penum} />}</>
 }
 
 class MoonCross {
@@ -28,56 +30,24 @@ class MoonCross {
       center[2]
     )
     this.center = center
-    this.top = [center[0], center[1] + MOON_SIZE / 2, center[2]]
-    this.bottom = [center[0], center[1] - MOON_SIZE / 2, center[2]]
-    const right = setFromSphericalCoordsCustom(
-      MOON_SIZE / 2,
-      Math.PI / 2,
-      this.spherical.Ll - Math.PI / 2,
-      center
-    )
-
-    const left = setFromSphericalCoordsCustom(
-      MOON_SIZE / 2,
-      Math.PI / 2,
-      this.spherical.Ll + Math.PI / 2,
-      center
-    )
-
-    this.right = [right.x, right.y, right.z]
-    this.left = [left.x, left.y, left.z]
-
-    const right1 = setFromSphericalCoordsCustom(
-      MOON_SIZE / 2,
-      Math.PI / 4,
-      this.spherical.Ll - Math.PI / 2,
-      center
-    )
-    const left1 = setFromSphericalCoordsCustom(
-      MOON_SIZE / 2,
-      Math.PI / 4,
-      this.spherical.Ll + Math.PI / 2,
-      center
-    )
-
-    this.right1 = [right1.x, right1.y, right1.z]
-    this.left1 = [left1.x, left1.y, left1.z]
-
-    const left2 = setFromSphericalCoordsCustom(
-      MOON_SIZE / 2,
-      Math.PI / 1.5,
-      this.spherical.Ll + Math.PI / 2,
-      center
-    )
-    const right2 = setFromSphericalCoordsCustom(
-      MOON_SIZE / 2,
-      Math.PI / 1.5,
-      this.spherical.Ll - Math.PI / 2,
-      center
-    )
-    this.right2 = [right2.x, right2.y, right2.z]
-    this.left2 = [left2.x, left2.y, left2.z]
+    this.points = this.calcPoins()
     //console.log('MOON:', this.center, this.top, this.left, this.right)
+  }
+
+  calcPoins () {
+    let points = []
+    //Calcular puntos girando según phi
+    for (let x = 0; x < Math.PI * 2; x += fragmentos) {
+      const p = setFromSphericalCoordsCustom(
+        MOON_SIZE / 2,
+        x,
+        this.spherical.Ll - Math.PI / 2,
+        this.center
+      )
+
+      points.push([p.x, p.y, p.z])
+    }
+    return points
   }
 
   extendCoord (factor, coord, reference) {
@@ -98,57 +68,28 @@ class MoonCross {
 class SunCross {
   constructor (theta) {
     this.center = [0, 0, 0]
-    this.top = [0, 0 + SUN_SIZE / 2, 0]
-    this.bottom = [0, 0 - SUN_SIZE / 2, 0]
-    const right = setFromSphericalCoordsCustom(
-      SUN_SIZE / 2,
-      Math.PI / 2,
-      theta - Math.PI / 2,
-      this.center
-    )
-    const left = setFromSphericalCoordsCustom(
-      SUN_SIZE / 2,
-      Math.PI / 2,
-      theta + Math.PI / 2,
-      this.center
-    )
-    this.right = [right.x, right.y, right.z]
-    this.left = [left.x, left.y, left.z]
-
-    const right1 = setFromSphericalCoordsCustom(
-      SUN_SIZE / 2,
-      Math.PI / 4,
-      theta - Math.PI / 2,
-      this.center
-    )
-    const left1 = setFromSphericalCoordsCustom(
-      SUN_SIZE / 2,
-      Math.PI / 4,
-      theta + Math.PI / 2,
-      this.center
-    )
-    this.right1 = [right1.x, right1.y, right1.z]
-    this.left1 = [left1.x, left1.y, left1.z]
-
-    const right2 = setFromSphericalCoordsCustom(
-      SUN_SIZE / 2,
-      Math.PI / 1.5,
-      theta - Math.PI / 2,
-      this.center
-    )
-    const left2 = setFromSphericalCoordsCustom(
-      SUN_SIZE / 2,
-      Math.PI / 1.5,
-      theta + Math.PI / 2,
-      this.center
-    )
-    this.right2 = [right2.x, right2.y, right2.z]
-    this.left2 = [left2.x, left2.y, left2.z]
+    this.points = this.calcPoins(theta)
     //console.log('SUN:', this.center, this.top, this.left, this.right, theta)
+  }
+
+  calcPoins (theta) {
+    let points = []
+    //Calcular puntos girando según phi
+    for (let x = 0; x < Math.PI * 2; x += fragmentos) {
+      const p = setFromSphericalCoordsCustom(
+        SUN_SIZE / 2,
+        x,
+        theta - Math.PI / 2,
+        this.center
+      )
+
+      points.push([p.x, p.y, p.z])
+    }
+    return points
   }
 }
 
-function Eclipse () {
+function Eclipse ({ umbra, penumbra }) {
   const { planets } = usePlanets()
 
   const earth = parseLBRToXYZ(planets.earth)
@@ -170,138 +111,43 @@ function Eclipse () {
     light.current.target = target.current
   }, [])
 
+  const lineasUmbra = moonCoords.points.map((p, i) => {
+    return (
+      <Line
+        lineWidth={1}
+        key={'umbra' + i}
+        color={0x00ffff}
+        points={[
+          sunCoordsToMoon.points[i],
+          p,
+          moonCoords.extendCoord(4, p, sunCoordsToMoon.points[i])
+        ]}
+      />
+    )
+  })
+  const lineasPenumbra = moonCoords.points.map((p, i) => {
+    const index =
+      (Math.ceil((moonCoords.points.length - 1) / 2) + i) %
+      moonCoords.points.length
+
+    return (
+      <Line
+        lineWidth={4}
+        key={'penumbra' + i}
+        color={0xffff90}
+        points={[
+          sunCoordsToMoon.points[index],
+          p,
+          moonCoords.extendCoord(4, p, sunCoordsToMoon.points[index])
+        ]}
+      />
+    )
+  })
+
   return (
     <>
-      <Line
-        color={'cyan'}
-        points={[
-          sunCoordsToMoon.top,
-          moonCoords.top,
-          moonCoords.extendCoord(4, moonCoords.top, sunCoordsToMoon.top)
-        ]}
-      />
-      <Line
-        color={'cyan'}
-        points={[
-          sunCoordsToMoon.bottom,
-          moonCoords.bottom,
-          moonCoords.extendCoord(4, moonCoords.bottom, sunCoordsToMoon.bottom)
-        ]}
-      />
-      <Line
-        color={'cyan'}
-        points={[
-          sunCoordsToMoon.right,
-          moonCoords.right,
-          moonCoords.extendCoord(4, moonCoords.right, sunCoordsToMoon.right)
-        ]}
-      />
-      <Line
-        color={'cyan'}
-        points={[
-          sunCoordsToMoon.left,
-          moonCoords.left,
-          moonCoords.extendCoord(4, moonCoords.left, sunCoordsToMoon.left)
-        ]}
-      />
-      {/*Angulos*/}
-      <Line
-        color={'cyan'}
-        points={[
-          sunCoordsToMoon.right1,
-          moonCoords.right1,
-          moonCoords.extendCoord(4, moonCoords.right1, sunCoordsToMoon.right1)
-        ]}
-      />
-      <Line
-        color={'cyan'}
-        points={[
-          sunCoordsToMoon.left2,
-          moonCoords.left2,
-          moonCoords.extendCoord(4, moonCoords.left2, sunCoordsToMoon.left2)
-        ]}
-      />
-      <Line
-        color={'cyan'}
-        points={[
-          sunCoordsToMoon.right2,
-          moonCoords.right2,
-          moonCoords.extendCoord(4, moonCoords.right2, sunCoordsToMoon.right2)
-        ]}
-      />
-      <Line
-        color={'cyan'}
-        points={[
-          sunCoordsToMoon.left1,
-          moonCoords.left1,
-          moonCoords.extendCoord(4, moonCoords.left1, sunCoordsToMoon.left1)
-        ]}
-      />
-      {/*Penumbra recta*/}
-      <Line
-        color={'red'}
-        points={[
-          sunCoordsToMoon.top,
-          moonCoords.bottom,
-          moonCoords.extendCoord(4, moonCoords.bottom, sunCoordsToMoon.top)
-        ]}
-      />
-      <Line
-        color={'red'}
-        points={[
-          sunCoordsToMoon.bottom,
-          moonCoords.top,
-          moonCoords.extendCoord(4, moonCoords.top, sunCoordsToMoon.bottom)
-        ]}
-      />
-      <Line
-        color={'red'}
-        points={[
-          sunCoordsToMoon.right,
-          moonCoords.left,
-          moonCoords.extendCoord(4, moonCoords.left, sunCoordsToMoon.right)
-        ]}
-      />
-      <Line
-        color={'red'}
-        points={[
-          sunCoordsToMoon.left,
-          moonCoords.right,
-          moonCoords.extendCoord(4, moonCoords.right, sunCoordsToMoon.left)
-        ]}
-      />
-      <Line
-        color={'red'}
-        points={[
-          sunCoordsToMoon.right1,
-          moonCoords.left2,
-          moonCoords.extendCoord(4, moonCoords.left2, sunCoordsToMoon.right1)
-        ]}
-      />
-      <Line
-        color={'red'}
-        points={[
-          sunCoordsToMoon.left1,
-          moonCoords.right2,
-          moonCoords.extendCoord(4, moonCoords.right2, sunCoordsToMoon.left1)
-        ]}
-      />
-      <Line
-        color={'red'}
-        points={[
-          sunCoordsToMoon.right2,
-          moonCoords.left1,
-          moonCoords.extendCoord(4, moonCoords.left1, sunCoordsToMoon.right2)
-        ]}
-      />
-      <Line
-        color={'red'}
-        points={[
-          sunCoordsToMoon.left2,
-          moonCoords.right1,
-          moonCoords.extendCoord(4, moonCoords.right1, sunCoordsToMoon.left2)
-        ]}
-      />
+      {umbra && lineasUmbra}
+      {penumbra && lineasPenumbra}
       <object3D
         ref={target}
         position={[
