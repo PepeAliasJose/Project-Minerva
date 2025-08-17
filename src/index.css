@@ -172,6 +172,14 @@ input[type='range'] {
   align-items: center;
 }
 
+li {
+  list-style: inside;
+  margin-left: 1em;
+}
+.numered-li > li {
+  list-style: inside upper-roman;
+}
+
 strong {
   color: white;
 }

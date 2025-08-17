@@ -65,7 +65,7 @@ function Linea ({ id, punto1, punto2 }) {
         text-xs inline-flex items-center gap-1 bg-transparent '
         >
           <p>{distancia.toFixed(au ? 8 : 7)} </p>
-          {au ? 'AU' : 'KM'}
+          {au ? 'ua' : 'km'}
         </div>
         <div
           className='up out-rounded p-1.5 hover:cursor-pointer'

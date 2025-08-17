@@ -132,7 +132,7 @@ function Orbit ({ id, points, color, start, end, host }) {
                   <p>
                     Distancia recorrida total:{'  '}
                     <strong className='font-semibold text-nowrap'>
-                      {calculaTotal().toFixed(4)} {au ? 'AU' : 'KM'}
+                      {calculaTotal().toFixed(4)} {au ? 'ua' : 'km'}
                     </strong>
                   </p>
                 </div>
@@ -140,7 +140,7 @@ function Orbit ({ id, points, color, start, end, host }) {
                   <p>
                     Desplazamiento:{'  '}
                     <strong className='font-semibold'>
-                      {calculaDesplazamiento().toFixed(4)} {au ? 'AU' : 'KM'}
+                      {calculaDesplazamiento().toFixed(4)} {au ? 'ua' : 'km'}
                     </strong>
                   </p>
                 </div>
@@ -148,7 +148,7 @@ function Orbit ({ id, points, color, start, end, host }) {
                   <p>
                     Distancia al cuerpo primario final:{'  '}
                     <strong className='font-semibold'>
-                      {calculaDisSol().toFixed(8)} {au ? 'AU' : 'KM'}
+                      {calculaDisSol().toFixed(8)} {au ? 'ua' : 'km'}
                     </strong>
                   </p>
                 </div>
@@ -156,7 +156,7 @@ function Orbit ({ id, points, color, start, end, host }) {
                   <p>
                     Altura respecto al plano inicial:{'  '}
                     <strong className='font-semibold text-nowrap'>
-                      {alturaRespectoPR().toFixed(4)} {au ? 'AU' : 'KM'}
+                      {alturaRespectoPR().toFixed(4)} {au ? 'ua' : 'km'}
                     </strong>
                   </p>
                 </div>
@@ -164,7 +164,7 @@ function Orbit ({ id, points, color, start, end, host }) {
                   <p>
                     Altura respecto al plano final:{'  '}
                     <strong className='font-semibold text-nowrap'>
-                      {alturaFinalRespectoPR().toFixed(4)} {au ? 'AU' : 'KM'}
+                      {alturaFinalRespectoPR().toFixed(4)} {au ? 'ua' : 'km'}
                     </strong>
                   </p>
                 </div>
@@ -210,7 +210,7 @@ function MiLinea ({ points, color }) {
       <Line
         color={color}
         points={points}
-        lineWidth={3}
+        lineWidth={1}
         onClick={e => {
           updateTarget([...e.pointOnLine])
           setPoint({ point: [...e.pointOnLine], show: true })
@@ -298,13 +298,13 @@ export function RectangularInfo ({ point }) {
     <>
       <p>Coord. rectangular</p>
       <p>
-        X: {x} {au ? 'AU' : 'KM'}
+        X: {x} {au ? 'ua' : 'km'}
       </p>
       <p>
-        Y: {y} {au ? 'AU' : 'KM'}
+        Y: {y} {au ? 'ua' : 'km'}
       </p>
       <p>
-        Z: {z} {au ? 'AU' : 'KM'}
+        Z: {z} {au ? 'ua' : 'km'}
       </p>
     </>
   )
@@ -331,7 +331,7 @@ export function SphericalInfo ({ point }) {
       <p>L: {theta} rad</p>
       <p>B: {phi} rad</p>
       <p>
-        R: {radius} {au ? 'AU' : 'KM'}
+        R: {radius} {au ? 'ua' : 'km'}
       </p>
     </>
   )

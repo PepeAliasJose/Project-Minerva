@@ -18,6 +18,8 @@ import {
   venusCoordinatesGivenDate
 } from './core/VSOP87D'
 import { useEffect } from 'react'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import Index from './pages/Index'
 
 const i = localStorage.getItem('firstEnter') != 'false'
 
@@ -162,15 +164,21 @@ function App () {
     localStorage.setItem('firstEnter', 'false')
   }, [])
 
+  //<Route path='*' element={<NotFound />} />
   return (
     <>
-      <SolarSystem />
+      <BrowserRouter>
+        <Routes location={location} key={location.pathname + ':'}>
+          <Route path='/' element={<SolarSystem />} />
+          <Route path='/info' element={<Index />} />
+        </Routes>
+      </BrowserRouter>
       <div
         className='fixed z-[60] bottom-2.5 w-screen
        text-center text-[0.81em] font-semibold underline'
       >
         <a
-          className='text-[var(--soft-text)]'
+          className='text-gray-500'
           href='https://pepercfoundry.web.app/'
           target='_blank'
           rel='noopener noreferrer'

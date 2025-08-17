@@ -205,6 +205,19 @@ export function setSphericalCoordFromCartesian (x, y, z) {
 }
 
 /**
+ *
+ *  Calculate spherical coordinates from a Cartesian position not starting from [0,0,0]
+ *
+ */
+export function setSphericalCoordFromCartesianCustom (x, y, z, [dy, dx, dz]) {
+  const Rr = Math.sqrt(x + dx ** 2 + y + dy ** 2 + z + dz ** 2)
+  const Ll = Math.atan2(x + dx, z + dz)
+  const Bb = Math.acos(y + dy / Rr)
+
+  return { Ll, Bb, Rr }
+}
+
+/**
  * Calculates JD from date
  */
 export function changeDateFromInput (value, isLocal = false) {

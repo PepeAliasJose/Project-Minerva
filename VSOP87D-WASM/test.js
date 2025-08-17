@@ -14,7 +14,7 @@ export function setFromSphericalCoords (radius, phi, theta) {
 function parseFunc (pos) {
   const { L, B, R } = pos
   const v = setFromSphericalCoords(
-    (R * 149597870.7) / SCALE, //Parse from AU to KM then reduce to scale
+    (R * 149597870.7) / SCALE, //Parse from ua to km then reduce to scale
     -Math.PI / 2 + B,
     L
   )

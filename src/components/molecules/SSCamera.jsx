@@ -47,6 +47,7 @@ function SSCamera () {
     camera.fov = fov
     camera.far = 300000
     camera.near = 0.01
+    camera.rotateSpeed = 0.01
 
     let start
 

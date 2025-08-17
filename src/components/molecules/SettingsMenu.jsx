@@ -103,7 +103,7 @@ function SettingsMenu () {
             </div>
             <div className='inline-flex gap-2 items-center'>
               <Checker
-                tag={'Distancia en ' + (au ? 'AU' : 'KM') + ':'}
+                tag={'Distancia en ' + (au ? 'ua' : 'km') + ':'}
                 value={au}
                 setValue={() => {
                   if (au) {

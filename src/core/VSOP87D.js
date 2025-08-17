@@ -21,6 +21,7 @@ import {
   moonLongitudeArgsTable
 } from './VSOP87D/vsop_mon'
 import { earth_nutation } from './VSOP87D/1980IAU_nutation'
+import { EARTH_SIZE } from '../helpers/functions/SolarSystemConstants'
 
 function getMeanLongitude (i, T) {
   const longitudes = [
