@@ -78,11 +78,11 @@ function Controls ({}) {
             transition: { duration: 0.7, ease: 'easeInOut' }
           }}
           className='absolute bottom-10 left-0 w-full justify-center 
-       flex flex-row-reverse gap-10 items-center z-50'
+       flex flex-row-reverse gap-2 items-center z-50'
         >
-          <div className='up out-rounded -ml-8'>
-            <p className='px-5 h-11 text-center content-center'>
-              {localTime ? ' Local ' : ' UT '}
+          <div className='up out-rounded '>
+            <p className='p-2 text-sm size-11 text-center content-center'>
+              {localTime ? ' LO ' : ' UT '}
             </p>
           </div>
           <div className='up out-rounded'>

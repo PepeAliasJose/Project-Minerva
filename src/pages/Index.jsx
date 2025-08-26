@@ -28,6 +28,7 @@ function Index () {
               <li>
                 Cambio de sitio donde indica si es tiempo UT o Local para movil
               </li>
+              <li>Mejora de interfaz</li>
               <li>
                 Puedes sacar captura de pantalla con transparencia pulsando la
                 R, en la consola esta el codigo en Base64

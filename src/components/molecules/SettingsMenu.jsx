@@ -138,18 +138,23 @@ function SettingsMenu () {
               />
             </div>
             <div className='inline-flex gap-2 items-center'>
-              <p className='m-2'>FOV:</p>
-              <input
-                type='text'
-                defaultValue={fov}
-                onChange={e => {
-                  const fov = e.target.value
-                  if (fov < 180 && fov > 0) {
-                    updateFov(fov)
-                  }
-                }}
-                className='down p-1 px-3 w-14 text-center'
-              />
+              <div
+                className='inline-flex gap-2 items-center justify-between w-full
+              bg-neutral-700 px-2 pr-1 m-1  rounded-full'
+              >
+                <p className='m-2'>FOV:</p>
+                <input
+                  type='text'
+                  defaultValue={fov}
+                  onChange={e => {
+                    const fov = e.target.value
+                    if (fov < 180 && fov > 0) {
+                      updateFov(fov)
+                    }
+                  }}
+                  className='down p-1 px-0 w-14 text-center'
+                />
+              </div>
             </div>
           </motion.div>
         )}

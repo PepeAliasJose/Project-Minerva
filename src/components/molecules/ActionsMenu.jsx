@@ -91,7 +91,7 @@ function CreateDistanceLine () {
 function ActivateEclipse () {
   const { eclip, setEclip, penum, setPenum } = useEclipse()
   return (
-    <>
+    <div className=' -ml-2 p-2'>
       <div className='flex flex-col gap-2'>
         <Checker
           tag={'Proyectar umbra lunar: '}
@@ -110,7 +110,7 @@ function ActivateEclipse () {
           }}
         />
       </div>
-    </>
+    </div>
   )
 }
 
@@ -238,9 +238,8 @@ function CreateOrbit ({ date }) {
             }
           />
         </label>
-        <div className='inline-flex gap-2 w-full'>
-          <label className='flex flex-row gap-2 text-sm text-[var(--soft-text)] items-center'>
-            Color
+        <div className='inline-flex gap-2 justify-between w-full'>
+          <label className='flex flex-row gap-2 text-sm text-[var(--soft-text)] items-center flex-wrap'>
             <input
               type='color'
               value={color}
@@ -253,13 +252,15 @@ function CreateOrbit ({ date }) {
               className='rounded-xl'
             />
           </label>
-          <Checker
-            tag={'Geocéntrica: '}
-            value={geocentrica}
-            setValue={() => {
-              setGeo(!geocentrica)
-            }}
-          />
+          <div className='w-full'>
+            <Checker
+              tag={'Geocéntrica: '}
+              value={geocentrica}
+              setValue={() => {
+                setGeo(!geocentrica)
+              }}
+            />
+          </div>
         </div>
       </div>
       <div className='flex flex-col gap-2'></div>
