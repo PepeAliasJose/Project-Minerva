@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 
 function Index () {
   return (
-    <section className='bg-gray-100 text-black min-h-screen'>
+    <section className='bg-neutral-900 text-neutral-200 min-h-screen'>
       <header className='p-5'>
         <h1 className='text-4xl font-bold'>MINERVA I</h1>
       </header>
@@ -16,10 +16,10 @@ function Index () {
         <section className='p-5'>
           <article>
             <h3 className='text-xl font-semibold'>Caracteristicas</h3>
-            Version actual 1.0
+            Version actual 1.0.1
           </article>
           <article>
-            <h3 className='text-xl font-semibold'>Historial de cambios</h3>
+            <h3 className='text-xl font-semibold'>Ultimos cambios</h3>
             <ul className=''>
               <li>
                 Nombre de medidas cambiado al sistema internacional (Norma ISO
@@ -34,13 +34,13 @@ function Index () {
                 R, en la consola esta el codigo en Base64
               </li>
               <li>
-                TODO: cambiar que cuando en ua el resultado sea 0.0000 o -0.0000
-                se ponga automatico en km
+                cambiar que cuando en (ua) el resultado sea 0.0000 o -0.0000 se
+                ponga automatico en km
               </li>
               <li>
-                Mejorar la proyeccion de eclipses lanzando 4 lineas desde el sol
-                a los polos de la luna por cada dimension, asi puedes ver la
-                umbra y penumbra de verdad segun la distancia
+                Mejorar la proyección de eclipses lanzando lineas desde el sol a
+                los polos de la luna por cada dimensión, asi puedes ver la umbra
+                y penumbra de verdad según la distancia
               </li>
             </ul>
           </article>

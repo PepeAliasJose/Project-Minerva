@@ -266,3 +266,37 @@ export function moonParseLBDToXYZ (pos) {
   )
   return [...v]
 }
+
+/**
+ *
+ * Parse km distance to au as string, if au distance is less than 0.0001 return is in km
+ * the number is formated
+ * @param distancia number - distance in km
+ * @param au boolean - parse to au or not
+ * @param decimals number - how much decimals to print, default:5
+ *
+ * @returns string - distance (au/km)
+ *
+ */
+export function distanceAuParser (distancia, au, decimals = 5) {
+  let parsed = false
+  let d = distancia
+  if (au) {
+    d /= 149597870.7
+    parsed = true
+
+    if (Math.abs(d) < 0.0001) {
+      d = distancia
+      parsed = false
+    }
+  }
+
+  return (
+    d.toLocaleString(undefined, {
+      //Local formating
+      maximumFractionDigits: decimals
+    }) +
+    ' ' +
+    (parsed ? 'ua' : 'km')
+  )
+}

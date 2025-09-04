@@ -20,6 +20,7 @@ import {
 import { useEffect } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Index from './pages/Index'
+import _404 from './pages/_404'
 
 const i = localStorage.getItem('firstEnter') != 'false'
 
@@ -172,6 +173,7 @@ function App () {
         <Routes location={location} key={location.pathname + ':'}>
           <Route path='/' element={<SolarSystem />} />
           <Route path='/info' element={<Index />} />
+          <Route path='*' element={<_404 />} />
         </Routes>
       </BrowserRouter>
       <div

@@ -3,6 +3,7 @@ import { MathUtils, Vector3 } from 'three'
 import { SCALE } from '../../helpers/functions/SolarSystemConstants'
 import { useConfig, useLines, usePlanets } from '../../App'
 import {
+  distanceAuParser,
   moonParseLBDToXYZ,
   parseLBRToXYZ
 } from '../../helpers/functions/astronomicalFunctions'
@@ -43,10 +44,6 @@ function Linea ({ id, punto1, punto2 }) {
   //console.log(p1, p2)
   let distancia = p1.distanceTo(p2) * SCALE
 
-  if (au) {
-    distancia /= 149597870.7
-  }
-
   const mid = new Vector3()
   mid.lerpVectors(p1, p2, 0.5)
 
@@ -64,8 +61,7 @@ function Linea ({ id, punto1, punto2 }) {
           className='text-[var(--soft-text)] up out-rounded px-4 py-1 
         text-xs inline-flex items-center gap-1 bg-transparent '
         >
-          <p>{distancia.toFixed(au ? 8 : 7)} </p>
-          {au ? 'ua' : 'km'}
+          <p className='text-nowrap'>{distanceAuParser(distancia, au, 7)} </p>
         </div>
         <div
           className='up out-rounded p-1.5 hover:cursor-pointer'

@@ -12,6 +12,7 @@ import {
 import { useState } from 'react'
 import { SCALE } from '../../helpers/functions/SolarSystemConstants'
 import { Spherical, Vector3 } from 'three'
+import { distanceAuParser } from '../../helpers/functions/astronomicalFunctions'
 
 function Orbits () {
   const { orbits } = useOrbits()
@@ -48,27 +49,19 @@ function Orbit ({ id, points, color, start, end, host }) {
     const p2 = new Vector3(...points[points.length - 1])
 
     let distancia = p1.distanceTo(p2) * SCALE
-
-    if (au) {
-      distancia /= 149597870.7
-    }
-
     return distancia
   }
 
+  //In KM
   function calculaDisSol () {
     const p1 = new Vector3(...host)
     const p2 = new Vector3(...endPoints[endPoints.length - 1])
 
     let distancia = p1.distanceTo(p2) * SCALE
-
-    if (au) {
-      distancia /= 149597870.7
-    }
-
     return distancia
   }
 
+  //In KM
   function calculaTotal () {
     let distancia = 0
 
@@ -78,31 +71,18 @@ function Orbit ({ id, points, color, start, end, host }) {
         SCALE
       //console.log(distancia)
     }
-
-    if (au) {
-      distancia /= 149597870.7
-    }
-
     return distancia
   }
 
+  //In KM
   function alturaRespectoPR () {
     let distancia = points[0][1] * SCALE
-
-    if (au) {
-      distancia /= 149597870.7
-    }
-
     return distancia
   }
 
+  //In KM
   function alturaFinalRespectoPR () {
     let distancia = points[points.length - 1][1] * SCALE
-
-    if (au) {
-      distancia /= 149597870.7
-    }
-
     return distancia
   }
 
@@ -132,7 +112,7 @@ function Orbit ({ id, points, color, start, end, host }) {
                   <p>
                     Distancia recorrida total:{'  '}
                     <strong className='font-semibold text-nowrap'>
-                      {calculaTotal().toFixed(4)} {au ? 'ua' : 'km'}
+                      {distanceAuParser(calculaTotal(), au)}
                     </strong>
                   </p>
                 </div>
@@ -140,7 +120,7 @@ function Orbit ({ id, points, color, start, end, host }) {
                   <p>
                     Desplazamiento:{'  '}
                     <strong className='font-semibold'>
-                      {calculaDesplazamiento().toFixed(4)} {au ? 'ua' : 'km'}
+                      {distanceAuParser(calculaDesplazamiento(), au)}
                     </strong>
                   </p>
                 </div>
@@ -148,7 +128,7 @@ function Orbit ({ id, points, color, start, end, host }) {
                   <p>
                     Distancia al cuerpo primario final:{'  '}
                     <strong className='font-semibold'>
-                      {calculaDisSol().toFixed(8)} {au ? 'ua' : 'km'}
+                      {distanceAuParser(calculaDisSol(), au)}
                     </strong>
                   </p>
                 </div>
@@ -156,7 +136,7 @@ function Orbit ({ id, points, color, start, end, host }) {
                   <p>
                     Altura respecto al plano inicial:{'  '}
                     <strong className='font-semibold text-nowrap'>
-                      {alturaRespectoPR().toFixed(4)} {au ? 'ua' : 'km'}
+                      {distanceAuParser(alturaRespectoPR(), au)}
                     </strong>
                   </p>
                 </div>
@@ -164,7 +144,7 @@ function Orbit ({ id, points, color, start, end, host }) {
                   <p>
                     Altura respecto al plano final:{'  '}
                     <strong className='font-semibold text-nowrap'>
-                      {alturaFinalRespectoPR().toFixed(4)} {au ? 'ua' : 'km'}
+                      {distanceAuParser(alturaFinalRespectoPR(), au)}
                     </strong>
                   </p>
                 </div>
@@ -288,24 +268,12 @@ export function RectangularInfo ({ point }) {
   let y = point[1] * SCALE
   let z = point[2] * SCALE
 
-  if (au) {
-    x /= 149597870.7
-    y /= 149597870.7
-    z /= 149597870.7
-  }
-
   return (
     <>
       <p>Coord. rectangular</p>
-      <p>
-        X: {x} {au ? 'ua' : 'km'}
-      </p>
-      <p>
-        Y: {y} {au ? 'ua' : 'km'}
-      </p>
-      <p>
-        Z: {z} {au ? 'ua' : 'km'}
-      </p>
+      <p>X: {distanceAuParser(x, au)}</p>
+      <p>Y: {distanceAuParser(y, au)}</p>
+      <p>Z: {distanceAuParser(z, au)}</p>
     </>
   )
 }
@@ -321,18 +289,12 @@ export function SphericalInfo ({ point }) {
   let phi = spherical.phi - Math.PI / 2
   let theta = spherical.theta
 
-  if (au) {
-    radius /= 149597870.7
-  }
-
   return (
     <>
       <p className='mt-1'>Coord. esferica</p>
-      <p>L: {theta} rad</p>
-      <p>B: {phi} rad</p>
-      <p>
-        R: {radius} {au ? 'ua' : 'km'}
-      </p>
+      <p>L: {theta.toFixed(5)} rad</p>
+      <p>B: {phi.toExponential(4)} rad</p>
+      <p>R: {distanceAuParser(radius, au)}</p>
     </>
   )
 }
