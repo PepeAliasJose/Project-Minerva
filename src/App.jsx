@@ -177,7 +177,7 @@ function App () {
         </Routes>
       </BrowserRouter>
       <div
-        className='fixed z-[60] bottom-2.5 w-screen
+        className='fixed z-[60] bottom-1 md:bottom-2.5 w-screen
        text-center text-[0.81em] font-semibold underline'
       >
         <a

@@ -48,6 +48,13 @@ body {
     inset 1px 1px 2px var(--light-border);
 }
 
+.up-flat {
+  border-radius: 25px;
+  box-shadow: inset -1px -1px 1px var(--dark-border),
+    inset 1px 1px 2px var(--light-border);
+  background-color: var(--bg);
+}
+
 .down {
   border-radius: 25px;
   box-shadow: 1px 1px 2px var(--light-border),

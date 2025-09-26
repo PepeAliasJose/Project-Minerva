@@ -1,54 +1,119 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { useEclipse, useLines, useOrbits } from '../../App'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import {
   ExclamationCircleIcon,
   ExclamationTriangleIcon,
   PlusIcon,
   WrenchScrewdriverIcon
-} from '@heroicons/react/24/outline'
+} from '@heroicons/react/24/solid'
 
 import PlanetSelector from '../atoms/PlanetSelector'
 import { planetsNoSun } from '../../helpers/functions/orbitCalculator'
 import Checker from '../atoms/Checker'
 import Worker from '../../helpers/workers/orbitWorker?worker'
+import { XMarkIcon } from '@heroicons/react/24/outline'
 
 function ActionsMenu ({ date }) {
   const [show, setShow] = useState(false)
+  const menu = useRef()
+
   return (
-    <div className='fixed z-50 top-0 right-0 p-5 overflow-clip  '>
-      <WrenchScrewdriverIcon
-        className={
-          'size-6 transition-all duration-500 z-[51] ease-in-out fixed top-8 right-16 ' +
-          (show ? ' -rotate-90 text-white ' : ' text-gray-400 ')
-        }
-        onClick={() => {
-          setShow(!show)
+    <motion.div
+      initial={{ opacity: 0, width: '3rem', height: '3rem' }}
+      animate={{
+        opacity: 1,
+        width: show ? menu.current.offsetWidth : '3rem',
+        height: show ? menu.current.offsetHeight : '3rem',
+        translateY: show ? ['0px', '75px', '0px'] : ['0px', '70px', '0px'],
+        translateX: show ? ['0px', '10px', '0px'] : ['0px', '9px', '0px'],
+        borderRadius: show ? '40px' : '25px'
+      }}
+      transition={{
+        duration: 0.25,
+        ease: 'easeInOut',
+        translateY: { duration: 0.25, ease: 'easeOut' },
+        translateX: { duration: 0.25, ease: 'easeOut' },
+        opacity: { duration: 0.1, delay: 0.35, ease: 'easeIn' }
+      }}
+      className='fixed z-[51] top-4 md:top-6 left-4 overflow-clip w-[calc(100vw-40px)] md:w-80  up out-rounded'
+    >
+      {!show && (
+        <motion.div
+          initial={{ opacity: 0, transition: { duration: 0 } }}
+          animate={{
+            opacity: 1,
+            transition: { duration: 0.2, ease: 'easeIn' }
+          }}
+          exit={{
+            opacity: 0,
+            transition: { duration: 0.1, ease: 'easeIn' }
+          }}
+          className='absolute left-0 z-10'
+        >
+          <WrenchScrewdriverIcon
+            className='size-6  hover:cursor-pointer transition-all 
+           duration-500 z-[51] ease-in-out text-white
+          m-3'
+            onClick={() => {
+              setShow(true)
+            }}
+          />
+        </motion.div>
+      )}
+      {show && (
+        <motion.div
+          initial={{ opacity: 0, transition: { duration: 0 } }}
+          animate={{
+            opacity: 1,
+            transition: { duration: 0.2, ease: 'easeIn', delay: 0.3 }
+          }}
+          exit={{
+            opacity: 0,
+            transition: { duration: 0.1, ease: 'easeIn' }
+          }}
+          className='absolute left-0 z-10'
+        >
+          <XMarkIcon
+            className=' size-7 
+        hover:cursor-pointer transition-all duration-500 
+        z-[49] ease-in-out text-white m-3.5'
+            onClick={() => {
+              setShow(false)
+            }}
+          />
+        </motion.div>
+      )}
+
+      <motion.div
+        ref={menu}
+        initial={{ opacity: 0 }}
+        animate={{
+          opacity: show ? 1 : 0,
+          filter: show ? 'blur(0px)' : 'blur(5px)'
         }}
-      />
-      <AnimatePresence>
-        {show && (
-          <motion.div
-            initial={{ translateX: '120%' }}
-            animate={{ translateX: '0%' }}
-            exit={{ translateX: '120%' }}
-            transition={{ duration: 0.5, ease: 'easeInOut' }}
-            className='flex flex-col w-[calc(100vw-40px)]
-       md:w-80 h-[calc(100svh-40px)] overflow-y-scroll overflow-x-clip 
-       hide-scroll up out-rounded p-2 pb-4'
-          >
-            <div className='m-2 font-semibold text-center'>Acciones</div>
-            <ActivateEclipse />
-            <p className='m-2'>Calcular distancia: </p>
-            <CreateDistanceLine />
-            <p className='m-2 mt-5'>Calcular trayectoria: </p>
-            <CreateOrbit date={date} />
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
+        transition={{ duration: 0.4, ease: 'easeInOut' }}
+        className='flex flex-col  w-[calc(100vw-32px)] md:w-80
+         h-[calc(100svh-40px)] md:h-[calc(100svh-120px)]  overflow-y-scroll overflow-x-clip 
+       hide-scroll  p-3 pb-4'
+      >
+        <div className='m-2 font-semibold text-center'>Acciones</div>
+        <ActivateEclipse />
+        <p className='m-2'>Calcular distancia: </p>
+        <CreateDistanceLine />
+        <p className='m-2 mt-5'>Calcular trayectoria: </p>
+        <CreateOrbit date={date} />
+      </motion.div>
+    </motion.div>
   )
 }
+
+/*
+
+flex flex-col w-[calc(100vw-40px)]
+       md:w-80 h-[calc(100svh-40px)] overflow-y-scroll overflow-x-clip 
+       hide-scroll up out-rounded p-2 pb-4
+*/
 
 export default ActionsMenu
 
