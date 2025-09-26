@@ -90,9 +90,9 @@ function ActionsMenu ({ date }) {
         initial={{ opacity: 0 }}
         animate={{
           opacity: show ? 1 : 0,
-          filter: show ? 'blur(0px)' : 'blur(5px)'
+          filter: show ? 'blur(0px)' : 'blur(10px)'
         }}
-        transition={{ duration: 0.4, ease: 'easeInOut' }}
+        transition={{ duration: 0.35, ease: 'easeInOut' }}
         className='flex flex-col  w-[calc(100vw-32px)] md:w-80
          h-[calc(100svh-40px)] md:h-[calc(100svh-120px)]  overflow-y-scroll overflow-x-clip 
        hide-scroll  p-3 pb-4'
