@@ -25,8 +25,8 @@ function ActionsMenu ({ date }) {
         opacity: 1,
         width: show ? menu.current.offsetWidth : '3rem',
         height: show ? menu.current.offsetHeight : '3rem',
-        translateY: show ? ['0px', '75px', '0px'] : ['0px', '70px', '0px'],
-        translateX: show ? ['0px', '10px', '0px'] : ['0px', '9px', '0px'],
+        translateY: show ? ['0px', '50px', '0px'] : ['0px', '40px', '0px'],
+        translateX: show ? ['0px', '5px', '0px'] : ['0px', '4px', '0px'],
         borderRadius: show ? '40px' : '25px'
       }}
       transition={{
