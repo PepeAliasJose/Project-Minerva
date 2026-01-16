@@ -1,5 +1,6 @@
 {
   "files.associations": {
     "vsop_ear.h": "c"
-  }
+  },
+  "chat.disableAIFeatures": true
 }

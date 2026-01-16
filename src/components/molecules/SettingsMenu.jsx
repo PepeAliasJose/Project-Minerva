@@ -1,4 +1,4 @@
-import { AnimatePresence, easeIn, motion } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { useConfig, useCustomCamera } from '../../App'
 import { useRef, useState } from 'react'
 import { Cog6ToothIcon } from '@heroicons/react/24/solid'
