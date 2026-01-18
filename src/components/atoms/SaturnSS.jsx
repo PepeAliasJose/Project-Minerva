@@ -2,13 +2,13 @@ import { TextureLoader } from 'three'
 import {
   parseLBRToXYZ,
   setSphericalCoordFromCartesian
-} from '../../helpers/functions/astronomicalFunctions'
+} from '../../core/helpers/functions/astronomicalFunctions'
 import {
   SATURN_INNER_RING_SIZE,
   SATURN_OUTTER_RING_SIZE,
   SATURN_SIZE,
   SCALE
-} from '../../helpers/functions/SolarSystemConstants'
+} from '../../core/helpers/functions/SolarSystemConstants'
 import { memo, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import SkyTag from './SkyTag'
 

@@ -1,10 +1,10 @@
 import { useLoader } from '@react-three/fiber'
-import { SUN_SIZE } from '../../helpers/functions/SolarSystemConstants'
+import { SUN_SIZE } from '../../core/helpers/functions/SolarSystemConstants'
 import { TextureLoader } from 'three'
 import SkyTag from './SkyTag'
 import { useEffect } from 'react'
 
-function SunSS ({ Sun }) {
+function SunSS({ Sun }) {
   const Sun_Texture = new TextureLoader().load('textures/sun.webp')
 
   useEffect(() => {

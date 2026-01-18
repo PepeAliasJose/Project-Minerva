@@ -1,6 +1,6 @@
 import { memo, useEffect, useState } from 'react'
-import { parseLBRToXYZ } from '../../helpers/functions/astronomicalFunctions'
-import { MARS_SIZE } from '../../helpers/functions/SolarSystemConstants'
+import { parseLBRToXYZ } from '../../core/helpers/functions/astronomicalFunctions'
+import { MARS_SIZE } from '../../core/helpers/functions/SolarSystemConstants'
 import { Texture, TextureLoader } from 'three'
 import SkyTag from './SkyTag'
 import { usePlanets } from '../../App'
@@ -12,7 +12,7 @@ const MarsSS = memo(({ Mars }) => {
 
   const { planets } = usePlanets()
 
-  function updateMars () {
+  function updateMars() {
     setMarsPos(parseLBRToXYZ(planets.mars))
   }
 

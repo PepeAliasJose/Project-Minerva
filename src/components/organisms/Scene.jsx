@@ -49,21 +49,13 @@ const Scene = memo(({ load }) => {
       />
       <EclipseSim />
       <SunSS Sun={Sun} />
-      {/*MERCURIO*/}
       <MercurySS Mercury={Mercury} />
-      {/*VENUS*/}
       <VenusSS Venus={Venus} />
-      {/*LA TIERRA*/}
       <EartMoon Earth={Earth} Moon={Moon} />
-      {/*MARTE*/}
       <MarsSS Mars={Mars} />
-      {/*SATURNO*/}
       <SaturnSS Saturn={Saturn} />
-      {/*JUPITER*/}
       <JupiterSS Jupiter={Jupiter} />
-      {/*URANO*/}
       <UranusSS Uranus={Uranus} />
-      {/*NEPTUNO*/}
       <NeptuneSS Neptune={Neptune} />
       <Orbits />
       <Lineas />

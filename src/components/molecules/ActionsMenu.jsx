@@ -1,6 +1,5 @@
-import { AnimatePresence, motion } from 'framer-motion'
-import { useEclipse, useLines, useOrbits } from '../../App'
-import { useRef, useState } from 'react'
+import { useLines, useOrbits } from '../../App'
+import { useState } from 'react'
 import {
   ExclamationCircleIcon,
   ExclamationTriangleIcon,
@@ -9,93 +8,38 @@ import {
 } from '@heroicons/react/24/solid'
 
 import PlanetSelector from '../atoms/PlanetSelector'
-import { planetsNoSun } from '../../helpers/functions/orbitCalculator'
+import { planetsNoSun } from '../../core/helpers/functions/orbitCalculator'
 import Checker from '../atoms/Checker'
-import Worker from '../../helpers/workers/orbitWorker?worker'
-import { XMarkIcon } from '@heroicons/react/24/outline'
+import Worker from '../../core/helpers/workers/orbitWorker?worker'
+import { useDate } from '../../state/useDate'
+import { changeDateFromInput } from '../../core/helpers/functions/astronomicalFunctions'
+import useConfig from '../../state/useConfig'
+import { useEclipse } from '../../state/useEclipse'
 
-function ActionsMenu ({ date }) {
+function ActionsMenu() {
+  const { date: current_date } = useDate()
+  const { localTime } = useConfig()
+  const date = changeDateFromInput(current_date, localTime)
+
   const [show, setShow] = useState(false)
-  const menu = useRef()
 
   return (
-    <motion.div
-      initial={{ opacity: 0, width: '3rem', height: '3rem' }}
-      animate={{
-        opacity: 1,
-        width: show ? menu.current.offsetWidth : '3rem',
-        height: show ? menu.current.offsetHeight : '3rem',
-        translateY: show ? ['0px', '50px', '0px'] : ['0px', '40px', '0px'],
-        translateX: show ? ['0px', '5px', '0px'] : ['0px', '4px', '0px'],
-        borderRadius: show ? '40px' : '25px'
-      }}
-      transition={{
-        duration: 0.25,
-        ease: 'easeInOut',
-        translateY: { duration: 0.25, ease: 'easeOut' },
-        translateX: { duration: 0.25, ease: 'easeOut' },
-        opacity: { duration: 0.1, delay: 0.35, ease: 'easeIn' }
-      }}
-      className='fixed z-[51] top-4 md:top-6 left-4 overflow-clip w-[calc(100vw-40px)] md:w-80  up out-rounded'
-    >
-      {!show && (
-        <motion.div
-          initial={{ opacity: 0, transition: { duration: 0 } }}
-          animate={{
-            opacity: 1,
-            transition: { duration: 0.2, ease: 'easeIn' }
+    <>
+      <div className='fixed left-2 top-2 z-65'>
+        <WrenchScrewdriverIcon
+          className={`size-6  hover:cursor-pointer transition-all 
+           duration-500 ease-in-out text-neutral-500 
+           ${show && ' text-white'} m-3`}
+          onClick={() => {
+            setShow(!show)
           }}
-          exit={{
-            opacity: 0,
-            transition: { duration: 0.1, ease: 'easeIn' }
-          }}
-          className='absolute left-0 z-10'
-        >
-          <WrenchScrewdriverIcon
-            className='size-6  hover:cursor-pointer transition-all 
-           duration-500 z-[51] ease-in-out text-white
-          m-3'
-            onClick={() => {
-              setShow(true)
-            }}
-          />
-        </motion.div>
-      )}
-      {show && (
-        <motion.div
-          initial={{ opacity: 0, transition: { duration: 0 } }}
-          animate={{
-            opacity: 1,
-            transition: { duration: 0.2, ease: 'easeIn', delay: 0.3 }
-          }}
-          exit={{
-            opacity: 0,
-            transition: { duration: 0.1, ease: 'easeIn' }
-          }}
-          className='absolute left-0 z-10'
-        >
-          <XMarkIcon
-            className=' size-7 
-        hover:cursor-pointer transition-all duration-500 
-        z-[49] ease-in-out text-white m-3.5'
-            onClick={() => {
-              setShow(false)
-            }}
-          />
-        </motion.div>
-      )}
+        />
+      </div>
 
-      <motion.div
-        ref={menu}
-        initial={{ opacity: 0 }}
-        animate={{
-          opacity: show ? 1 : 0,
-          filter: show ? 'blur(0px)' : 'blur(10px)'
-        }}
-        transition={{ duration: 0.35, ease: 'easeInOut' }}
-        className='flex flex-col  w-[calc(100vw-32px)] md:w-80
-         h-[calc(100svh-40px)] md:h-[calc(100svh-120px)]  overflow-y-scroll overflow-x-clip 
-       hide-scroll  p-3 pb-4'
+      <div
+        className={`fixed z-60 left-0 top-2 flex flex-col sm:w-80 select-none 
+            overflow-y-scroll max-h-[calc(100vh-16px)] hide-scroll p-1 pb-4 mx-2 up out-rounded 
+            transition-all duration-300 ${!show && ' opacity-0 -translate-y-[150%]'}`}
       >
         <div className='m-2 font-semibold text-center'>Acciones</div>
         <ActivateEclipse />
@@ -103,29 +47,22 @@ function ActionsMenu ({ date }) {
         <CreateDistanceLine />
         <p className='m-2 mt-5'>Calcular trayectoria: </p>
         <CreateOrbit date={date} />
-      </motion.div>
-    </motion.div>
+      </div>
+    </>
   )
 }
 
-/*
-
-flex flex-col w-[calc(100vw-40px)]
-       md:w-80 h-[calc(100svh-40px)] overflow-y-scroll overflow-x-clip 
-       hide-scroll up out-rounded p-2 pb-4
-*/
-
 export default ActionsMenu
 
-function CreateDistanceLine () {
+function CreateDistanceLine() {
   const { lines, addLine } = useLines()
   const [p1, setP1] = useState('sun')
   const [p2, setP2] = useState('earth')
 
-  function agregarLinea () {
+  function agregarLinea() {
     if (p1 != p2) {
       let repetido = false
-      lines.map(l => {
+      lines.map((l) => {
         if (l.id == p1 + '.' + p2 || l.id == p2 + '.' + p1) {
           repetido = true
           console.log('Repetido')
@@ -153,7 +90,7 @@ function CreateDistanceLine () {
   )
 }
 
-function ActivateEclipse () {
+function ActivateEclipse() {
   const { eclip, setEclip, penum, setPenum } = useEclipse()
   return (
     <div className=' -ml-2 p-2'>
@@ -179,7 +116,7 @@ function ActivateEclipse () {
   )
 }
 
-function CreateOrbit ({ date }) {
+function CreateOrbit({ date }) {
   const { orbits, addOrbit } = useOrbits()
   const [p1, setP1] = useState('earth')
   const [fecha, setFecha] = useState(1)
@@ -201,10 +138,10 @@ function CreateOrbit ({ date }) {
     '#3b82f6'
   ]
 
-  async function agregarLinea () {
+  async function agregarLinea() {
     if (p1 != 'sun') {
       let repetido = false
-      orbits.map(o => {
+      orbits.map((o) => {
         if (o.id == p1 + ':' + fecha) {
           repetido = true
           console.log('Repetido')
@@ -216,7 +153,7 @@ function CreateOrbit ({ date }) {
 
         const calculateOrbit = new Worker()
 
-        const agregar = event => {
+        const agregar = (event) => {
           addOrbit({
             id: p1 + ':' + fecha,
             points: event.data.orbit,
@@ -249,7 +186,7 @@ function CreateOrbit ({ date }) {
           <PlanetSelector
             flat
             planet={p1}
-            setPlanet={p => {
+            setPlanet={(p) => {
               setP1(p)
               setColor(colors[planetsNoSun.indexOf(p)])
             }}
@@ -270,7 +207,7 @@ function CreateOrbit ({ date }) {
           <input
             type='text'
             value={duracion}
-            onChange={e => {
+            onChange={(e) => {
               setDuracion(e.target.value)
             }}
             min={1}
@@ -289,7 +226,7 @@ function CreateOrbit ({ date }) {
           <input
             type='text'
             value={precision}
-            onChange={e => {
+            onChange={(e) => {
               setPrecision(e.target.value)
             }}
             min={1}
@@ -308,7 +245,7 @@ function CreateOrbit ({ date }) {
             <input
               type='color'
               value={color}
-              onChange={e => {
+              onChange={(e) => {
                 setColor(e.target.value)
               }}
               min={1}
@@ -358,43 +295,45 @@ function CreateOrbit ({ date }) {
   )
 }
 
-function chechNumber (number) {
+function chechNumber(number) {
   return isNaN(number) || number.length < 1
 }
 
-function DistanciaOrbita ({ orbita, setOrbita }) {
+function DistanciaOrbita({ orbita, setOrbita }) {
   return (
-    <select
-      className='up px-5 py-2.5 z-50 w-full max-w-32'
-      value={orbita}
-      onChange={e => {
-        setOrbita(e.target.value)
-      }}
-    >
-      <option className='text-white bg-[var(--bg)]' value={36500}>
-        + siglo
-      </option>
-      <option className='text-white bg-[var(--bg)]' value={3650}>
-        + década
-      </option>
-      <option className='text-white bg-[var(--bg)]' value={365}>
-        + año
-      </option>
-      <option className='text-white bg-[var(--bg)]' value={1}>
-        + día
-      </option>
-      <option className='text-white bg-[var(--bg)]' value={-1}>
-        - día
-      </option>
-      <option className='text-white bg-[var(--bg)]' value={-365}>
-        - año
-      </option>
-      <option className='text-white bg-[var(--bg)]' value={-3650}>
-        - década
-      </option>
-      <option className='text-white bg-[var(--bg)]' value={-36500}>
-        - siglo
-      </option>
-    </select>
+    <div className='up w-full h-10 inline-flex items-center '>
+      <select
+        className=' px-5 py-2.5 w-full focus:outline-0'
+        value={orbita}
+        onChange={(e) => {
+          setOrbita(e.target.value)
+        }}
+      >
+        <option className='text-white bg-[var(--bg)]' value={36500}>
+          + siglo
+        </option>
+        <option className='text-white bg-[var(--bg)]' value={3650}>
+          + década
+        </option>
+        <option className='text-white bg-[var(--bg)]' value={365}>
+          + año
+        </option>
+        <option className='text-white bg-[var(--bg)]' value={1}>
+          + día
+        </option>
+        <option className='text-white bg-[var(--bg)]' value={-1}>
+          - día
+        </option>
+        <option className='text-white bg-[var(--bg)]' value={-365}>
+          - año
+        </option>
+        <option className='text-white bg-[var(--bg)]' value={-3650}>
+          - década
+        </option>
+        <option className='text-white bg-[var(--bg)]' value={-36500}>
+          - siglo
+        </option>
+      </select>
+    </div>
   )
 }

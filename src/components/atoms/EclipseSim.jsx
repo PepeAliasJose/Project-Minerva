@@ -1,29 +1,28 @@
-import { useEclipse, usePlanets } from '../../App'
+import { usePlanets } from '../../App'
 import {
   moonParseLBDToXYZ,
   parseLBRToXYZ,
-  setFromSphericalCoords,
   setFromSphericalCoordsCustom,
-  setSphericalCoordFromCartesian,
-  setSphericalCoordFromCartesianCustom
-} from '../../helpers/functions/astronomicalFunctions'
+  setSphericalCoordFromCartesian
+} from '../../core/helpers/functions/astronomicalFunctions'
 import { Line } from '@react-three/drei'
 import { useEffect, useRef } from 'react'
 import * as THREE from 'three'
 import {
   MOON_SIZE,
   SUN_SIZE
-} from '../../helpers/functions/SolarSystemConstants'
+} from '../../core/helpers/functions/SolarSystemConstants'
+import { useEclipse } from '../../state/useEclipse'
 
 const fragmentos = Math.PI / 8
 
-function EclipseSim () {
+function EclipseSim() {
   const { eclip, penum } = useEclipse()
   return <>{(eclip || penum) && <Eclipse umbra={eclip} penumbra={penum} />}</>
 }
 
 class MoonCross {
-  constructor (center) {
+  constructor(center) {
     this.spherical = setSphericalCoordFromCartesian(
       center[0],
       center[1],
@@ -34,7 +33,7 @@ class MoonCross {
     //console.log('MOON:', this.center, this.top, this.left, this.right)
   }
 
-  calcPoins () {
+  calcPoins() {
     let points = []
     //Calcular puntos girando según phi
     for (let x = 0; x < Math.PI * 2; x += fragmentos) {
@@ -50,7 +49,7 @@ class MoonCross {
     return points
   }
 
-  extendCoord (factor, coord, reference) {
+  extendCoord(factor, coord, reference) {
     const dx = coord[0] - reference[0],
       dy = coord[1] - reference[1],
       dz = coord[2] - reference[2]
@@ -66,13 +65,13 @@ class MoonCross {
 }
 
 class SunCross {
-  constructor (theta) {
+  constructor(theta) {
     this.center = [0, 0, 0]
     this.points = this.calcPoins(theta)
     //console.log('SUN:', this.center, this.top, this.left, this.right, theta)
   }
 
-  calcPoins (theta) {
+  calcPoins(theta) {
     let points = []
     //Calcular puntos girando según phi
     for (let x = 0; x < Math.PI * 2; x += fragmentos) {
@@ -89,7 +88,7 @@ class SunCross {
   }
 }
 
-function Eclipse ({ umbra, penumbra }) {
+function Eclipse({ umbra, penumbra }) {
   const { planets } = usePlanets()
 
   const earth = parseLBRToXYZ(planets.earth)

@@ -2,7 +2,7 @@ import { Texture, TextureLoader } from 'three'
 import {
   EARTH_SIZE,
   MOON_SIZE
-} from '../../helpers/functions/SolarSystemConstants'
+} from '../../core/helpers/functions/SolarSystemConstants'
 import SkyTag from './SkyTag'
 import { memo, useEffect, useState } from 'react'
 import { usePlanets } from '../../App'
@@ -11,7 +11,7 @@ import {
   degreesToRadians,
   moonParseLBDToXYZ,
   parseLBRToXYZ
-} from '../../helpers/functions/astronomicalFunctions'
+} from '../../core/helpers/functions/astronomicalFunctions'
 
 const EartMoon = memo(({ Earth, Moon }) => {
   const [earthPos, setEarthPos] = useState([0, 0, 0])
@@ -21,7 +21,7 @@ const EartMoon = memo(({ Earth, Moon }) => {
 
   const { planets } = usePlanets()
 
-  function updateMoonRotation (lambda) {
+  function updateMoonRotation(lambda) {
     //Compensa rotacion de la luna + rotacion de la luna - offset para ajustar
     Moon.current.rotation.y = degreesToRadians(lambda) + Math.PI / 2
   }

@@ -1,9 +1,10 @@
 import { AnimatePresence } from 'framer-motion'
 import { motion } from 'framer-motion'
 import { useLayoutEffect, useState } from 'react'
-import { useAnimation, useConfig } from '../../App'
+import { useAnimation } from '../../App'
+import useConfig from '../../state/useConfig'
 
-function IntroTitle ({}) {
+function IntroTitle({}) {
   const { tagsOn, controlsOn } = useConfig()
   const { intro_animation } = useAnimation()
 
