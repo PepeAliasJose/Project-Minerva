@@ -1,4 +1,4 @@
-import { moonParseLBDToXYZ, parseLBRToXYZ } from './astronomicalFunctions'
+import { moonParseLBDToXYZ, parseLBRToXYZ } from './astronomical-functions'
 import { getPlanetHeliocentricCoordinates } from '../../VSOP87D'
 import { moonCoordinatesGivenDate } from '../../moons/vsop_earth_moon'
 

@@ -10,7 +10,7 @@ import {
 import PlanetSelector from '../atoms/PlanetSelector'
 import { planetsNoSun } from '../../core/helpers/functions/orbitCalculator'
 import Checker from '../atoms/Checker'
-import Worker from '../../core/helpers/workers/orbitWorker?worker'
+import Worker from '../../helpers/workers/orbitWorker?worker'
 import { useDate } from '../../state/useDate'
 import { changeDateFromInput } from '../../core/helpers/functions/astronomicalFunctions'
 import useConfig from '../../state/useConfig'

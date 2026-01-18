@@ -1,7 +1,7 @@
-import { SCALE } from './SolarSystemConstants'
+import { SCALE } from './solar-system-values'
 import * as THREE from 'three'
 
-export function degreesToRadians (ang) {
+export function degreesToRadians(ang) {
   return (ang * Math.PI) / 180
 }
 
@@ -10,7 +10,7 @@ export function degreesToRadians (ang) {
  *  Linear combination to calculate moon L,B
  *
  */
-export function linearCombinationSin (tabla, D, M, Mp, F, E) {
+export function linearCombinationSin(tabla, D, M, Mp, F, E) {
   let res = 0
   for (let x = 0; x < tabla.length; x++) {
     if (tabla[x][0][1] == 1 || tabla[x][0][1] == -1) {
@@ -59,7 +59,7 @@ export function linearCombinationSin (tabla, D, M, Mp, F, E) {
  * Linear combination to calculate moon R
  *
  */
-export function linearCombinationCos (tabla, D, M, Mp, F, E) {
+export function linearCombinationCos(tabla, D, M, Mp, F, E) {
   let res = 0
   for (let x = 0; x < tabla.length; x++) {
     if (tabla[x][0][1] == 1 || tabla[x][0][1] == -1) {
@@ -108,7 +108,7 @@ export function linearCombinationCos (tabla, D, M, Mp, F, E) {
  *  Parse any angle to a positive angle
  *
  */
-export function angleToPos (angle) {
+export function angleToPos(angle) {
   if (angle < 0) {
     return 360 + angle
   }
@@ -120,7 +120,7 @@ export function angleToPos (angle) {
  *  Gives Time (T) in Julian centuries from Epoch J2000
  *
  */
-export function TFromJD (time) {
+export function TFromJD(time) {
   const T = (time - 2451545) / 36525
   return T
 }
@@ -130,7 +130,7 @@ export function TFromJD (time) {
  *  Gives Time (T) in Julian millennia from Epoch J2000
  *
  */
-export function MillenniaTFromJD (time) {
+export function MillenniaTFromJD(time) {
   const T = (time - 2451545) / 365250
   return T
 }
@@ -140,7 +140,7 @@ export function MillenniaTFromJD (time) {
  *  Calculate any term (L,B,R) using the tables provided
  *
  */
-export function calculateTerm (tables, T) {
+export function calculateTerm(tables, T) {
   let X = 0
   for (let x = 0; x < tables.length; x++) {
     X += calculateSubTerm(tables[x], T) * T ** x
@@ -153,7 +153,7 @@ export function calculateTerm (tables, T) {
  *  Calculate any subterm (L,B,R) using the table provided
  *
  */
-export function calculateSubTerm (table, T) {
+export function calculateSubTerm(table, T) {
   let X = 0
   for (let x = 0; x < table.length; x++) {
     X += table[x][0] * Math.cos(table[x][1] + table[x][2] * T) // A cos(B+C*T)
@@ -166,7 +166,7 @@ export function calculateSubTerm (table, T) {
  *  Calculate Cartesian coordinates from a spherical position + offset
  *
  */
-export function setFromSphericalCoordsCustom (radius, phi, theta, [dx, dy, dz]) {
+export function setFromSphericalCoordsCustom(radius, phi, theta, [dx, dy, dz]) {
   const sinPhiRadius = Math.sin(phi) * radius
 
   let x = sinPhiRadius * Math.sin(theta) + dx
@@ -181,7 +181,7 @@ export function setFromSphericalCoordsCustom (radius, phi, theta, [dx, dy, dz]) 
  *  Calculate Cartesian coordinates from a spherical position
  *
  */
-export function setFromSphericalCoords (radius, phi, theta) {
+export function setFromSphericalCoords(radius, phi, theta) {
   const sinPhiRadius = Math.sin(phi) * radius
 
   let x = sinPhiRadius * Math.sin(theta)
@@ -196,7 +196,7 @@ export function setFromSphericalCoords (radius, phi, theta) {
  *  Calculate spherical coordinates from a Cartesian position
  *
  */
-export function setSphericalCoordFromCartesian (x, y, z) {
+export function setSphericalCoordFromCartesian(x, y, z) {
   const Rr = Math.sqrt(x ** 2 + y ** 2 + z ** 2)
   const Ll = Math.atan2(x, z)
   const Bb = Math.acos(y / Rr)
@@ -209,7 +209,7 @@ export function setSphericalCoordFromCartesian (x, y, z) {
  *  Calculate spherical coordinates from a Cartesian position not starting from [0,0,0]
  *
  */
-export function setSphericalCoordFromCartesianCustom (x, y, z, [dy, dx, dz]) {
+export function setSphericalCoordFromCartesianCustom(x, y, z, [dy, dx, dz]) {
   const Rr = Math.sqrt(x + dx ** 2 + y + dy ** 2 + z + dz ** 2)
   const Ll = Math.atan2(x + dx, z + dz)
   const Bb = Math.acos(y + dy / Rr)
@@ -220,7 +220,7 @@ export function setSphericalCoordFromCartesianCustom (x, y, z, [dy, dx, dz]) {
 /**
  * Calculates JD from date
  */
-export function changeDateFromInput (value, isLocal = false) {
+export function changeDateFromInput(value, isLocal = false) {
   let time = Date.parse(value) + 120000
   let gmt = new Date(time).getTimezoneOffset() * 60 * 1000
 
@@ -239,7 +239,7 @@ export function changeDateFromInput (value, isLocal = false) {
  *  @param pos { L(theta) , B(phi) , R(radius) }
  *
  */
-export function parseLBRToXYZ (pos) {
+export function parseLBRToXYZ(pos) {
   const { L, B, R } = pos
   const v = new THREE.Vector3().setFromSphericalCoords(
     (R * 149597870.7) / SCALE, //Parse from AU to KM then reduce to scale
@@ -257,7 +257,7 @@ export function parseLBRToXYZ (pos) {
  *  @param pos { L(theta) , B(phi) , R(radius) }
  *
  */
-export function moonParseLBDToXYZ (pos) {
+export function moonParseLBDToXYZ(pos) {
   const { L, B, R } = pos
   const v = new THREE.Vector3().setFromSphericalCoords(
     R / SCALE,
@@ -278,7 +278,7 @@ export function moonParseLBDToXYZ (pos) {
  * @returns string - distance (au/km)
  *
  */
-export function distanceAuParser (distancia, au, decimals = 5) {
+export function distanceAuParser(distancia, au, decimals = 5) {
   let parsed = false
   let d = distancia
   if (au) {

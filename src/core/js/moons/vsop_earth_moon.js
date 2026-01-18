@@ -3,13 +3,13 @@ import {
   linearCombinationCos,
   linearCombinationSin,
   TFromJD
-} from '../helpers/functions/astronomicalFunctions'
+} from '../scripts/functions/astronomicalFunctions'
 
 import {
   moonDistanceArgsTable,
   moonLatitudeArgsTable,
   moonLongitudeArgsTable
-} from '../VSOP87D/vsop_mon'
+} from '../vsop87d-data/vsop_mon'
 
 export function moonCoordinatesGivenDate(date) {
   const T = TFromJD(date)

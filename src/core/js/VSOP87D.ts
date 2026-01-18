@@ -2,19 +2,19 @@ import {
   angleToPos,
   MillenniaTFromJD,
   TFromJD
-} from './helpers/functions/astronomicalFunctions'
+} from './scripts/astronomical-functions'
 
-import { VSOP_EARTH } from './VSOP87D/vsop_ear'
-import { VSOP_VENUS } from './VSOP87D/vsop_ven'
-import { VSOP_MERCURY } from './VSOP87D/vsop_mer'
-import { VSOP_MARS } from './VSOP87D/vsop_mar'
-import { VSOP_JUPITER } from './VSOP87D/vsop_jup'
-import { VSOP_SATURN } from './VSOP87D/vsop_sat'
-import { VSOP_URANUS } from './VSOP87D/vsop_ura'
-import { VSOP_NEPTUNE } from './VSOP87D/vsop_nep'
+import { VSOP_EARTH } from './vsop87d-data/vsop_ear'
+import { VSOP_VENUS } from './vsop87d-data/vsop_ven'
+import { VSOP_MERCURY } from './vsop87d-data/vsop_mer'
+import { VSOP_MARS } from './vsop87d-data/vsop_mar'
+import { VSOP_JUPITER } from './vsop87d-data/vsop_jup'
+import { VSOP_SATURN } from './vsop87d-data/vsop_sat'
+import { VSOP_URANUS } from './vsop87d-data/vsop_ura'
+import { VSOP_NEPTUNE } from './vsop87d-data/vsop_nep'
 
-import { earth_nutation } from './VSOP87D/1980IAU_nutation'
-import { getMeanLongitude } from './VSOP87D/meanLongitudes'
+import { earth_nutation } from './vsop87d-data/1980IAU_nutation'
+import { getMeanLongitude } from './vsop87d-data/meanLongitudes'
 import { moonCoordinatesGivenDate as moonCoordinatesGivenDateR } from './moons/vsop_earth_moon'
 //import { EARTH_SIZE } from './helpers/functions/SolarSystemConstants'
 
