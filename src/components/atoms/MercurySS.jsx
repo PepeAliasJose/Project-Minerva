@@ -1,8 +1,8 @@
-import { MERCURY_SIZE } from '../../helpers/functions/SolarSystemConstants'
+import { MERCURY_SIZE } from '../../core/helpers/functions/SolarSystemConstants'
 import { Texture, TextureLoader } from 'three'
 import SkyTag from './SkyTag'
 import { memo, useEffect, useState } from 'react'
-import { parseLBRToXYZ } from '../../helpers/functions/astronomicalFunctions'
+import { parseLBRToXYZ } from '../../core/helpers/functions/astronomicalFunctions'
 import { usePlanets } from '../../App'
 
 const MercurySS = memo(({ Mercury }) => {
@@ -11,7 +11,7 @@ const MercurySS = memo(({ Mercury }) => {
 
   const { planets } = usePlanets()
 
-  function updateMercury () {
+  function updateMercury() {
     setMercuryPos(parseLBRToXYZ(planets.mercury))
   }
 

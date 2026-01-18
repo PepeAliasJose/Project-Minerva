@@ -1,7 +1,7 @@
 import { memo, useEffect, useRef, useState } from 'react'
 import { Texture, TextureLoader } from 'three'
-import { parseLBRToXYZ } from '../../helpers/functions/astronomicalFunctions'
-import { URANUS_SIZE } from '../../helpers/functions/SolarSystemConstants'
+import { parseLBRToXYZ } from '../../core/helpers/functions/astronomicalFunctions'
+import { URANUS_SIZE } from '../../core/helpers/functions/SolarSystemConstants'
 import SkyTag from './SkyTag'
 import { usePlanets } from '../../App'
 
@@ -20,7 +20,7 @@ const UranusSS = memo(({ Uranus }) => {
 
   const [Uranus_Texture, setTexture] = useState(new Texture())
 
-  function updateUranus () {
+  function updateUranus() {
     setUranusPos(parseLBRToXYZ(planets.uranus))
     UranusLight.current.position.setFromSphericalCoords(
       10,

@@ -1,5 +1,5 @@
 import { Html, Line } from '@react-three/drei'
-import { useConfig, useCustomCamera, useOrbits, usePlanets } from '../../App'
+import { useCustomCamera, useOrbits } from '../../App'
 import {
   ArrowDownIcon,
   ArrowUpIcon,
@@ -10,14 +10,15 @@ import {
   TrashIcon
 } from '@heroicons/react/24/outline'
 import { useState } from 'react'
-import { SCALE } from '../../helpers/functions/SolarSystemConstants'
+import { SCALE } from '../../core/helpers/functions/SolarSystemConstants'
 import { Spherical, Vector3 } from 'three'
-import { distanceAuParser } from '../../helpers/functions/astronomicalFunctions'
+import { distanceAuParser } from '../../core/helpers/functions/astronomicalFunctions'
+import useConfig from '../../state/useConfig'
 
-function Orbits () {
+function Orbits() {
   const { orbits } = useOrbits()
 
-  const o = orbits.map(o => {
+  const o = orbits.map((o) => {
     return (
       <Orbit
         key={o.id}
@@ -34,17 +35,17 @@ function Orbits () {
   return <>{o}</>
 }
 
-function Orbit ({ id, points, color, start, end, host }) {
+function Orbit({ id, points, color, start, end, host }) {
   const { removeOrbit } = useOrbits()
   const { au } = useConfig()
 
   const [show, setShow] = useState(true)
 
-  const endPoints = points.map(p => {
+  const endPoints = points.map((p) => {
     return [p[0] + host[0], p[1] + host[1], p[2] + host[2]]
   })
 
-  function calculaDesplazamiento () {
+  function calculaDesplazamiento() {
     const p1 = new Vector3(...points[0])
     const p2 = new Vector3(...points[points.length - 1])
 
@@ -53,7 +54,7 @@ function Orbit ({ id, points, color, start, end, host }) {
   }
 
   //In KM
-  function calculaDisSol () {
+  function calculaDisSol() {
     const p1 = new Vector3(...host)
     const p2 = new Vector3(...endPoints[endPoints.length - 1])
 
@@ -62,7 +63,7 @@ function Orbit ({ id, points, color, start, end, host }) {
   }
 
   //In KM
-  function calculaTotal () {
+  function calculaTotal() {
     let distancia = 0
 
     for (let i = 0; i <= points.length - 2; i++) {
@@ -75,13 +76,13 @@ function Orbit ({ id, points, color, start, end, host }) {
   }
 
   //In KM
-  function alturaRespectoPR () {
+  function alturaRespectoPR() {
     let distancia = points[0][1] * SCALE
     return distancia
   }
 
   //In KM
-  function alturaFinalRespectoPR () {
+  function alturaFinalRespectoPR() {
     let distancia = points[points.length - 1][1] * SCALE
     return distancia
   }
@@ -179,7 +180,7 @@ function Orbit ({ id, points, color, start, end, host }) {
   )
 }
 
-function MiLinea ({ points, color }) {
+function MiLinea({ points, color }) {
   const { updateTarget } = useCustomCamera()
   const [point, setPoint] = useState({ point: [0, 0, 0], show: false })
   const [top, setTop] = useState(false)
@@ -191,14 +192,14 @@ function MiLinea ({ points, color }) {
         color={color}
         points={points}
         lineWidth={1}
-        onClick={e => {
+        onClick={(e) => {
           updateTarget([...e.pointOnLine])
           setPoint({ point: [...e.pointOnLine], show: true })
         }}
-        onPointerEnter={e => {
+        onPointerEnter={(e) => {
           document.body.style.cursor = 'pointer'
         }}
-        onPointerLeave={e => {
+        onPointerLeave={(e) => {
           document.body.style.cursor = 'initial'
         }}
       />
@@ -262,7 +263,7 @@ function MiLinea ({ points, color }) {
 /**
  * Rectangular point in scene -> Rectangular point in SCALE
  */
-export function RectangularInfo ({ point }) {
+export function RectangularInfo({ point }) {
   const { au } = useConfig()
   let x = point[0] * SCALE
   let y = point[1] * SCALE
@@ -281,7 +282,7 @@ export function RectangularInfo ({ point }) {
 /**
  * Rectangular point in scene -> Spherical point in SCALE
  */
-export function SphericalInfo ({ point }) {
+export function SphericalInfo({ point }) {
   const { au } = useConfig()
   const spherical = new Spherical().setFromCartesianCoords(...point)
 

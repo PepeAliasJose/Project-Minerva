@@ -1,5 +1,7 @@
 {
   "files.associations": {
     "vsop_ear.h": "c"
-  }
+  },
+  "chat.disableAIFeatures": true,
+  "prettier.configPath": ".prettierrc"
 }

@@ -1,8 +1,8 @@
 import { memo, useEffect, useState } from 'react'
-import { parseLBRToXYZ } from '../../helpers/functions/astronomicalFunctions'
+import { parseLBRToXYZ } from '../../core/helpers/functions/astronomicalFunctions'
 import { Texture, TextureLoader } from 'three'
 
-import { VENUS_SIZE } from '../../helpers/functions/SolarSystemConstants'
+import { VENUS_SIZE } from '../../core/helpers/functions/SolarSystemConstants'
 import SkyTag from './SkyTag'
 import { usePlanets } from '../../App'
 
@@ -12,7 +12,7 @@ const VenusSS = memo(({ Venus }) => {
 
   const { planets } = usePlanets()
 
-  function updateVenus () {
+  function updateVenus() {
     setVenusPos(parseLBRToXYZ(planets.venus))
   }
 

@@ -1,10 +1,11 @@
 import { useEffect, useRef } from 'react'
-import { useAnimation, useConfig, useCustomCamera } from '../../App'
+import { useAnimation, useCustomCamera } from '../../App'
 import { useThree } from '@react-three/fiber'
 import { CameraControls } from '@react-three/drei'
 import { useMediaQuery } from 'react-responsive'
+import useConfig from '../../state/useConfig'
 
-function SSCamera () {
+function SSCamera() {
   const { camera, gl } = useThree()
 
   const desktop = useMediaQuery({ query: '(min-width: 40rem)' })

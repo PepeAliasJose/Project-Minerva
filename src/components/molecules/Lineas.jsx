@@ -1,30 +1,31 @@
 import { Html, Line } from '@react-three/drei'
-import { MathUtils, Vector3 } from 'three'
-import { SCALE } from '../../helpers/functions/SolarSystemConstants'
-import { useConfig, useLines, usePlanets } from '../../App'
+import { Vector3 } from 'three'
+import { SCALE } from '../../core/helpers/functions/SolarSystemConstants'
+import { useLines, usePlanets } from '../../App'
 import {
   distanceAuParser,
   moonParseLBDToXYZ,
   parseLBRToXYZ
-} from '../../helpers/functions/astronomicalFunctions'
+} from '../../core/helpers/functions/astronomicalFunctions'
 import { TrashIcon } from '@heroicons/react/24/outline'
+import useConfig from '../../state/useConfig'
 
-function Lineas () {
+function Lineas() {
   const { lines } = useLines()
 
-  const lineas = lines.map(l => {
+  const lineas = lines.map((l) => {
     return <Linea key={l.id} id={l.id} punto1={l.p1} punto2={l.p2} />
   })
 
   return <>{lineas}</>
 }
 
-function Linea ({ id, punto1, punto2 }) {
+function Linea({ id, punto1, punto2 }) {
   const { planets } = usePlanets()
   const { au } = useConfig()
   const { removeLine } = useLines()
 
-  function getPlanetsCoordinates (planet) {
+  function getPlanetsCoordinates(planet) {
     //console.log(planet, planets[planet])
     switch (planet) {
       case 'sun':
