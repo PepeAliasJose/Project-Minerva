@@ -1,17 +1,17 @@
-function Checker ({ tag, value, setValue }) {
+function Checker({ tag, value, setValue }) {
   return (
     <div
       className='inline-flex gap-2 items-center justify-between w-full
-    bg-neutral-700 px-2 m-1  rounded-full'
+    bg-neutral-700 px-2 m-1 rounded-full'
     >
       <p className='m-2'>{tag}</p>
       <div
         onClick={setValue}
-        className='down min-w-[3.25rem] w-[3.25rem] h-7 transition-all 
+        className='down min-w-13 w-13 h-7 transition-all 
         p-0.5 hover:cursor-pointer 
         grid grid-cols-1 grid-rows-1'
       >
-        <div className='min-w-[3.25rem] w-[3.25rem] flex flex-row justify-between px-2'>
+        <div className='min-w-13 w-13 flex flex-row justify-between px-2'>
           <p>λ</p>
           <p>Θ</p>
         </div>

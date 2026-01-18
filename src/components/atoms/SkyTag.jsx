@@ -1,7 +1,7 @@
 import { Html } from '@react-three/drei'
-import { useConfig } from '../../App'
+import useConfig from '../../state/useConfig'
 
-function SkyTag ({
+function SkyTag({
   name,
   color = ' bg-white',
   top = false,

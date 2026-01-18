@@ -1,7 +1,7 @@
 import { Texture, TextureLoader } from 'three'
-import { parseLBRToXYZ } from '../../helpers/functions/astronomicalFunctions'
+import { parseLBRToXYZ } from '../../core/helpers/functions/astronomicalFunctions'
 import SkyTag from './SkyTag'
-import { JUPITER_SIZE } from '../../helpers/functions/SolarSystemConstants'
+import { JUPITER_SIZE } from '../../core/helpers/functions/SolarSystemConstants'
 import { memo, useEffect, useRef, useState } from 'react'
 import { usePlanets } from '../../App'
 
@@ -20,7 +20,7 @@ const JupiterSS = memo(({ Jupiter }) => {
       ? 128
       : 1024
 
-  function updateJupiter () {
+  function updateJupiter() {
     setJupiterPos(parseLBRToXYZ(planets.jupiter))
     JupiterLight.current.position.setFromSphericalCoords(
       10,

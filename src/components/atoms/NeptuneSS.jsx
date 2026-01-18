@@ -1,7 +1,7 @@
 import { memo, useEffect, useRef, useState } from 'react'
 import { Texture, TextureLoader } from 'three'
-import { parseLBRToXYZ } from '../../helpers/functions/astronomicalFunctions'
-import { NEPTUNE_SIZE } from '../../helpers/functions/SolarSystemConstants'
+import { parseLBRToXYZ } from '../../core/helpers/functions/astronomicalFunctions'
+import { NEPTUNE_SIZE } from '../../core/helpers/functions/SolarSystemConstants'
 import SkyTag from './SkyTag'
 import { usePlanets } from '../../App'
 
@@ -19,7 +19,7 @@ const NeptuneSS = memo(({ Neptune }) => {
       ? 128
       : 1024
 
-  function updateNeptune () {
+  function updateNeptune() {
     setNeptunePos(parseLBRToXYZ(planets.neptune))
     NeptuneLight.current.position.setFromSphericalCoords(
       10,
