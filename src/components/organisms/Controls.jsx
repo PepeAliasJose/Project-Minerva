@@ -101,7 +101,8 @@ function Controls({}) {
                 defaultValue={date}
                 onChange={(e) => {
                   //changeDateFromInput(e.target.value)
-                  setDate(e.target.value)
+                  const date = new Date(e.target.value)
+                  setDate(date.toISOString())
                 }}
               />
             </div>
